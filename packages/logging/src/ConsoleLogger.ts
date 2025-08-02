@@ -1,4 +1,4 @@
-import { type EndLoggerScopeOptions, type LoggerScope, LogLevel, type RootLogger } from "./Logger.ts";
+import { LogLevel, type EndLoggerScopeOptions, type Logger, type LoggerScope } from "./Logger.ts";
 
 type Log = () => void;
 
@@ -84,7 +84,7 @@ export class ConsoleLoggerScope implements LoggerScope {
     }
 }
 
-export class ConsoleLogger implements RootLogger {
+export class ConsoleLogger implements Logger {
     readonly #logLevel: LogLevel;
 
     constructor(logLevel: LogLevel = LogLevel.debug) {

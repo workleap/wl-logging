@@ -6,7 +6,7 @@ export enum LogLevel {
     critical = 4
 }
 
-export interface Logger {
+export interface LoggerMethods {
     /**
      * Write a debug log. The log will be process only if the logger LogLevel is >= debug.
      */
@@ -39,14 +39,14 @@ export interface EndLoggerScopeOptions {
     [key: string]: unknown;
 }
 
-export interface LoggerScope extends Logger {
+export interface LoggerScope extends LoggerMethods {
     /**
      * End the scope.
      */
     end: (options?: EndLoggerScopeOptions) => void;
 }
 
-export interface RootLogger extends Logger {
+export interface Logger extends LoggerMethods {
     getName: () => string;
 
     /**
