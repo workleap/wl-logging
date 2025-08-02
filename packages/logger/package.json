@@ -1,7 +1,7 @@
 {
     "name": "@workleap/logger",
     "author": "Workleap",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "description": "A package including logging utilities for Workleap web applications.",
     "license": "Apache-2.0",
     "repository": {
@@ -32,7 +32,7 @@
         "build": "rslib build --config ./rslib.build.ts",
         "eslint": "eslint . --max-warnings=-0 --cache --cache-location node_modules/.cache/eslint",
         "typecheck": "tsc",
-        "test": "vitest --config vitest.config.ts --no-watch"
+        "test": "vitest --config vitest.config.ts --no-watch --passWithNoTests"
     },
     "devDependencies": {
         "@rsbuild/core": "1.4.12",
