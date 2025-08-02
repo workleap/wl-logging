@@ -1,0 +1,48 @@
+{
+    "name": "@workleap/logger",
+    "author": "Workleap",
+    "version": "1.0.0",
+    "description": "A package including logging utilities for Workleap web applications.",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/workleap/wl-logger.git",
+        "directory": "packages/logger"
+    },
+    "type": "module",
+    "publishConfig": {
+        "access": "public",
+        "provenance": true,
+        "exports": {
+            ".": {
+                "types": "./dist/index.d.ts",
+                "import": "./dist/index.js",
+                "default": "./dist/index.js"
+            }
+        }
+    },
+    "exports": "./src/index.ts",
+    "files": [
+        "src",
+        "dist",
+        "CHANGELOG.md",
+        "README.md"
+    ],
+    "scripts": {
+        "build": "rslib build --config ./rslib.build.ts",
+        "eslint": "eslint . --max-warnings=-0 --cache --cache-location node_modules/.cache/eslint",
+        "typecheck": "tsc",
+        "test": "vitest --config vitest.config.ts --no-watch"
+    },
+    "devDependencies": {
+        "@rsbuild/core": "1.4.12",
+        "@rslib/core": "0.11.1",
+        "@workleap/eslint-plugin": "3.5.0",
+        "@workleap/rslib-configs": "1.1.0",
+        "@workleap/typescript-configs": "3.0.4",
+        "eslint": "8.57.1",
+        "typescript": "5.9.2",
+        "vitest": "3.2.4"
+    },
+    "sideEffects": false
+}
