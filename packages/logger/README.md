@@ -2,7 +2,7 @@
 
 ## Usage
 
-View the [user's documentation](https://workleap.github.io/wl-logger/).
+View the [user's documentation](https://workleap.github.io/wl-logging/).
 
 ## 🤝 Contributing
 

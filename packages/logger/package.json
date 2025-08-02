@@ -1,13 +1,13 @@
 {
-    "name": "@workleap/logger",
+    "name": "@workleap/logging",
     "author": "Workleap",
     "version": "0.0.1",
     "description": "A package including logging utilities for Workleap web applications.",
     "license": "Apache-2.0",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/workleap/wl-logger.git",
-        "directory": "packages/logger"
+        "url": "git+https://github.com/workleap/wl-logging.git",
+        "directory": "packages/logging"
     },
     "type": "module",
     "publishConfig": {
