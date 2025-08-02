@@ -1,4 +1,4 @@
-# @workleap/logger
+# @workleap/logging
 
 ## Usage
 

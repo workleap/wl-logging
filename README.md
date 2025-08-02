@@ -9,7 +9,7 @@ A set of logging packages for the Workleap platform.
 
 | Name | NPM |
 | --- | --- |
-| [@workleap/logger](packages/logger/README.md) | [![npm version](https://img.shields.io/npm/v/@workleap/logger)](https://www.npmjs.com/package/@workleap/logger) |
+| [@workleap/logging](packages/logging/README.md) | [![npm version](https://img.shields.io/npm/v/@workleap/logging)](https://www.npmjs.com/package/@workleap/logging) |
 
 ## Have a question or found an issue?
 
