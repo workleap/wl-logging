@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://workleap.github.io/wl-logger/sitemap.xml.gz
