@@ -1,7 +1,7 @@
 import type { EndLoggerScopeOptions, Logger, LoggerScope } from "./Logger.ts";
 
 export class CompositeLoggerScope implements LoggerScope {
-    readonly #scopes;
+    readonly #scopes: LoggerScope[];
 
     constructor(scopes: LoggerScope[] = []) {
         this.#scopes = scopes;
@@ -75,7 +75,7 @@ export class CompositeLoggerScope implements LoggerScope {
 }
 
 export class CompositeLogger implements Logger {
-    readonly #loggers;
+    readonly #loggers: Logger[];
 
     constructor(loggers: Logger[] = []) {
         this.#loggers = loggers;

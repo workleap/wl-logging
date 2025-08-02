@@ -28,7 +28,7 @@ export class ConsoleLoggerScope implements LoggerScope {
 
                 // Categorized logs will only show in the console when the console group is open, which is quite a weird
                 // behavior for categorized logs such as error.
-                // To aleviate the situation, those categorized logs are logged twice: one time in the group and one time at the root.
+                // To alleviate the situation, those categorized logs are logged twice: one time in the group and one time at the root.
                 if (additionalLog) {
                     additionalLog();
                 }

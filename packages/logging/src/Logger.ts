@@ -8,23 +8,23 @@ export enum LogLevel {
 
 export interface LoggerMethods {
     /**
-     * Write a debug log. The log will be process only if the logger LogLevel is >= debug.
+     * Write a debug log. The log will be processed only if the logger LogLevel is >= debug.
      */
     debug: (log: string, ...rest: unknown[]) => void;
     /**
-     * Write an information log. The log will be process only if the logger LogLevel is >= information.
+     * Write an information log. The log will be processed only if the logger LogLevel is >= information.
      */
     information: (log: string, ...rest: unknown[]) => void;
     /**
-     * Write a warning log. The log will be process only if the logger LogLevel is >= warning.
+     * Write a warning log. The log will be processed only if the logger LogLevel is >= warning.
      */
     warning: (log: string, ...rest: unknown[]) => void;
     /**
-     * Write an error log. The log will be process only if the logger LogLevel is >= error.
+     * Write an error log. The log will be processed only if the logger LogLevel is >= error.
      */
     error: (log: string, ...rest: unknown[]) => void;
     /**
-     * Write a critical log. The log will be process only if the logger LogLevel is >= critical.
+     * Write a critical log. The log will be processed only if the logger LogLevel is >= critical.
      */
     critical: (log: string, ...rest: unknown[]) => void;
 }
