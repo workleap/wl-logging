@@ -1,23 +1,23 @@
-# wl-logger
+# wl-logging
 
 A set of logging packages for the Workleap platform.
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
-[![CI](https://github.com/workleap/wl-logger/actions/workflows/ci.yml/badge.svg)](https://github.com/workleap/wl-logger/actions/workflows/ci.yml)
+[![CI](https://github.com/workleap/wl-logging/actions/workflows/ci.yml/badge.svg)](https://github.com/workleap/wl-logging/actions/workflows/ci.yml)
 
 ### Packages
 
 | Name | NPM |
 | --- | --- |
-| [@workleap/logger](packages/logger/README.md) | [![npm version](https://img.shields.io/npm/v/@workleap/logger)](https://www.npmjs.com/package/@workleap/logger) |
+| [@workleap/logging](packages/logging/README.md) | [![npm version](https://img.shields.io/npm/v/@workleap/logging)](https://www.npmjs.com/package/@workleap/logging) |
 
 ## Have a question or found an issue?
 
-To ask a question or propose an idea, feel free to start a new [discussion](https://github.com/workleap/wl-logger/discussions). If you found a bug, please open an [issue](https://github.com/workleap/wl-logger/issues).
+To ask a question or propose an idea, feel free to start a new [discussion](https://github.com/workleap/wl-logging/discussions). If you found a bug, please open an [issue](https://github.com/workleap/wl-logging/issues).
 
 ## Documentation
 
-View the [user's documentation](https://workleap.github.io/wl-logger/).
+View the [user's documentation](https://workleap.github.io/wl-logging/).
 
 ## 🤝 Contributing
 
