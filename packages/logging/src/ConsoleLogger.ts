@@ -46,7 +46,7 @@ function appendText(currentText: string, newText: string) {
 function parseItems(logItems: LogItem[]) {
     const textItems: TextItem[] = [];
     const objects: unknown[] = [];
-    const allUnwrapped: unknown[] = [];
+    const unwrappedItems: unknown[] = [];
 
     let includeStyle = false;
 
@@ -57,13 +57,13 @@ function parseItems(logItems: LogItem[]) {
 
         if (x.text) {
             textItems.push(x as TextItem);
-            allUnwrapped.push(x.text);
+            unwrappedItems.push(x.text);
         } else if (x.obj) {
             objects.push(x.obj);
-            allUnwrapped.push(x.obj);
+            unwrappedItems.push(x.obj);
         } else if (x.error) {
             objects.push(x.error);
-            allUnwrapped.push(x.error);
+            unwrappedItems.push(x.error);
         }
     });
 
@@ -71,7 +71,7 @@ function parseItems(logItems: LogItem[]) {
         textItems,
         objects,
         includeStyle,
-        allUnwrapped
+        unwrappedItems
     };
 }
 
@@ -85,9 +85,11 @@ function formatItems(logItems: LogItem[]) {
         textItems,
         objects,
         includeStyle,
-        allUnwrapped
+        unwrappedItems
     } = parseItems(logItems);
 
+    // There's some style, merge all the text into a single string, following by all the style merged also
+    // in a single string.
     if (includeStyle) {
         let text = "";
 
@@ -111,7 +113,8 @@ function formatItems(logItems: LogItem[]) {
         ];
     }
 
-    return allUnwrapped;
+    // There's no style, preserve the original sequencing.
+    return unwrappedItems;
 }
 
 type LogFunction = (...rest: unknown[]) => void;
