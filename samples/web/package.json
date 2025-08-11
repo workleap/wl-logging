@@ -13,6 +13,10 @@
     },
     "dependencies": {
         "@workleap/logging": "workspace:*",
+        "@workleap/logrocket": "1.0.1",
+        "@workleap/logrocket-logger": "workspace:*",
+        "@workleap/telemetry": "1.0.0",
+        "logrocket": "10.1.0",
         "react": "19.1.1",
         "react-dom": "19.1.1"
     },

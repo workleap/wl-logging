@@ -51,6 +51,13 @@ export interface LogBuilder {
     critical: (log?: string, options?: LogOptions) => void;
 }
 
+export interface LoggerOptions {
+    /**
+     * The the minimum severity of messages that will be logged. Default is "debug".
+     */
+    logLevel?: LogLevel;
+}
+
 export interface LoggerScopeOptions {
     /**
      * Style to apply to the label of the group when applicable.
@@ -91,10 +98,5 @@ export interface LogItem {
     text?: string;
     error?: Error;
     obj?: unknown;
-    options?: LogOptions;
-}
-
-export interface TextItem {
-    text: string;
     options?: LogOptions;
 }

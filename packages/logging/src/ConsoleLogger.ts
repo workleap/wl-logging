@@ -1,4 +1,4 @@
-import { LogBuilder, LoggerScopeEndOptions, LogLevel, TextItem, type Logger, type LoggerScope, type LoggerScopeOptions, type LogItem, type LogOptions } from "./Logger.ts";
+import { LoggerOptions, LoggerScopeEndOptions, LogLevel, type Logger, type LoggerScope, type LoggerScopeOptions, type LogItem, type LogOptions } from "./Logger.ts";
 
 /*
 
@@ -24,7 +24,12 @@ logger.debug("hello world!", OPTIONS);
 
 */
 
-export function convertCssInlineStyleToConsoleStyle(cssProps: Partial<CSSStyleDeclaration>) {
+interface TextItem {
+    text: string;
+    options?: LogOptions;
+}
+
+function convertCssInlineStyleToConsoleStyle(cssProps: Partial<CSSStyleDeclaration>) {
     return Object.entries(cssProps)
         .map(([key, value]) => `${key.replace(/[A-Z]/g, x => `-${x.toLowerCase()}`)}:${value}`)
         .join(";");
@@ -38,44 +43,78 @@ function appendText(currentText: string, newText: string) {
     return newText;
 }
 
-export function formatItems(logItems: LogItem[]) {
+function parseItems(logItems: LogItem[]) {
     const textItems: TextItem[] = [];
-    const others: unknown[] = [];
+    const objects: unknown[] = [];
+    const allUnwrapped: unknown[] = [];
+
+    let includeStyle = false;
 
     logItems.forEach(x => {
+        if (x.options?.style) {
+            includeStyle = true;
+        }
+
         if (x.text) {
             textItems.push(x as TextItem);
+            allUnwrapped.push(x.text);
         } else if (x.obj) {
-            others.push(x.obj);
+            objects.push(x.obj);
+            allUnwrapped.push(x.obj);
         } else if (x.error) {
-            others.push(x.error);
+            objects.push(x.error);
+            allUnwrapped.push(x.error);
         }
     });
 
-    let text = "";
+    return {
+        textItems,
+        objects,
+        includeStyle,
+        allUnwrapped
+    };
+}
 
-    const styling: string[] = [];
+// If the text logs include style, all the text element must be appended as a single string that will be returned as the first element of the array,
+// following a string including all the style.
+// This is done this way because the console functions expect all the styling to be provided in a single single as the second argument.
+// Therefore, when there's styling the original text / object / error sequencing is not preserved.
+// If there's no style though, then the original sequencing will be preserved.
+function formatItems(logItems: LogItem[]) {
+    const {
+        textItems,
+        objects,
+        includeStyle,
+        allUnwrapped
+    } = parseItems(logItems);
 
-    textItems.forEach(x => {
-        if (x.options?.style) {
-            text = appendText(text, `%c${x.text}%c`);
+    if (includeStyle) {
+        let text = "";
 
-            styling.push(convertCssInlineStyleToConsoleStyle(x.options.style));
-            styling.push("%s");
-        } else {
-            text = appendText(text, x.text);
-        }
-    });
+        const styling: string[] = [];
 
-    return [
-        text,
-        ...styling,
-        ...others
-    ]
+        textItems.forEach(x => {
+            if (x.options?.style) {
+                text = appendText(text, `%c${x.text}%c`);
+
+                styling.push(convertCssInlineStyleToConsoleStyle(x.options.style));
+                styling.push("%s");
+            } else {
+                text = appendText(text, x.text);
+            }
+        });
+
+        return [
+            text,
+            ...styling,
+            ...objects
+        ];
+    }
+
+    return allUnwrapped;
 }
 
 type LogFunction = (...rest: unknown[]) => void;
-
 type PendingLog = () => void;
 
 export class ConsoleLoggerScope implements LoggerScope {
@@ -232,7 +271,11 @@ export class ConsoleLogger implements Logger {
     readonly #logLevel: LogLevel;
     #logItems: LogItem[] = [];
 
-    constructor(logLevel: LogLevel = LogLevel.debug) {
+    constructor(options: LoggerOptions = {}) {
+        const {
+            logLevel = LogLevel.debug,
+        } = options
+
         this.#logLevel = logLevel;
     }
 
