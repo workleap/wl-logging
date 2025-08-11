@@ -1,5 +1,5 @@
 export { CompositeLogger, CompositeLoggerScope } from "./CompositeLogger.ts";
-export { ConsoleLogger, ConsoleLoggerScope, type EndConsoleLoggerScopeOptions } from "./ConsoleLogger.ts";
-export type { EndLoggerScopeOptions, Logger, LoggerMethods, LoggerScope, LogLevel } from "./Logger.ts";
+export { ConsoleLogger, ConsoleLoggerScope } from "./ConsoleLogger.ts";
+export type { LogBuilder, Logger, LoggerScope, LoggerScopeEndOptions, LoggerScopeOptions, LogItem, LogLevel, LogOptions } from "./Logger.ts";
 export { NoopLogger, NoopLoggerScope } from "./NoopLogger.ts";
 

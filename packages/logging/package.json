@@ -35,8 +35,8 @@
         "test": "vitest --config vitest.config.ts --no-watch --passWithNoTests"
     },
     "devDependencies": {
-        "@rsbuild/core": "1.4.12",
-        "@rslib/core": "0.11.1",
+        "@rsbuild/core": "1.4.15",
+        "@rslib/core": "0.11.2",
         "@workleap/eslint-plugin": "3.5.0",
         "@workleap/rslib-configs": "1.1.0",
         "@workleap/typescript-configs": "3.0.4",
