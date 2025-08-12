@@ -1,4 +1,4 @@
-import { afterEach, describe, it, test, vi } from "vitest";
+import { afterEach, describe, test, vi } from "vitest";
 import { ConsoleLogger, ConsoleLoggerScope } from "../src/ConsoleLogger.ts";
 import { LogLevel } from "../src/Logger.ts";
 
@@ -527,7 +527,7 @@ describe("ConsoleLoggerScope", () => {
     });
 
     describe("end", () => {
-        it.concurrent("should end scope without logs if no pending logs", ({ expect }) => {
+        test.concurrent("can end scope without logs if no pending logs", ({ expect }) => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
 
@@ -539,7 +539,7 @@ describe("ConsoleLoggerScope", () => {
             expect(groupEndMock).not.toHaveBeenCalled();
         });
 
-        it.concurrent("should dismiss scope without logging", ({ expect }) => {
+        test.concurrent("can dismiss scope without logging", ({ expect }) => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
             const groupLog = vi.spyOn(console, "log").mockImplementation(() => {});
@@ -554,7 +554,7 @@ describe("ConsoleLoggerScope", () => {
             expect(groupEndMock).not.toHaveBeenCalled();
         });
 
-        it.concurrent("should end scope with custom label style", ({ expect }) => {
+        test.concurrent("can end scope with custom label style", ({ expect }) => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
             const groupLog = vi.spyOn(console, "log").mockImplementation(() => {});
@@ -572,7 +572,7 @@ describe("ConsoleLoggerScope", () => {
             expect(groupEndMock).toHaveBeenCalled();
         });
 
-        it.concurrent("should use initial label style if no end style provided", ({ expect }) => {
+        test.concurrent("can use initial label style if no end style provided", ({ expect }) => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
             const groupLog = vi.spyOn(console, "log").mockImplementation(() => {});
@@ -592,7 +592,7 @@ describe("ConsoleLoggerScope", () => {
             expect(groupEndMock).toHaveBeenCalled();
         });
 
-        it.concurrent("should not log again after scope has ended", ({ expect }) => {
+        test.concurrent("can not log again after scope has ended", ({ expect }) => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
 
