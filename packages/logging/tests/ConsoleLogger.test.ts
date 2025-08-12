@@ -1,173 +1,138 @@
-import { afterEach, beforeEach, describe, expect, it, vi, type MockedFunction } from "vitest";
+import { afterEach, describe, it, test, vi } from "vitest";
 import { ConsoleLogger, ConsoleLoggerScope } from "../src/ConsoleLogger.ts";
 import { LogLevel } from "../src/Logger.ts";
 
-const mockConsoleLog = vi.fn();
-const mockConsoleWarn = vi.fn();
-const mockConsoleError = vi.fn();
-const mockConsoleGroup = vi.fn();
-const mockConsoleGroupCollapsed = vi.fn();
-const mockConsoleGroupEnd = vi.fn();
-
-beforeEach(() => {
-    vi.stubGlobal("console", {
-        log: mockConsoleLog,
-        warn: mockConsoleWarn,
-        error: mockConsoleError,
-        group: mockConsoleGroup,
-        groupCollapsed: mockConsoleGroupCollapsed,
-        groupEnd: mockConsoleGroupEnd
-    });
-});
-
 afterEach(() => {
-    vi.clearAllMocks();
-});
+    vi.resetAllMocks();
+})
 
 describe("ConsoleLogger", () => {
-    describe("debug logging", () => {
-        it("should log debug message when log level is debug", () => {
-            const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
+    describe.each([
+        ["debug", "log", [true, false, false, false, false]],
+        ["information", "log", [true, true, false, false, false]],
+        ["warning", "warn", [true, true, true, false, false]],
+        ["error", "error", [true, true, true, true, false]],
+        ["critical", "error", [true, true, true, true, true]]
+    ] satisfies [keyof ConsoleLogger, keyof typeof console, boolean[]][]
+    )("can write a \"%s\" log", (loggerFunction, consoleFunction, expectedResults) => {
+        test.concurrent.for([
+            ["debug", LogLevel.debug],
+            ["information", LogLevel.information],
+            ["warning", LogLevel.warning],
+            ["error", LogLevel.error],
+            ["critical", LogLevel.critical]
+        ] satisfies [keyof ConsoleLogger, LogLevel][])("when the log level is \"%s\"", ([, logLevel], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
-            logger.debug("debug message");
+            const logger = new ConsoleLogger({ logLevel });
+            const logValue = "foo";
 
-            expect(mockConsoleLog).toHaveBeenCalledWith("debug message");
-        });
+            logger[loggerFunction](logValue);
 
-        it("should not log debug message when log level is higher than debug", () => {
-            const logger = new ConsoleLogger({ logLevel: LogLevel.information });
+            const expectedResult = expectedResults[logLevel];
 
-            logger.debug("debug message");
+            if (expectedResult === undefined) {
+                throw new Error(`There's no expected result for logLevel: "${logLevel}".`);
+            }
 
-            expect(mockConsoleLog).not.toHaveBeenCalled();
-        });
-    });
-
-    describe("information logging", () => {
-        it("should log information message when log level is information or lower", () => {
-            const logger = new ConsoleLogger({ logLevel: LogLevel.information });
-
-            logger.information("info message");
-
-            expect(mockConsoleLog).toHaveBeenCalledWith("info message");
-        });
-
-        it("should not log information message when log level is higher than information", () => {
-            const logger = new ConsoleLogger({ logLevel: LogLevel.warning });
-
-            logger.information("info message");
-
-            expect(mockConsoleLog).not.toHaveBeenCalled();
-        });
-    });
-
-    describe("warning logging", () => {
-        it("should log warning message when log level is warning or lower", () => {
-            const logger = new ConsoleLogger({ logLevel: LogLevel.warning });
-
-            logger.warning("warning message");
-
-            expect(mockConsoleWarn).toHaveBeenCalledWith("warning message");
-        });
-
-        it("should not log warning message when log level is higher than warning", () => {
-            const logger = new ConsoleLogger({ logLevel: LogLevel.error });
-
-            logger.warning("warning message");
-
-            expect(mockConsoleWarn).not.toHaveBeenCalled();
+            if (expectedResult) {
+                expect(logMock).toHaveBeenCalledOnce();
+                expect(logMock).toHaveBeenCalledWith(logValue);
+            } else {
+                expect(logMock).not.toHaveBeenCalled();
+            }
         });
     });
 
-    describe("error logging", () => {
-        it("should log error message when log level is error or lower", () => {
-            const logger = new ConsoleLogger({ logLevel: LogLevel.error });
+    describe("builder", () => {
+        const pairs = [
+            ["debug", "log"],
+            ["information", "log"],
+            ["warning", "warn"],
+            ["error", "error"],
+            ["critical", "error"]
+        ] satisfies [keyof ConsoleLogger, keyof typeof console][];
 
-            logger.error("error message");
+        test.concurrent.for(pairs)("can build a \"%s\" log with text", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
-            expect(mockConsoleError).toHaveBeenCalledWith("error message");
-        });
-
-        it("should not log error message when log level is higher than error", () => {
-            const logger = new ConsoleLogger({ logLevel: LogLevel.critical });
-
-            logger.error("error message");
-
-            expect(mockConsoleError).not.toHaveBeenCalled();
-        });
-    });
-
-    describe("critical logging", () => {
-        it("should log critical message", () => {
-            const logger = new ConsoleLogger({ logLevel: LogLevel.critical });
-
-            logger.critical("critical message");
-
-            expect(mockConsoleError).toHaveBeenCalledWith("critical message");
-        });
-    });
-
-    describe("builder pattern", () => {
-        it("should build log with text", () => {
             const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
 
-            logger.withText("Hello").withText(" World").debug();
+            logger.withText("Hello").withText(" World")[loggerFunction]();
 
-            expect(mockConsoleLog).toHaveBeenCalledWith("Hello", " World");
+            expect(logMock).toHaveBeenCalledWith("Hello", " World");
         });
 
-        it("should build log with object", () => {
+        test.concurrent.for(pairs)("can build a \"%s\" log with object", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+
             const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
-            const testObj = { name: "John", age: 30 };
+            const obj = { name: "John", age: 30 };
 
-            logger.withText("User:").withObject(testObj).debug();
+            logger.withText("User:").withObject(obj)[loggerFunction]();
 
-            expect(mockConsoleLog).toHaveBeenCalledWith("User:", testObj);
+            expect(logMock).toHaveBeenCalledWith("User:", obj);
         });
 
-        it("should build log with error", () => {
+        test.concurrent.for(pairs)("can build a \"%s\" log with error", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+
             const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
-            const testError = new Error("Test error");
+            const error = new Error("Test error");
 
-            logger.withText("Error occurred:").withError(testError).debug();
+            logger.withText("Error occurred:").withError(error)[loggerFunction]();
 
-            expect(mockConsoleLog).toHaveBeenCalledWith("Error occurred:", testError);
+            expect(logMock).toHaveBeenCalledWith("Error occurred:", error);
         });
 
-        it("should build log with mixed items", () => {
+        test.concurrent.for(pairs)("can build a \"%s\" log with mixed items", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+
             const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
-            const testObj = { id: 1 };
-            const testError = new Error("Test error");
+            const obj = { id: 1 };
+            const error = new Error("Test error");
 
             logger
                 .withText("Processing item")
-                .withObject(testObj)
+                .withObject(obj)
                 .withText("failed with error")
-                .withError(testError)
-                .debug();
+                .withError(error)
+                [loggerFunction]();
 
-            expect(mockConsoleLog).toHaveBeenCalledWith("Processing item", testObj, "failed with error", testError);
+            expect(logMock).toHaveBeenCalledWith("Processing item", obj, "failed with error", error);
         });
     });
 
     describe("styling", () => {
-        it("should apply CSS styling to text", () => {
+        const pairs = [
+            ["debug", "log"],
+            ["information", "log"],
+            ["warning", "warn"],
+            ["error", "error"],
+            ["critical", "error"]
+        ] satisfies [keyof ConsoleLogger, keyof typeof console][];
+
+        test.concurrent.for(pairs)("can apply styling to text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+
             const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
 
-            logger.withText("Styled text", { style: { color: "red", fontWeight: "bold" } }).debug();
+            logger.withText("Styled text", { style: { color: "red", fontWeight: "bold" } })[loggerFunction]();
 
-            expect(mockConsoleLog).toHaveBeenCalledWith("%cStyled text%c", "color:red;font-weight:bold", "%s");
+            expect(logMock).toHaveBeenCalledWith("%cStyled text%c", "color:red;font-weight:bold", "%s");
         });
 
-        it("should handle multiple styled text items", () => {
+        test.concurrent.for(pairs)("can handle multiple styled items with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+
             const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
 
             logger
                 .withText("Red text", { style: { color: "red" } })
                 .withText("Blue text", { style: { color: "blue" } })
-                .debug();
+                [loggerFunction]();
 
-            expect(mockConsoleLog).toHaveBeenCalledWith(
+            expect(logMock).toHaveBeenCalledWith(
                 "%cRed text%c %cBlue text%c",
                 "color:red",
                 "%s",
@@ -176,16 +141,18 @@ describe("ConsoleLogger", () => {
             );
         });
 
-        it("should mix styled and unstyled text", () => {
+        test.concurrent.for(pairs)("can mix styled and unstyled text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+
             const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
 
             logger
                 .withText("Normal text")
                 .withText("Styled text", { style: { color: "green" } })
                 .withText("More normal text")
-                .debug();
+                [loggerFunction]();
 
-            expect(mockConsoleLog).toHaveBeenCalledWith(
+            expect(logMock).toHaveBeenCalledWith(
                 "Normal text %cStyled text%c More normal text",
                 "color:green",
                 "%s"
@@ -193,152 +160,293 @@ describe("ConsoleLogger", () => {
         });
     });
 
-    describe("scope management", () => {
-        it("should always create a new scope", () => {
+    describe("scope", () => {
+        test.concurrent("starting a scope always return a new instance", ({ expect }) => {
             const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
 
-            const scope1 = logger.startScope("Test Scope 1");
-            const scope2 = logger.startScope("Test Scope 2");
+            const scope1 = logger.startScope("foo");
+            const scope2 = logger.startScope("bar");
 
-            expect(scope1).not.equal(scope2);
+            expect(scope1).not.toBe(scope2);
+        });
+
+        test.concurrent("a scope inherit from the root logger log level", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const logger = new ConsoleLogger({ logLevel: LogLevel.error });
+            const scope = logger.startScope("foo");
+
+            scope.information("bar");
+            scope.end();
+
+            expect(logMock).not.toHaveBeenCalled();
+        });
+
+        test.concurrent("when a scope is started, the root logger can still write logs", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
+            const logValue = "bar";
+
+            logger.startScope("foo");
+            logger.information(logValue);
+
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledWith(logValue);
         });
     });
 });
 
 describe("ConsoleLoggerScope", () => {
-    describe("logging within scope", () => {
-        it("should log debug message in scope", () => {
-            const scope = new ConsoleLoggerScope("Test Scope", LogLevel.debug);
+    describe.each([
+        ["debug", "log", [true, false, false, false, false]],
+        ["information", "log", [true, true, false, false, false]],
+        ["warning", "warn", [true, true, true, false, false]],
+        ["error", "error", [true, true, true, true, false]],
+        ["critical", "error", [true, true, true, true, true]]
+    ] satisfies [keyof ConsoleLogger, keyof typeof console, boolean[]][])("can write a \"%s\" log", (loggerFunction, consoleFunction, expectedResults) => {
+        test.concurrent.for([
+            ["debug", LogLevel.debug],
+            ["information", LogLevel.information],
+            ["warning", LogLevel.warning],
+            ["error", LogLevel.error],
+            ["critical", LogLevel.critical]
+        ] satisfies [keyof ConsoleLogger, LogLevel][])("when the log level is \"%s\"", ([, logLevel], { expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
-            scope.debug("debug in scope");
+            // This code is a bit stupid, it's only to mute the console if the console function is not "log" (which
+            // has been previously mocked).
+            if (consoleFunction !== "log") {
+                vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            }
+
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+
+            const scope = new ConsoleLoggerScope("foo", logLevel);
+            const logValue = "bar";
+
+            scope[loggerFunction](logValue);
             scope.end();
 
-            expect(mockConsoleGroupCollapsed).toHaveBeenCalledWith("Test Scope");
-            expect(mockConsoleLog).toHaveBeenCalledWith("debug in scope");
-            expect(mockConsoleGroupEnd).toHaveBeenCalled();
-        });
+            const expectedResult = expectedResults[logLevel];
 
-        it("should log warning message in scope with duplication", () => {
-            const scope = new ConsoleLoggerScope("Test Scope", LogLevel.debug);
+            if (expectedResult === undefined) {
+                throw new Error(`There's no expected result for logLevel: "${logLevel}".`);
+            }
 
-            scope.warning("warning in scope");
-            scope.end();
+            if (expectedResult) {
+                expect(logMock).toHaveBeenCalledOnce();
+                expect(groupCollapsedMock).toHaveBeenCalledOnce();
+                expect(groupEndMock).toHaveBeenCalledOnce();
+            } else {
+                expect(logMock).not.toHaveBeenCalled();
+                expect(groupCollapsedMock).not.toHaveBeenCalled();
+                expect(groupEndMock).not.toHaveBeenCalled();
+            }
 
-            expect(mockConsoleGroupCollapsed).toHaveBeenCalledWith("Test Scope");
-            expect(mockConsoleLog).toHaveBeenCalledWith("warning in scope");
-            expect(mockConsoleWarn).toHaveBeenCalledWith("warning in scope");
-            expect(mockConsoleGroupEnd).toHaveBeenCalled();
-        });
-
-        it("should log error message in scope with duplication", () => {
-            const scope = new ConsoleLoggerScope("Test Scope", LogLevel.debug);
-
-            scope.error("error in scope");
-            scope.end();
-
-            expect(mockConsoleGroupCollapsed).toHaveBeenCalledWith("Test Scope");
-            expect(mockConsoleLog).toHaveBeenCalledWith("error in scope");
-            expect(mockConsoleError).toHaveBeenCalledWith("error in scope");
-            expect(mockConsoleGroupEnd).toHaveBeenCalled();
-        });
-
-        it("should log critical message in scope with duplication", () => {
-            const scope = new ConsoleLoggerScope("Test Scope", LogLevel.debug);
-
-            scope.critical("critical in scope");
-            scope.end();
-
-            expect(mockConsoleGroupCollapsed).toHaveBeenCalledWith("Test Scope");
-            expect(mockConsoleLog).toHaveBeenCalledWith("critical in scope");
-            expect(mockConsoleError).toHaveBeenCalledWith("critical in scope");
-            expect(mockConsoleGroupEnd).toHaveBeenCalled();
+            logMock.mockRestore();
+            groupCollapsedMock.mockRestore();
+            groupEndMock.mockRestore();
         });
     });
 
-    describe("builder pattern in scope", () => {
-        it("should build log with text in scope", () => {
-            const scope = new ConsoleLoggerScope("Test Scope", LogLevel.debug);
+    describe("builder", () => {
+        const pairs = [
+            ["debug", "log"],
+            ["information", "log"],
+            ["warning", "warn"],
+            ["error", "error"],
+            ["critical", "error"]
+        ] satisfies [keyof ConsoleLogger, keyof typeof console][];
 
-            scope.withText("Hello").withText(" from scope").debug();
+        test.concurrent.for(pairs)("can build a \"%s\" log with text", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+
+            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+
+            scope.withText("Hello").withText(" World")[loggerFunction]();
             scope.end();
 
-            expect(mockConsoleGroupCollapsed).toHaveBeenCalledWith("Test Scope");
-            expect(mockConsoleLog).toHaveBeenCalledWith("Hello", " from scope");
-            expect(mockConsoleGroupEnd).toHaveBeenCalled();
+            expect(logMock).toHaveBeenCalledWith("Hello", " World");
         });
 
-        it("should build log with mixed items in scope", () => {
-            const scope = new ConsoleLoggerScope("Test Scope", LogLevel.debug);
-            const testObj = { id: 1 };
-            const testError = new Error("Scope error");
+        test.concurrent.for(pairs)("can build a \"%s\" log with object", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+
+            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+            const obj = { name: "John", age: 30 };
+
+            scope.withText("User:").withObject(obj)[loggerFunction]();
+            scope.end();
+
+            expect(logMock).toHaveBeenCalledWith("User:", obj);
+        });
+
+        test.concurrent.for(pairs)("can build a \"%s\" log with error", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+
+            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+            const error = new Error("Test error");
+
+            scope.withText("Error occurred:").withError(error)[loggerFunction]();
+            scope.end();
+
+            expect(logMock).toHaveBeenCalledWith("Error occurred:", error);
+        });
+
+        test.concurrent.for(pairs)("can build a \"%s\" log with mixed items", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+
+            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+            const obj = { id: 1 };
+            const error = new Error("Test error");
 
             scope
-                .withText("Scope processing")
-                .withObject(testObj)
-                .withError(testError)
-                .debug();
+                .withText("Processing item")
+                .withObject(obj)
+                .withText("failed with error")
+                .withError(error)
+                [loggerFunction]();
 
             scope.end();
 
-            expect(mockConsoleGroupCollapsed).toHaveBeenCalledWith("Test Scope");
-            expect(mockConsoleLog).toHaveBeenCalledWith("Scope processing", testObj, testError);
-            expect(mockConsoleGroupEnd).toHaveBeenCalled();
+            expect(logMock).toHaveBeenCalledWith("Processing item", obj, "failed with error", error);
         });
     });
 
-    describe("scope ending", () => {
-        it("should end scope without logs if no pending logs", () => {
-            const scope = new ConsoleLoggerScope("Empty Scope", LogLevel.debug);
+    describe("styling", () => {
+        const pairs = [
+            ["debug", "log"],
+            ["information", "log"],
+            ["warning", "warn"],
+            ["error", "error"],
+            ["critical", "error"]
+        ] satisfies [keyof ConsoleLogger, keyof typeof console][];
+
+        test.concurrent.for(pairs)("can apply styling to text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+
+            const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
+
+            logger.withText("Styled text", { style: { color: "red", fontWeight: "bold" } })[loggerFunction]();
+
+            expect(logMock).toHaveBeenCalledWith("%cStyled text%c", "color:red;font-weight:bold", "%s");
+        });
+
+        test.concurrent.for(pairs)("can handle multiple styled items with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+
+            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+
+            scope
+                .withText("Red text", { style: { color: "red" } })
+                .withText("Blue text", { style: { color: "blue" } })
+                [loggerFunction]();
 
             scope.end();
 
-            expect(mockConsoleGroupCollapsed).not.toHaveBeenCalled();
-            expect(mockConsoleGroupEnd).not.toHaveBeenCalled();
+            expect(logMock).toHaveBeenCalledWith(
+                "%cRed text%c %cBlue text%c",
+                "color:red",
+                "%s",
+                "color:blue",
+                "%s"
+            );
         });
 
-        it("should dismiss scope without logging", () => {
-            const scope = new ConsoleLoggerScope("Dismissed Scope", LogLevel.debug);
+        test.concurrent.for(pairs)("can mix styled and unstyled text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+
+            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+
+            scope
+                .withText("Normal text")
+                .withText("Styled text", { style: { color: "green" } })
+                .withText("More normal text")
+                [loggerFunction]();
+
+            scope.end();
+
+            expect(logMock).toHaveBeenCalledWith(
+                "Normal text %cStyled text%c More normal text",
+                "color:green",
+                "%s"
+            );
+        });
+    });
+
+    describe("end", () => {
+        it.concurrent("should end scope without logs if no pending logs", ({ expect }) => {
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+
+            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+
+            scope.end();
+
+            expect(groupCollapsedMock).not.toHaveBeenCalled();
+            expect(groupEndMock).not.toHaveBeenCalled();
+        });
+
+        it.concurrent("should dismiss scope without logging", ({ expect }) => {
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+            const groupLog = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
 
             scope.debug("This should not appear");
             scope.end({ dismiss: true });
 
-            expect(mockConsoleGroupCollapsed).not.toHaveBeenCalled();
-            expect(mockConsoleLog).not.toHaveBeenCalled();
-            expect(mockConsoleGroupEnd).not.toHaveBeenCalled();
+            expect(groupCollapsedMock).not.toHaveBeenCalled();
+            expect(groupLog).not.toHaveBeenCalled();
+            expect(groupEndMock).not.toHaveBeenCalled();
         });
 
-        it("should end scope with custom label style", () => {
-            const scope = new ConsoleLoggerScope("Styled Scope", LogLevel.debug);
+        it.concurrent("should end scope with custom label style", ({ expect }) => {
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+            const groupLog = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
 
             scope.debug("content");
             scope.end({ labelStyle: { color: "purple", fontWeight: "bold" } });
 
-            expect(mockConsoleGroupCollapsed).toHaveBeenCalledWith(
-                "%cStyled Scope",
+            expect(groupCollapsedMock).toHaveBeenCalledWith(
+                "%cfoo",
                 "color:purple;font-weight:bold"
             );
-            expect(mockConsoleLog).toHaveBeenCalledWith("content");
-            expect(mockConsoleGroupEnd).toHaveBeenCalled();
+            expect(groupLog).toHaveBeenCalledWith("content");
+            expect(groupEndMock).toHaveBeenCalled();
         });
 
-        it("should use initial label style if no end style provided", () => {
-            const scope = new ConsoleLoggerScope("Initial Styled Scope", LogLevel.debug, {
+        it.concurrent("should use initial label style if no end style provided", ({ expect }) => {
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+            const groupLog = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const scope = new ConsoleLoggerScope("foo", LogLevel.debug, {
                 labelStyle: { color: "orange" }
             });
 
             scope.debug("content");
             scope.end();
 
-            expect(mockConsoleGroupCollapsed).toHaveBeenCalledWith(
-                "%cInitial Styled Scope",
+            expect(groupCollapsedMock).toHaveBeenCalledWith(
+                "%cfoo",
                 "color:orange"
             );
-            expect(mockConsoleLog).toHaveBeenCalledWith("content");
-            expect(mockConsoleGroupEnd).toHaveBeenCalled();
+            expect(groupLog).toHaveBeenCalledWith("content");
+            expect(groupEndMock).toHaveBeenCalled();
         });
 
-        it("should not log again after scope has ended", () => {
-            const scope = new ConsoleLoggerScope("Test Scope", LogLevel.debug);
+        it.concurrent("should not log again after scope has ended", ({ expect }) => {
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+
+            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
 
             scope.debug("first log");
             scope.end();
@@ -346,53 +454,10 @@ describe("ConsoleLoggerScope", () => {
             scope.debug("after log");
             scope.end();
 
-            expect(mockConsoleGroupCollapsed).toHaveBeenCalledTimes(1);
-            expect(mockConsoleGroupEnd).toHaveBeenCalledTimes(1);
+            expect(groupCollapsedMock).toHaveBeenCalledTimes(1);
+            expect(groupEndMock).toHaveBeenCalledTimes(1);
         });
-    });
-
-    describe("log level filtering in scope", () => {
-        it("should not log when log level is too high", () => {
-            const scope = new ConsoleLoggerScope("Filtered Scope", LogLevel.error);
-
-            scope.debug("debug message");
-            scope.information("info message");
-            scope.warning("warning message");
-            scope.end();
-
-            expect(mockConsoleGroupCollapsed).not.toHaveBeenCalled();
-            expect(mockConsoleLog).not.toHaveBeenCalled();
-            expect(mockConsoleGroupEnd).not.toHaveBeenCalled();
-        });
-
-        it("should log when log level is appropriate", () => {
-            const scope = new ConsoleLoggerScope("Filtered Scope", LogLevel.warning);
-
-            scope.warning("warning message");
-            scope.error("error message");
-            scope.end();
-
-            expect(mockConsoleGroupCollapsed).toHaveBeenCalledWith("Filtered Scope");
-            expect(mockConsoleLog).toHaveBeenCalledTimes(2);
-            expect(mockConsoleWarn).toHaveBeenCalledWith("warning message");
-            expect(mockConsoleError).toHaveBeenCalledWith("error message");
-            expect(mockConsoleGroupEnd).toHaveBeenCalled();
-        });
-    });
-
-    describe("multiple logs in scope", () => {
-        it("should handle multiple log calls in a scope", () => {
-            const scope = new ConsoleLoggerScope("Multi Log Scope", LogLevel.debug);
-
-            scope.debug("first debug");
-            scope.information("first info");
-            scope.warning("first warning");
-            scope.end();
-
-            expect(mockConsoleGroupCollapsed).toHaveBeenCalledWith("Multi Log Scope");
-            expect(mockConsoleLog).toHaveBeenCalledTimes(3); // All logs + duplicates for warn
-            expect(mockConsoleWarn).toHaveBeenCalledWith("first warning");
-            expect(mockConsoleGroupEnd).toHaveBeenCalled();
-        });
-    });
+    })
 });
+
+
