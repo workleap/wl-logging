@@ -3,7 +3,7 @@ import { ConsoleLogger, ConsoleLoggerScope } from "../src/ConsoleLogger.ts";
 import { LogLevel } from "../src/Logger.ts";
 
 afterEach(() => {
-    vi.resetAllMocks();
+    vi.restoreAllMocks();
 })
 
 describe("ConsoleLogger", () => {
@@ -60,6 +60,7 @@ describe("ConsoleLogger", () => {
 
             logger.withText("Hello").withText(" World")[loggerFunction]();
 
+            expect(logMock).toHaveBeenCalledOnce();
             expect(logMock).toHaveBeenCalledWith("Hello", " World");
         });
 
@@ -71,6 +72,7 @@ describe("ConsoleLogger", () => {
 
             logger.withText("User:").withObject(obj)[loggerFunction]();
 
+            expect(logMock).toHaveBeenCalledOnce();
             expect(logMock).toHaveBeenCalledWith("User:", obj);
         });
 
@@ -82,6 +84,7 @@ describe("ConsoleLogger", () => {
 
             logger.withText("Error occurred:").withError(error)[loggerFunction]();
 
+            expect(logMock).toHaveBeenCalledOnce();
             expect(logMock).toHaveBeenCalledWith("Error occurred:", error);
         });
 
@@ -99,6 +102,7 @@ describe("ConsoleLogger", () => {
                 .withError(error)
                 [loggerFunction]();
 
+            expect(logMock).toHaveBeenCalledOnce();
             // The sequencing has been preserved because there's no styling.
             expect(logMock).toHaveBeenCalledWith("Processing item", obj, "failed with error", error);
         });
@@ -120,6 +124,7 @@ describe("ConsoleLogger", () => {
 
             logger.withText("Styled text", { style: { color: "red", fontWeight: "bold" } })[loggerFunction]();
 
+            expect(logMock).toHaveBeenCalledOnce();
             expect(logMock).toHaveBeenCalledWith("%cStyled text%c", "color:red;font-weight:bold", "%s");
         });
 
@@ -133,6 +138,7 @@ describe("ConsoleLogger", () => {
                 .withText("Blue text", { style: { color: "blue" } })
                 [loggerFunction]();
 
+            expect(logMock).toHaveBeenCalledOnce();
             expect(logMock).toHaveBeenCalledWith(
                 "%cRed text%c %cBlue text%c",
                 "color:red",
@@ -153,6 +159,7 @@ describe("ConsoleLogger", () => {
                 .withText("More normal text")
                 [loggerFunction]();
 
+            expect(logMock).toHaveBeenCalledOnce();
             expect(logMock).toHaveBeenCalledWith(
                 "Normal text %cStyled text%c More normal text",
                 "color:green",
@@ -175,6 +182,7 @@ describe("ConsoleLogger", () => {
                 .withText("Red text", { style: { color: "red" } })
                 .debug();
 
+            expect(logMock).toHaveBeenCalledOnce();
             expect(logMock).toHaveBeenCalledWith(
                 "Normal text %cGreen text%c %cRed text%c",
                 "color:green",
@@ -271,10 +279,6 @@ describe("ConsoleLoggerScope", () => {
                 expect(groupCollapsedMock).not.toHaveBeenCalled();
                 expect(groupEndMock).not.toHaveBeenCalled();
             }
-
-            logMock.mockRestore();
-            groupCollapsedMock.mockRestore();
-            groupEndMock.mockRestore();
         });
     });
 
@@ -285,21 +289,41 @@ describe("ConsoleLoggerScope", () => {
             ["warning", "warn"],
             ["error", "error"],
             ["critical", "error"]
-        ] satisfies [keyof ConsoleLogger, keyof typeof console][];
+        ] satisfies [keyof ConsoleLoggerScope, keyof typeof console][];
 
         test.concurrent.for(pairs)("can build a \"%s\" log with text", ([loggerFunction, consoleFunction], { expect }) => {
-            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+
+            // This code is a bit stupid, it's only to mute the console if the console function is not "log" (which
+            // has been previously mocked).
+            if (consoleFunction !== "log") {
+                vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            }
 
             const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
 
             scope.withText("Hello").withText(" World")[loggerFunction]();
             scope.end();
 
+            expect(groupCollapsedMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(groupEndMock).toHaveBeenCalledOnce();
+
             expect(logMock).toHaveBeenCalledWith("Hello", " World");
         });
 
         test.concurrent.for(pairs)("can build a \"%s\" log with object", ([loggerFunction, consoleFunction], { expect }) => {
-            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+
+            // This code is a bit stupid, it's only to mute the console if the console function is not "log" (which
+            // has been previously mocked).
+            if (consoleFunction !== "log") {
+                vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            }
 
             const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
             const obj = { name: "John", age: 30 };
@@ -307,11 +331,23 @@ describe("ConsoleLoggerScope", () => {
             scope.withText("User:").withObject(obj)[loggerFunction]();
             scope.end();
 
+            expect(groupCollapsedMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(groupEndMock).toHaveBeenCalledOnce();
+
             expect(logMock).toHaveBeenCalledWith("User:", obj);
         });
 
         test.concurrent.for(pairs)("can build a \"%s\" log with error", ([loggerFunction, consoleFunction], { expect }) => {
-            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+
+            // This code is a bit stupid, it's only to mute the console if the console function is not "log" (which
+            // has been previously mocked).
+            if (consoleFunction !== "log") {
+                vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            }
 
             const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
             const error = new Error("Test error");
@@ -319,11 +355,23 @@ describe("ConsoleLoggerScope", () => {
             scope.withText("Error occurred:").withError(error)[loggerFunction]();
             scope.end();
 
+            expect(groupCollapsedMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(groupEndMock).toHaveBeenCalledOnce();
+
             expect(logMock).toHaveBeenCalledWith("Error occurred:", error);
         });
 
         test.concurrent.for(pairs)("can build a \"%s\" log with mixed items", ([loggerFunction, consoleFunction], { expect }) => {
-            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+
+            // This code is a bit stupid, it's only to mute the console if the console function is not "log" (which
+            // has been previously mocked).
+            if (consoleFunction !== "log") {
+                vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            }
 
             const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
             const obj = { id: 1 };
@@ -338,6 +386,10 @@ describe("ConsoleLoggerScope", () => {
 
             scope.end();
 
+            expect(groupCollapsedMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(groupEndMock).toHaveBeenCalledOnce();
+
             expect(logMock).toHaveBeenCalledWith("Processing item", obj, "failed with error", error);
         });
     });
@@ -349,20 +401,41 @@ describe("ConsoleLoggerScope", () => {
             ["warning", "warn"],
             ["error", "error"],
             ["critical", "error"]
-        ] satisfies [keyof ConsoleLogger, keyof typeof console][];
+        ] satisfies [keyof ConsoleLoggerScope, keyof typeof console][];
 
         test.concurrent.for(pairs)("can apply styling to text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
-            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
 
-            const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
+            // This code is a bit stupid, it's only to mute the console if the console function is not "log" (which
+            // has been previously mocked).
+            if (consoleFunction !== "log") {
+                vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            }
 
-            logger.withText("Styled text", { style: { color: "red", fontWeight: "bold" } })[loggerFunction]();
+            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+
+            scope.withText("Styled text", { style: { color: "red", fontWeight: "bold" } })[loggerFunction]();
+            scope.end();
+
+            expect(groupCollapsedMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(groupEndMock).toHaveBeenCalledOnce();
 
             expect(logMock).toHaveBeenCalledWith("%cStyled text%c", "color:red;font-weight:bold", "%s");
         });
 
         test.concurrent.for(pairs)("can handle multiple styled items with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
-            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+
+            // This code is a bit stupid, it's only to mute the console if the console function is not "log" (which
+            // has been previously mocked).
+            if (consoleFunction !== "log") {
+                vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            }
 
             const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
 
@@ -372,6 +445,10 @@ describe("ConsoleLoggerScope", () => {
                 [loggerFunction]();
 
             scope.end();
+
+            expect(groupCollapsedMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(groupEndMock).toHaveBeenCalledOnce();
 
             expect(logMock).toHaveBeenCalledWith(
                 "%cRed text%c %cBlue text%c",
@@ -383,7 +460,15 @@ describe("ConsoleLoggerScope", () => {
         });
 
         test.concurrent.for(pairs)("can mix styled and unstyled text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
-            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+
+            // This code is a bit stupid, it's only to mute the console if the console function is not "log" (which
+            // has been previously mocked).
+            if (consoleFunction !== "log") {
+                vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            }
 
             const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
 
@@ -395,6 +480,10 @@ describe("ConsoleLoggerScope", () => {
 
             scope.end();
 
+            expect(groupCollapsedMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(groupEndMock).toHaveBeenCalledOnce();
+
             expect(logMock).toHaveBeenCalledWith(
                 "Normal text %cStyled text%c More normal text",
                 "color:green",
@@ -404,6 +493,8 @@ describe("ConsoleLoggerScope", () => {
 
         test.concurrent("when there are objects or errors, they are moved to the end", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
 
             const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
             const obj = { id: 1 };
@@ -418,6 +509,10 @@ describe("ConsoleLoggerScope", () => {
                 .debug();
 
             scope.end();
+
+            expect(groupCollapsedMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(groupEndMock).toHaveBeenCalledOnce();
 
             expect(logMock).toHaveBeenCalledWith(
                 "Normal text %cGreen text%c %cRed text%c",
