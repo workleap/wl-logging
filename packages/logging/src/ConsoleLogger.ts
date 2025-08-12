@@ -75,11 +75,11 @@ function parseItems(logItems: LogItem[]) {
     };
 }
 
-// If the text logs include style, all the text element must be appended as a single string that will be returned as the first element of the array,
-// following a string including all the style.
-// This is done this way because the console functions expect all the styling to be provided in a single single as the second argument.
-// Therefore, when there's styling the original text / object / error sequencing is not preserved.
-// If there's no style though, then the original sequencing will be preserved.
+// If the text logs include style, all the text items must be merged as a single string that will be returned as the first element of the array,
+// followed by items for the included style.
+// This is done this way because the console functions expect all the styled text to be provided as the first argument, followed by the style items.
+// Therefore, when there's styling, the original text / object / error sequencing is not preserved as object and error items are moved at the end.
+// When there's no style, the original sequencing is preserved.
 function formatItems(logItems: LogItem[]) {
     const {
         textItems,
@@ -88,8 +88,7 @@ function formatItems(logItems: LogItem[]) {
         unwrappedItems
     } = parseItems(logItems);
 
-    // There's some style, merge all the text into a single string, following by all the style merged also
-    // in a single string.
+    // There's some style, merge all the text into a single string.
     if (includeStyle) {
         let text = "";
 

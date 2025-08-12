@@ -99,6 +99,7 @@ describe("ConsoleLogger", () => {
                 .withError(error)
                 [loggerFunction]();
 
+            // The sequencing has been preserved because there's no styling.
             expect(logMock).toHaveBeenCalledWith("Processing item", obj, "failed with error", error);
         });
     });
@@ -122,7 +123,7 @@ describe("ConsoleLogger", () => {
             expect(logMock).toHaveBeenCalledWith("%cStyled text%c", "color:red;font-weight:bold", "%s");
         });
 
-        test.concurrent.for(pairs)("can handle multiple styled items with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.concurrent.for(pairs)("can handle multiple styled text items with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
@@ -156,6 +157,32 @@ describe("ConsoleLogger", () => {
                 "Normal text %cStyled text%c More normal text",
                 "color:green",
                 "%s"
+            );
+        });
+
+        test.concurrent("when there are objects or errors, they are moved to the end", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
+            const obj = { id: 1 };
+            const error = new Error("Test error");
+
+            logger
+                .withObject(obj)
+                .withText("Normal text")
+                .withText("Green text", { style: { color: "green" } })
+                .withError(error)
+                .withText("Red text", { style: { color: "red" } })
+                .debug();
+
+            expect(logMock).toHaveBeenCalledWith(
+                "Normal text %cGreen text%c %cRed text%c",
+                "color:green",
+                "%s",
+                "color:red",
+                "%s",
+                obj,
+                error
             );
         });
     });
@@ -372,6 +399,34 @@ describe("ConsoleLoggerScope", () => {
                 "Normal text %cStyled text%c More normal text",
                 "color:green",
                 "%s"
+            );
+        });
+
+        test.concurrent("when there are objects or errors, they are moved to the end", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+            const obj = { id: 1 };
+            const error = new Error("Test error");
+
+            scope
+                .withObject(obj)
+                .withText("Normal text")
+                .withText("Green text", { style: { color: "green" } })
+                .withError(error)
+                .withText("Red text", { style: { color: "red" } })
+                .debug();
+
+            scope.end();
+
+            expect(logMock).toHaveBeenCalledWith(
+                "Normal text %cGreen text%c %cRed text%c",
+                "color:green",
+                "%s",
+                "color:red",
+                "%s",
+                obj,
+                error
             );
         });
     });
