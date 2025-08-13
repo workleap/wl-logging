@@ -228,26 +228,28 @@ import { ConsoleLogger } from "@workleap/logging";
 
 const logger = new ConsoleLogger();
 
-const scope = logger.startScope("Module 1 registration", {
+const scope = logger.startScope("A scope", {
     labelStyle: {
         backgroundColor: "purple",
         color: "white"
     }
 });
 
-scope.information("Hello world!);
+scope.information("Hello world!");
 scope.end();
 ```
 
 ### Style the scope label at end
 
+A scope label can be styled when the scope it's ended. This is particularly useful to style the label accordingly to the status of an operation or request.
+
 ```ts !#8-13
 import { ConsoleLogger } from "@workleap/logging";
 
 const logger = new ConsoleLogger();
-const scope = logger.startScope("Module 1 registration");
+const scope = logger.startScope("A scope");
 
-scope.information("Hello world!);
+scope.information("Hello world!");
 
 scope.end({
     labelStyle: {
