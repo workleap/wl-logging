@@ -9,7 +9,7 @@ toc:
 
 # ConsoleLogger
 
-A logger outputting messages to the console.
+A logger outputting messages to a browser console.
 
 ## Reference
 
@@ -25,6 +25,10 @@ const logger = new ConsoleLogger(options?: { logLevel? })
 ### Methods
 
 Refer to the [Logger](./Logger.md) and [LoggerScope](./LoggerScope.md) documentation.
+
+!!!tip
+When styling is applied to any text segment, all error or object segments are appended at the end of the log entry. If no styling is applied, the original sequencing is preserved.
+!!!
 
 ## Usage
 

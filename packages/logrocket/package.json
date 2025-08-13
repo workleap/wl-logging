@@ -1,4 +1,5 @@
 {
+    "private": true,
     "name": "@workleap/logrocket-logger",
     "author": "Workleap",
     "version": "0.0.1",
