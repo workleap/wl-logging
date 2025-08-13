@@ -2,7 +2,7 @@
     "name": "@samples/web",
     "author": "Workleap",
     "version": "0.0.0",
-    "description": "Sample application to tests the console logger.",
+    "description": "Sample application to test the console logger.",
     "private": true,
     "license": "Apache-2.0",
     "type": "module",
