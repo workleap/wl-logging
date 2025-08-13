@@ -158,7 +158,7 @@ logger
 
 ### Use a logging scope
 
-```ts
+```ts !#4
 import { ConsoleLogger } from "@workleap/logging";
 
 const logger = new ConsoleLogger();
