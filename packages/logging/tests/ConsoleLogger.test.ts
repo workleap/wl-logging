@@ -88,7 +88,7 @@ describe("ConsoleLogger", () => {
             expect(logMock).toHaveBeenCalledWith("Error occurred:", error);
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with mixed items", ([loggerFunction, consoleFunction], { expect }) => {
+        test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
@@ -96,7 +96,7 @@ describe("ConsoleLogger", () => {
             const error = new Error("Test error");
 
             logger
-                .withText("Processing item")
+                .withText("Processing segment")
                 .withObject(obj)
                 .withText("failed with error")
                 .withError(error)
@@ -104,7 +104,7 @@ describe("ConsoleLogger", () => {
 
             expect(logMock).toHaveBeenCalledOnce();
             // The sequencing has been preserved because there's no styling.
-            expect(logMock).toHaveBeenCalledWith("Processing item", obj, "failed with error", error);
+            expect(logMock).toHaveBeenCalledWith("Processing segment", obj, "failed with error", error);
         });
     });
 
@@ -128,7 +128,7 @@ describe("ConsoleLogger", () => {
             expect(logMock).toHaveBeenCalledWith("%cStyled text%c", "color:red;font-weight:bold", "%s");
         });
 
-        test.concurrent.for(pairs)("can handle multiple styled text items with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.concurrent.for(pairs)("can handle multiple styled text segments with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
@@ -362,7 +362,7 @@ describe("ConsoleLoggerScope", () => {
             expect(logMock).toHaveBeenCalledWith("Error occurred:", error);
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with mixed items", ([loggerFunction, consoleFunction], { expect }) => {
+        test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -378,7 +378,7 @@ describe("ConsoleLoggerScope", () => {
             const error = new Error("Test error");
 
             scope
-                .withText("Processing item")
+                .withText("Processing segment")
                 .withObject(obj)
                 .withText("failed with error")
                 .withError(error)
@@ -390,7 +390,7 @@ describe("ConsoleLoggerScope", () => {
             expect(logMock).toHaveBeenCalledOnce();
             expect(groupEndMock).toHaveBeenCalledOnce();
 
-            expect(logMock).toHaveBeenCalledWith("Processing item", obj, "failed with error", error);
+            expect(logMock).toHaveBeenCalledWith("Processing segment", obj, "failed with error", error);
         });
     });
 
@@ -426,7 +426,7 @@ describe("ConsoleLoggerScope", () => {
             expect(logMock).toHaveBeenCalledWith("%cStyled text%c", "color:red;font-weight:bold", "%s");
         });
 
-        test.concurrent.for(pairs)("can handle multiple styled items with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.concurrent.for(pairs)("can handle multiple styled segments with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});

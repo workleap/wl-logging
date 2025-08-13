@@ -89,7 +89,7 @@ describe("CompositeLogger", () => {
             expect(logMock).toHaveBeenCalledWith("Error occurred:", error);
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with mixed items", ([loggerFunction, consoleFunction], { expect }) => {
+        test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new CompositeLogger([new ConsoleLogger({ logLevel: LogLevel.debug }), new ConsoleLogger({ logLevel: LogLevel.debug })]);
@@ -97,14 +97,14 @@ describe("CompositeLogger", () => {
             const error = new Error("Test error");
 
             logger
-                .withText("Processing item")
+                .withText("Processing segment")
                 .withObject(obj)
                 .withText("failed with error")
                 .withError(error)
                 [loggerFunction]();
 
             expect(logMock).toHaveBeenCalledTimes(2);
-            expect(logMock).toHaveBeenCalledWith("Processing item", obj, "failed with error", error);
+            expect(logMock).toHaveBeenCalledWith("Processing segment", obj, "failed with error", error);
         });
     });
 
@@ -278,7 +278,7 @@ describe("CompositeLoggerScope", () => {
             expect(logMock).toHaveBeenCalledWith("Error occurred:", error);
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with mixed items", ([loggerFunction, consoleFunction], { expect }) => {
+        test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -288,7 +288,7 @@ describe("CompositeLoggerScope", () => {
             const error = new Error("Test error");
 
             scope
-                .withText("Processing item")
+                .withText("Processing segment")
                 .withObject(obj)
                 .withText("failed with error")
                 .withError(error)
@@ -300,7 +300,7 @@ describe("CompositeLoggerScope", () => {
             expect(logMock).toHaveBeenCalledTimes(2);
             expect(groupEndMock).toHaveBeenCalledTimes(2);
 
-            expect(logMock).toHaveBeenCalledWith("Processing item", obj, "failed with error", error);
+            expect(logMock).toHaveBeenCalledWith("Processing segment", obj, "failed with error", error);
         });
     });
 

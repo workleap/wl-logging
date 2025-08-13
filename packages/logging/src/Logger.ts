@@ -94,7 +94,7 @@ export interface Logger extends LogBuilder {
     startScope: (label: string, options?: LoggerScopeOptions) => LoggerScope;
 }
 
-export interface LogItem {
+export interface Segment {
     text?: string;
     error?: Error;
     obj?: unknown;

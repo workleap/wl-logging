@@ -1,4 +1,4 @@
-import { LoggerOptions, LoggerScopeEndOptions, LogLevel, type Logger, type LoggerScope, type LoggerScopeOptions, type LogItem, type LogOptions } from "./Logger.ts";
+import { LoggerOptions, LoggerScopeEndOptions, LogLevel, type Logger, type LoggerScope, type LoggerScopeOptions, type LogOptions, type Segment } from "./Logger.ts";
 
 /*
 
@@ -24,96 +24,96 @@ logger.debug("hello world!", OPTIONS);
 
 */
 
-interface TextItem {
+interface TextSegment {
     text: string;
     options?: LogOptions;
 }
 
-function convertCssInlineStyleToConsoleStyle(cssProps: Partial<CSSStyleDeclaration>) {
-    return Object.entries(cssProps)
+function convertCssInlineStyleToConsoleStyle(cssInlineStyle: Partial<CSSStyleDeclaration>) {
+    return Object.entries(cssInlineStyle)
         .map(([key, value]) => `${key.replace(/[A-Z]/g, x => `-${x.toLowerCase()}`)}:${value}`)
         .join(";");
 }
 
-function appendText(currentText: string, newText: string) {
+function appendTextSegment(currentText: string, segment: string) {
     if (currentText.length > 0) {
-        return `${currentText} ${newText}`;
+        return `${currentText} ${segment}`;
     }
 
-    return newText;
+    return segment;
 }
 
-function parseItems(logItems: LogItem[]) {
-    const textItems: TextItem[] = [];
-    const objects: unknown[] = [];
-    const unwrappedItems: unknown[] = [];
+function parseSegments(segments: Segment[]) {
+    const textSegments: TextSegment[] = [];
+    const objectSegments: unknown[] = [];
+    const allUnwrappedSegments: unknown[] = [];
 
-    let includeStyle = false;
+    let includeStyleOptions = false;
 
-    logItems.forEach(x => {
+    segments.forEach(x => {
         if (x.options?.style) {
-            includeStyle = true;
+            includeStyleOptions = true;
         }
 
         if (x.text) {
-            textItems.push(x as TextItem);
-            unwrappedItems.push(x.text);
+            textSegments.push(x as TextSegment);
+            allUnwrappedSegments.push(x.text);
         } else if (x.obj) {
-            objects.push(x.obj);
-            unwrappedItems.push(x.obj);
+            objectSegments.push(x.obj);
+            allUnwrappedSegments.push(x.obj);
         } else if (x.error) {
-            objects.push(x.error);
-            unwrappedItems.push(x.error);
+            objectSegments.push(x.error);
+            allUnwrappedSegments.push(x.error);
         }
     });
 
     return {
-        textItems,
-        objects,
-        includeStyle,
-        unwrappedItems
+        textSegments,
+        objectSegments,
+        allUnwrappedSegments,
+        includeStyleOptions
     };
 }
 
-// If the text logs include style, all the text items must be merged as a single string that will be returned as the first element of the array,
-// followed by items for the included style.
-// This is done this way because the console functions expect all the styled text to be provided as the first argument, followed by the style items.
-// Therefore, when there's styling, the original text / object / error sequencing is not preserved as object and error items are moved at the end.
+// If the text logs include style, all the text segments must be merged as a single string that will be returned as the first element of the array,
+// followed by segments for the included style.
+// This is done this way because the console functions expect all the styled text to be provided as the first argument, followed by the style segments.
+// Therefore, when there's styling, the original text / object / error sequencing is not preserved as object and error segments are moved at the end.
 // When there's no style, the original sequencing is preserved.
-function formatItems(logItems: LogItem[]) {
+function formatSegments(segments: Segment[]) {
     const {
-        textItems,
-        objects,
-        includeStyle,
-        unwrappedItems
-    } = parseItems(logItems);
+        textSegments,
+        objectSegments,
+        allUnwrappedSegments,
+        includeStyleOptions,
+    } = parseSegments(segments);
 
     // There's some style, merge all the text into a single string.
-    if (includeStyle) {
+    if (includeStyleOptions) {
         let text = "";
 
         const styling: string[] = [];
 
-        textItems.forEach(x => {
+        textSegments.forEach(x => {
             if (x.options?.style) {
-                text = appendText(text, `%c${x.text}%c`);
+                text = appendTextSegment(text, `%c${x.text}%c`);
 
                 styling.push(convertCssInlineStyleToConsoleStyle(x.options.style));
                 styling.push("%s");
             } else {
-                text = appendText(text, x.text);
+                text = appendTextSegment(text, x.text);
             }
         });
 
         return [
             text,
             ...styling,
-            ...objects
+            ...objectSegments
         ];
     }
 
     // There's no style, preserve the original sequencing.
-    return unwrappedItems;
+    return allUnwrappedSegments;
 }
 
 type LogFunction = (...rest: unknown[]) => void;
@@ -124,7 +124,7 @@ export class ConsoleLoggerScope implements LoggerScope {
     readonly #label: string;
     readonly #labelStyle?: Partial<CSSStyleDeclaration>;
 
-    #logItems: LogItem[] = [];
+    #segments: Segment[] = [];
     #pendingLogs: PendingLog[] = [];
     #hasEnded: boolean = false;
 
@@ -134,34 +134,34 @@ export class ConsoleLoggerScope implements LoggerScope {
         this.#labelStyle = options.labelStyle;
     }
 
-    #resetLogItems() {
-        this.#logItems = [];
+    #resetSegments() {
+        this.#segments = [];
     }
 
     // Categorized logs (warn, error, etc..) will only show in the console when the console group is open, which is a weird
     // behavior for categorized logs such as error.
     // To alleviate the situation, those categorized logs are logged twice: one time in the group and one time at the root.
     #log(fcts: LogFunction[], threshold: LogLevel) {
-        if (this.#logItems.length > 0) {
+        if (this.#segments.length > 0) {
             if (this.#logLevel <= threshold) {
-                // Required closure to preserved the current log items for when they will be formatted when the scope is ended.
-                const logItems = this.#logItems;
+                // Required closure to preserved the current segments for when they will be formatted when the scope is ended.
+                const segments = this.#segments;
 
                 this.#pendingLogs.push(() => {
-                    const formattedItems = formatItems(logItems);
+                    const formattedSegments = formatSegments(segments);
 
                     fcts.forEach(x => {
-                        x(...formattedItems);
+                        x(...formattedSegments);
                     })
                 });
             }
 
-            this.#resetLogItems();
+            this.#resetSegments();
         }
     }
 
     withText(text: string, options: LogOptions = {}) {
-        this.#logItems.push({
+        this.#segments.push({
             text,
             options
         });
@@ -170,7 +170,7 @@ export class ConsoleLoggerScope implements LoggerScope {
     }
 
     withError(error: Error) {
-        this.#logItems.push({
+        this.#segments.push({
             error
         });
 
@@ -178,7 +178,7 @@ export class ConsoleLoggerScope implements LoggerScope {
     }
 
     withObject(obj: object) {
-        this.#logItems.push({
+        this.#segments.push({
             obj
         });
 
@@ -187,7 +187,7 @@ export class ConsoleLoggerScope implements LoggerScope {
 
     debug(log?: string, options?: LogOptions) {
         if (log) {
-            this.#logItems.push({
+            this.#segments.push({
                 text: log,
                 options
             });
@@ -198,7 +198,7 @@ export class ConsoleLoggerScope implements LoggerScope {
 
     information(log?: string, options?: LogOptions) {
         if (log) {
-            this.#logItems.push({
+            this.#segments.push({
                 text: log,
                 options
             });
@@ -209,7 +209,7 @@ export class ConsoleLoggerScope implements LoggerScope {
 
     warning(log?: string, options?: LogOptions) {
         if (log) {
-            this.#logItems.push({
+            this.#segments.push({
                 text: log,
                 options
             });
@@ -220,7 +220,7 @@ export class ConsoleLoggerScope implements LoggerScope {
 
     error(log?: string, options?: LogOptions) {
         if (log) {
-            this.#logItems.push({
+            this.#segments.push({
                 text: log,
                 options
             });
@@ -231,7 +231,7 @@ export class ConsoleLoggerScope implements LoggerScope {
 
     critical(log?: string, options?: LogOptions) {
         if (log) {
-            this.#logItems.push({
+            this.#segments.push({
                 text: log,
                 options
             });
@@ -271,7 +271,7 @@ export class ConsoleLoggerScope implements LoggerScope {
 
 export class ConsoleLogger implements Logger {
     readonly #logLevel: LogLevel;
-    #logItems: LogItem[] = [];
+    #segments: Segment[] = [];
 
     constructor(options: LoggerOptions = {}) {
         const {
@@ -281,17 +281,17 @@ export class ConsoleLogger implements Logger {
         this.#logLevel = logLevel;
     }
 
-    #resetLogItems() {
-        this.#logItems = [];
+    #resetSegments() {
+        this.#segments = [];
     }
 
     #log(fct: LogFunction, threshold: LogLevel) {
-        if (this.#logItems.length > 0) {
+        if (this.#segments.length > 0) {
             if (this.#logLevel <= threshold) {
-                fct(...formatItems(this.#logItems));
+                fct(...formatSegments(this.#segments));
             }
 
-            this.#resetLogItems();
+            this.#resetSegments();
         }
     }
 
@@ -300,7 +300,7 @@ export class ConsoleLogger implements Logger {
     }
 
     withText(text: string, options: LogOptions = {}) {
-        this.#logItems.push({
+        this.#segments.push({
             text,
             options
         });
@@ -309,7 +309,7 @@ export class ConsoleLogger implements Logger {
     }
 
     withError(error: Error) {
-        this.#logItems.push({
+        this.#segments.push({
             error
         });
 
@@ -317,7 +317,7 @@ export class ConsoleLogger implements Logger {
     }
 
     withObject(obj: object) {
-        this.#logItems.push({
+        this.#segments.push({
             obj
         });
 
@@ -326,7 +326,7 @@ export class ConsoleLogger implements Logger {
 
     debug(log?: string, options?: LogOptions) {
         if (log) {
-            this.#logItems.push({
+            this.#segments.push({
                 text: log,
                 options
             });
@@ -337,7 +337,7 @@ export class ConsoleLogger implements Logger {
 
     information(log?: string, options?: LogOptions) {
         if (log) {
-            this.#logItems.push({
+            this.#segments.push({
                 text: log,
                 options
             });
@@ -348,7 +348,7 @@ export class ConsoleLogger implements Logger {
 
     warning(log?: string, options?: LogOptions) {
         if (log) {
-            this.#logItems.push({
+            this.#segments.push({
                 text: log,
                 options
             });
@@ -359,7 +359,7 @@ export class ConsoleLogger implements Logger {
 
     error(log?: string, options?: LogOptions) {
         if (log) {
-            this.#logItems.push({
+            this.#segments.push({
                 text: log,
                 options
             });
@@ -370,7 +370,7 @@ export class ConsoleLogger implements Logger {
 
     critical(log?: string, options?: LogOptions) {
         if (log) {
-            this.#logItems.push({
+            this.#segments.push({
                 text: log,
                 options
             });
