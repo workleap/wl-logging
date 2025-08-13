@@ -1,28 +1,4 @@
-import { LoggerOptions, LoggerScopeEndOptions, LogLevel, type Logger, type LoggerScope, type LoggerScopeOptions, type LogOptions, type Segment } from "./Logger.ts";
-
-/*
-
--> Also provide a LoggerProvider / LoggerContext for React?
-    -> Could it though encourage Squide devs to define a new Provider rather than using Squide logger?
-
--> I think the libraries "verbose" mode should also log to LogRocket by default <----- NO NO NO
-    -> Or not? What if the app isn't using LogRocket?
-    -> And that would add a dependency on LogRocket for those libraries
-
--> App could either create their own logger or use squide logger
-
-logger
-    .withText("helllo", OPTIONS)
-    .withText(" world!")
-    .withObject({ name: "John Doe" })
-    .withError(new Error("foo"))
-    .debug();
-
-logger.debug("hello world!");
-
-logger.debug("hello world!", OPTIONS);
-
-*/
+import { LogLevel, type Logger, type LoggerOptions, type LoggerScope, type LoggerScopeEndOptions, type LoggerScopeOptions, type LogOptions, type Segment } from "./Logger.ts";
 
 interface TextSegment {
     text: string;

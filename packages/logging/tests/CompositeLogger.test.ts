@@ -5,7 +5,7 @@ import { LogLevel } from "../src/Logger.ts";
 
 afterEach(() => {
     vi.restoreAllMocks();
-})
+});
 
 describe("CompositeLogger", () => {
     describe.each([

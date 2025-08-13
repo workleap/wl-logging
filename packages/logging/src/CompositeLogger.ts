@@ -25,7 +25,7 @@ export class CompositeLoggerScope implements LoggerScope {
             try {
                 x.withError(error, options);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+            } catch (_error: unknown) {
                 // Do nothing...
             }
         });
@@ -36,7 +36,7 @@ export class CompositeLoggerScope implements LoggerScope {
     withObject(obj: object, options?: LogOptions) {
         this.#scopes.forEach(x => {
             try {
-                x.withObject(obj, options)
+                x.withObject(obj, options);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error: unknown) {
                 // Do nothing...
@@ -142,7 +142,7 @@ export class CompositeLogger implements Logger {
             try {
                 x.withError(error, options);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+            } catch (_error: unknown) {
                 // Do nothing...
             }
         });
