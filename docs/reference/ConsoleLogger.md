@@ -24,35 +24,7 @@ const logger = new ConsoleLogger(options?: { logLevel? })
 
 ### Methods
 
-- `withText(text, options?)`: Adds a text segment to the log entry.
-- `withError(error)`: Adds an `Error` object to the log entry.
-- `withObject(obj)`: Adds an arbitrary object to the log entry.
-- `debug(log?, options?)`: Output a log entry to the console at the debug level. Typically used for low-level diagnostic information.
-- `information(log?, options?)`: Output a log entry to the console at the information level. Typically used for general information.
-- `warning(log?, options?)`: Output a log entry to the console at the warning level. Typically indicates a potential problem or unexpected state.
-- `error(log?, options?)`: Output a log entry to the console at the error level. Typically used for failures and issues.
-- `critical(log?, options?)`: Output a log entry to the console at the critical level. Typically indicates severe errors or conditions requiring immediate attention.
-- `startScope(label, options?)`: Begins a logical logging scope with a label to group related log entries.
-
-!!!info
-When styling is applied to any text segment, all error or object segments are appended at the end of the log entry. If no styling is applied, the original sequencing is preserved.
-!!!
-
-## Scope definition
-
-A scope is a temporary, named logging context that groups related log entries together. A scope is typically created to trace the execution of a specific operation, request, or lifecycle event. All logs outputted through the scope are grouped under its label, making it easier to visually group messages in the console. Scopes can include multiple log levels and chained segments.
-
-### Methods
-
-- `withText(text, options?)`: Adds a text segment to the log entry.
-- `withError(error)`: Adds an `Error` object to the log entry.
-- `withObject(obj)`: Adds an arbitrary object to the log entry.
-- `debug(log?, options?)`: Output a log entry to the console at the debug level. Typically used for low-level diagnostic information.
-- `information(log?, options?)`: Output a log entry to the console at the information level. Typically used for general information.
-- `warning(log?, options?)`: Output a log entry to the console at the warning level. Typically indicates a potential problem or unexpected state.
-- `error(log?, options?)`: Output a log entry to the console at the error level. Typically used for failures and issues.
-- `critical(log?, options?)`: Output a log entry to the console at the critical level. Typically indicates severe errors or conditions requiring immediate attention.
-- `end(options?)`: Ends the logical scope, outputting the log entries to the console if the scope is not dismissed.
+Refer to the [Logger](./Logger.md) and [LoggerScope](./LoggerScope.md) documentation.
 
 ## Usage
 
