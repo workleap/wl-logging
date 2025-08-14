@@ -1,5 +1,5 @@
-import { CompositeLogger, CompositeLoggerScope, ConsoleLogger, ConsoleLoggerScope } from "@workleap/logging";
-import { LogRocketLogger, LogRocketLoggerScope } from "@workleap/logrocket-logger";
+import { CompositeLogger, type CompositeLoggerScope, ConsoleLogger, type ConsoleLoggerScope } from "@workleap/logging";
+import { LogRocketLogger, type LogRocketLoggerScope } from "@workleap/logrocket-logger";
 import { useCallback, useState } from "react";
 
 function getShortId() {
@@ -37,16 +37,18 @@ const consoleLogger = new ConsoleLogger();
 
 function useConsoleLogCallback(level: string) {
     return useCallback(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         consoleLogger[level]();
-    }, []);
+    }, [level]);
 }
 
 function useConsoleLogWithTextCallback(level: string) {
     return useCallback(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         consoleLogger[level](`Log: ${getShortId()}`);
-    }, []);
+    }, [level]);
 }
 
 function ConsoleLoggerSection() {
@@ -121,23 +123,25 @@ function ConsoleLoggerSection() {
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 //////////////////////
 
 function useConsoleScopeLogCallback(level: string, scope?: ConsoleLoggerScope) {
     return useCallback(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         scope?.[level]();
-    }, [scope]);
+    }, [scope, level]);
 }
 
 function useConsoleScopeLogWithTextCallback(level: string, scope?: ConsoleLoggerScope) {
     return useCallback(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         scope?.[level](`Log: ${getShortId()}`);
-    }, [scope]);
+    }, [scope, level]);
 }
 
 function ConsoleLoggerScopeSection() {
@@ -255,7 +259,7 @@ function ConsoleLoggerScopeSection() {
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 //////////////////////
@@ -264,16 +268,18 @@ const logRocketLogger = new LogRocketLogger();
 
 function useLogRocketLogCallback(level: string) {
     return useCallback(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         logRocketLogger[level]();
-    }, []);
+    }, [level]);
 }
 
 function useLogRocketLogWithTextCallback(level: string) {
     return useCallback(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         logRocketLogger[level](`Log: ${getShortId()}`);
-    }, []);
+    }, [level]);
 }
 
 function LogRocketLoggerSection() {
@@ -320,23 +326,25 @@ function LogRocketLoggerSection() {
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 //////////////////////
 
 function useLogRocketScopeLogCallback(level: string, scope?: LogRocketLoggerScope) {
     return useCallback(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         scope?.[level]();
-    }, [scope]);
+    }, [scope, level]);
 }
 
 function useLogRocketScopeLogWithTextCallback(level: string, scope?: LogRocketLoggerScope) {
     return useCallback(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         scope?.[level](`Log: ${getShortId()}`);
-    }, [scope]);
+    }, [scope, level]);
 }
 
 function LogRocketLoggerScopeSection() {
@@ -402,7 +410,7 @@ function LogRocketLoggerScopeSection() {
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 //////////////////////
@@ -414,16 +422,18 @@ const compositeLogger = new CompositeLogger([
 
 function useCompositeLogCallback(level: string) {
     return useCallback(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         compositeLogger[level]();
-    }, []);
+    }, [level]);
 }
 
 function useCompositeLogWithTextCallback(level: string) {
     return useCallback(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         compositeLogger[level](`Log: ${getShortId()}`);
-    }, []);
+    }, [level]);
 }
 
 export function CompositeLoggerSection() {
@@ -498,23 +508,25 @@ export function CompositeLoggerSection() {
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 //////////////////////
 
 function useCompositeScopeLogCallback(level: string, scope?: CompositeLoggerScope) {
     return useCallback(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         scope?.[level]();
-    }, [scope]);
+    }, [scope, level]);
 }
 
 function useCompositeScopeLogWithTextCallback(level: string, scope?: CompositeLoggerScope) {
     return useCallback(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         scope?.[level](`Log: ${getShortId()}`);
-    }, [scope]);
+    }, [scope, level]);
 }
 
 function CompositeLoggerScopeSection() {
@@ -632,7 +644,7 @@ function CompositeLoggerScopeSection() {
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 //////////////////////
@@ -647,5 +659,5 @@ export function App() {
             <CompositeLoggerSection />
             <CompositeLoggerScopeSection />
         </>
-    )
+    );
 }
