@@ -27,11 +27,19 @@ To be understand the relationships between the commands, have a look at this rep
 
 ## Project overview
 
-This project is split into two major sections, [packages/](./packages) and [sample/](./sample).
+This project is split into two major sections, [packages/](./packages) and [samples/](./samples).
 
 ### Packages
 
 Under [packages/](./packages/) are the actual telemetry libraries.
+
+### Samples
+
+Under [samples/](samples/) are applications to test the loggers functionalities while developing.
+
+You'll find four samples:
+
+- `web`: A sample application for testing web loggers.
 
 ## Installation
 
@@ -59,7 +67,13 @@ npx retype wallet --add <your-license-key-here>
 
 ## Develop the packages
 
-TBD
+Open a [VSCode terminals](https://code.visualstudio.com/docs/terminal/basics#_managing-multiple-terminals) and start one of the sample application with one of the following scripts:
+
+```bash
+pnpm dev-web
+```
+
+You can then open your favorite browser and navigate to `http://localhost:8080/` to get a live preview of your code.
 
 ## Release the packages
 
@@ -92,6 +106,30 @@ By default, packages compilation output will be in their respective *dist* direc
 ## Commands
 
 From the project root, you have access to many commands the main ones are:
+
+### dev-web
+
+Start a watch process for the "web" sample application.
+
+```bash
+pnpm dev-web
+```
+
+### dev-docs
+
+Start the [Retype](https://retype.com/) dev server. If you are experiencing issue with the license, refer to the [setup Retype section](#setup-retype).
+
+```bash
+pnpm dev-docs
+```
+
+### build-pkg
+
+Build the packages for release.
+
+```bash
+pnpm build-pkg
+```
 
 ### lint
 
