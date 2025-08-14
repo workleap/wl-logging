@@ -1,14 +1,14 @@
-import { type Logger, LoggerOptions, type LoggerScope, type LoggerScopeEndOptions, LogItem, LogLevel, type LogOptions } from "@workleap/logging";
+import { type Logger, type LoggerOptions, type LoggerScope, type LoggerScopeEndOptions, LogLevel, type LogOptions, type Segment } from "@workleap/logging";
 import LogRocket from "logrocket";
 
 type LogFunction = (...rest: unknown[]) => void;
 type PendingLog = () => void;
 
 export class LogRocketLoggerScope implements LoggerScope {
-    readonly #logLevel: LogLevel
+    readonly #logLevel: LogLevel;
     readonly #label: string;
 
-    #logItems: LogItem[] = [];
+    #logItems: Segment[] = [];
     #pendingLogs: PendingLog[] = [];
     #hasEnded: boolean = false;
 
@@ -29,7 +29,7 @@ export class LogRocketLoggerScope implements LoggerScope {
         return newText;
     }
 
-    #formatItems(logItems: LogItem[]) {
+    #formatItems(logItems: Segment[]) {
         let text: string = "";
         const remainingItems: unknown[] = [];
 
@@ -177,12 +177,12 @@ export class LogRocketLoggerScope implements LoggerScope {
 
 export class LogRocketLogger implements Logger {
     readonly #logLevel: LogLevel;
-    #logItems: LogItem[] = [];
+    #logItems: Segment[] = [];
 
     constructor(options: LoggerOptions = {}) {
         const {
-            logLevel = LogLevel.debug,
-        } = options
+            logLevel = LogLevel.debug
+        } = options;
 
         this.#logLevel = logLevel;
     }

@@ -101,6 +101,7 @@ describe("CompositeLogger", () => {
                 .withObject(obj)
                 .withText("failed with error")
                 .withError(error)
+                // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
             expect(logMock).toHaveBeenCalledTimes(2);
@@ -292,6 +293,7 @@ describe("CompositeLoggerScope", () => {
                 .withObject(obj)
                 .withText("failed with error")
                 .withError(error)
+                // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
             scope.end();

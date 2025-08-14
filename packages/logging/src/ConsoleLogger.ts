@@ -61,7 +61,7 @@ function formatSegments(segments: Segment[]) {
         textSegments,
         objectSegments,
         allUnwrappedSegments,
-        includeStyleOptions,
+        includeStyleOptions
     } = parseSegments(segments);
 
     // There's some style, merge all the text into a single string.
@@ -128,7 +128,7 @@ export class ConsoleLoggerScope implements LoggerScope {
 
                     fcts.forEach(x => {
                         x(...formattedSegments);
-                    })
+                    });
                 });
             }
 
@@ -251,8 +251,8 @@ export class ConsoleLogger implements Logger {
 
     constructor(options: LoggerOptions = {}) {
         const {
-            logLevel = LogLevel.debug,
-        } = options
+            logLevel = LogLevel.debug
+        } = options;
 
         this.#logLevel = logLevel;
     }

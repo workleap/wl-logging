@@ -4,7 +4,7 @@ import { LogLevel } from "../src/Logger.ts";
 
 afterEach(() => {
     vi.restoreAllMocks();
-})
+});
 
 describe("ConsoleLogger", () => {
     describe.each([
@@ -100,6 +100,7 @@ describe("ConsoleLogger", () => {
                 .withObject(obj)
                 .withText("failed with error")
                 .withError(error)
+                // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
             expect(logMock).toHaveBeenCalledOnce();
@@ -136,6 +137,7 @@ describe("ConsoleLogger", () => {
             logger
                 .withText("Red text", { style: { color: "red" } })
                 .withText("Blue text", { style: { color: "blue" } })
+                // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
             expect(logMock).toHaveBeenCalledOnce();
@@ -157,6 +159,7 @@ describe("ConsoleLogger", () => {
                 .withText("Normal text")
                 .withText("Styled text", { style: { color: "green" } })
                 .withText("More normal text")
+                // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
             expect(logMock).toHaveBeenCalledOnce();
@@ -382,6 +385,7 @@ describe("ConsoleLoggerScope", () => {
                 .withObject(obj)
                 .withText("failed with error")
                 .withError(error)
+                // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
             scope.end();
@@ -442,6 +446,7 @@ describe("ConsoleLoggerScope", () => {
             scope
                 .withText("Red text", { style: { color: "red" } })
                 .withText("Blue text", { style: { color: "blue" } })
+                // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
             scope.end();
@@ -476,6 +481,7 @@ describe("ConsoleLoggerScope", () => {
                 .withText("Normal text")
                 .withText("Styled text", { style: { color: "green" } })
                 .withText("More normal text")
+                // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
             scope.end();
@@ -607,7 +613,7 @@ describe("ConsoleLoggerScope", () => {
             expect(groupCollapsedMock).toHaveBeenCalledTimes(1);
             expect(groupEndMock).toHaveBeenCalledTimes(1);
         });
-    })
+    });
 });
 
 

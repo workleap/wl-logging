@@ -26,9 +26,9 @@ function generateRandomError(): Error {
         "Internal server error"
     ];
 
-    const randomMessage = messages[Math.floor(Math.random() * messages.length)]
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
 
-    return new Error(randomMessage)
+    return new Error(randomMessage);
 }
 
 //////////////////////

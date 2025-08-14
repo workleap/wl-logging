@@ -5,7 +5,7 @@ import { App } from "./App.tsx";
 
 registerLogRocketInstrumentation(process.env.LOGROCKET_APP_ID as string, {
     verbose: true
-})
+});
 
 const root = createRoot(document.getElementById("root")!);
 
