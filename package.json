@@ -11,8 +11,8 @@
     },
     "scripts": {
         "dev-web": "turbo run dev --filter=./samples/web",
-        "build-pkg": "turbo run build --filter=./packages/*",
         "dev-docs": "retype start",
+        "build-pkg": "turbo run build --filter=./packages/*",
         "lint": "turbo run lint --continue",
         "eslint": "eslint . --ignore-pattern packages --ignore-pattern samples --max-warnings=-0 --cache --cache-location node_modules/.cache/eslint",
         "typecheck": "tsc",
