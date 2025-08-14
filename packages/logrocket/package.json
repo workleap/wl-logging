@@ -2,7 +2,7 @@
     "private": true,
     "name": "@workleap/logrocket-logger",
     "author": "Workleap",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "A logger for LogRocket.",
     "license": "Apache-2.0",
     "repository": {
