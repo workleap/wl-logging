@@ -41,7 +41,7 @@ output: .retype
 url: https://workleap.github.io/wl-logging/
 
 branding:
-    title: "Logger"
+    title: "Logging"
     logo: ./static/logo.png
 
 favicon: ./static/favicon.png

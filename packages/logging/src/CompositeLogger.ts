@@ -1,4 +1,4 @@
-import type { EndLoggerScopeOptions, Logger, LoggerScope } from "./Logger.ts";
+import type { Logger, LoggerScope, LoggerScopeEndOptions, LoggerScopeOptions, LogOptions } from "./Logger.ts";
 
 export class CompositeLoggerScope implements LoggerScope {
     readonly #scopes: LoggerScope[];
@@ -7,10 +7,49 @@ export class CompositeLoggerScope implements LoggerScope {
         this.#scopes = scopes;
     }
 
-    debug(log: string, ...rest: unknown[]) {
+    withText(text: string, options?: LogOptions) {
         this.#scopes.forEach(x => {
             try {
-                x.debug(log, ...rest);
+                x.withText(text, options);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            } catch (error: unknown) {
+                // Do nothing...
+            }
+        });
+
+        return this;
+    }
+
+    withError(error: Error, options?: LogOptions) {
+        this.#scopes.forEach(x => {
+            try {
+                x.withError(error, options);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            } catch (_error: unknown) {
+                // Do nothing...
+            }
+        });
+
+        return this;
+    }
+
+    withObject(obj: object, options?: LogOptions) {
+        this.#scopes.forEach(x => {
+            try {
+                x.withObject(obj, options);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            } catch (error: unknown) {
+                // Do nothing...
+            }
+        });
+
+        return this;
+    }
+
+    debug(log?: string, options?: LogOptions) {
+        this.#scopes.forEach(x => {
+            try {
+                x.debug(log, options);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error: unknown) {
                 // Do nothing...
@@ -18,10 +57,10 @@ export class CompositeLoggerScope implements LoggerScope {
         });
     }
 
-    information(log: string, ...rest: unknown[]) {
+    information(log?: string, options?: LogOptions) {
         this.#scopes.forEach(x => {
             try {
-                x.information(log, ...rest);
+                x.information(log, options);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error: unknown) {
                 // Do nothing...
@@ -29,10 +68,10 @@ export class CompositeLoggerScope implements LoggerScope {
         });
     }
 
-    warning(log: string, ...rest: unknown[]) {
+    warning(log?: string, options?: LogOptions) {
         this.#scopes.forEach(x => {
             try {
-                x.warning(log, ...rest);
+                x.warning(log, options);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error: unknown) {
                 // Do nothing...
@@ -40,10 +79,10 @@ export class CompositeLoggerScope implements LoggerScope {
         });
     }
 
-    error(log: string, ...rest: unknown[]) {
+    error(log?: string, options?: LogOptions) {
         this.#scopes.forEach(x => {
             try {
-                x.error(log, ...rest);
+                x.error(log, options);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error: unknown) {
                 // Do nothing...
@@ -51,10 +90,10 @@ export class CompositeLoggerScope implements LoggerScope {
         });
     }
 
-    critical(log: string, ...rest: unknown[]) {
+    critical(log?: string, options?: LogOptions) {
         this.#scopes.forEach(x => {
             try {
-                x.critical(log, ...rest);
+                x.critical(log, options);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error: unknown) {
                 // Do nothing...
@@ -62,7 +101,7 @@ export class CompositeLoggerScope implements LoggerScope {
         });
     }
 
-    end(options?: EndLoggerScopeOptions) {
+    end(options?: LoggerScopeEndOptions) {
         this.#scopes.forEach(x => {
             try {
                 x.end(options);
@@ -85,10 +124,49 @@ export class CompositeLogger implements Logger {
         return CompositeLogger.name;
     }
 
-    debug(log: string, ...rest: unknown[]) {
+    withText(text: string, options?: LogOptions) {
         this.#loggers.forEach(x => {
             try {
-                x.debug(log, ...rest);
+                x.withText(text, options);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            } catch (error: unknown) {
+                // Do nothing...
+            }
+        });
+
+        return this;
+    }
+
+    withError(error: Error, options?: LogOptions) {
+        this.#loggers.forEach(x => {
+            try {
+                x.withError(error, options);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            } catch (_error: unknown) {
+                // Do nothing...
+            }
+        });
+
+        return this;
+    }
+
+    withObject(obj: object, options?: LogOptions) {
+        this.#loggers.forEach(x => {
+            try {
+                x.withObject(obj, options);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            } catch (error: unknown) {
+                // Do nothing...
+            }
+        });
+
+        return this;
+    }
+
+    debug(log?: string, options?: LogOptions) {
+        this.#loggers.forEach(x => {
+            try {
+                x.debug(log, options);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error: unknown) {
                 // Do nothing...
@@ -96,10 +174,10 @@ export class CompositeLogger implements Logger {
         });
     }
 
-    information(log: string, ...rest: unknown[]) {
+    information(log?: string, options?: LogOptions) {
         this.#loggers.forEach(x => {
             try {
-                x.information(log, ...rest);
+                x.information(log, options);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error: unknown) {
                 // Do nothing...
@@ -107,10 +185,10 @@ export class CompositeLogger implements Logger {
         });
     }
 
-    warning(log: string, ...rest: unknown[]) {
+    warning(log?: string, options?: LogOptions) {
         this.#loggers.forEach(x => {
             try {
-                x.warning(log, ...rest);
+                x.warning(log, options);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error: unknown) {
                 // Do nothing...
@@ -118,10 +196,10 @@ export class CompositeLogger implements Logger {
         });
     }
 
-    error(log: string, ...rest: unknown[]) {
+    error(log?: string, options?: LogOptions) {
         this.#loggers.forEach(x => {
             try {
-                x.error(log, ...rest);
+                x.error(log, options);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error: unknown) {
                 // Do nothing...
@@ -129,10 +207,10 @@ export class CompositeLogger implements Logger {
         });
     }
 
-    critical(log: string, ...rest: unknown[]) {
+    critical(log?: string, options?: LogOptions) {
         this.#loggers.forEach(x => {
             try {
-                x.critical(log, ...rest);
+                x.critical(log, options);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error: unknown) {
                 // Do nothing...
@@ -140,8 +218,8 @@ export class CompositeLogger implements Logger {
         });
     }
 
-    startScope(label: string) {
-        const scopes = this.#loggers.map(x => x.startScope(label));
+    startScope(label: string, options?: LoggerScopeOptions) {
+        const scopes = this.#loggers.map(x => x.startScope(label, options));
 
         return new CompositeLoggerScope(scopes);
     }

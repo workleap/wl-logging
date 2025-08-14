@@ -1,64 +1,224 @@
-import { LogLevel, type EndLoggerScopeOptions, type Logger, type LoggerScope } from "./Logger.ts";
+import { LogLevel, type Logger, type LoggerOptions, type LoggerScope, type LoggerScopeEndOptions, type LoggerScopeOptions, type LogOptions, type Segment } from "./Logger.ts";
 
-type Log = () => void;
-
-export interface EndConsoleLoggerScopeOptions extends EndLoggerScopeOptions {
-    /**
-     * Optionally specify the text color of the scope label.
-     */
-    color?: string;
+interface TextSegment {
+    text: string;
+    options?: LogOptions;
 }
+
+function convertCssInlineStyleToConsoleStyle(cssInlineStyle: Partial<CSSStyleDeclaration>) {
+    return Object.entries(cssInlineStyle)
+        .map(([key, value]) => `${key.replace(/[A-Z]/g, x => `-${x.toLowerCase()}`)}:${value}`)
+        .join(";");
+}
+
+function appendTextSegment(currentText: string, segment: string) {
+    if (currentText.length > 0) {
+        return `${currentText} ${segment}`;
+    }
+
+    return segment;
+}
+
+function parseSegments(segments: Segment[]) {
+    const textSegments: TextSegment[] = [];
+    const objectSegments: unknown[] = [];
+    const allUnwrappedSegments: unknown[] = [];
+
+    let includeStyleOptions = false;
+
+    segments.forEach(x => {
+        if (x.options?.style) {
+            includeStyleOptions = true;
+        }
+
+        if (x.text) {
+            textSegments.push(x as TextSegment);
+            allUnwrappedSegments.push(x.text);
+        } else if (x.obj) {
+            objectSegments.push(x.obj);
+            allUnwrappedSegments.push(x.obj);
+        } else if (x.error) {
+            objectSegments.push(x.error);
+            allUnwrappedSegments.push(x.error);
+        }
+    });
+
+    return {
+        textSegments,
+        objectSegments,
+        allUnwrappedSegments,
+        includeStyleOptions
+    };
+}
+
+// If the text logs include style, all the text segments must be merged as a single string that will be returned as the first element of the array,
+// followed by segments for the included style.
+// This is done this way because the console functions expect all the styled text to be provided as the first argument, followed by the style segments.
+// Therefore, when there's styling, the original text / object / error sequencing is not preserved as object and error segments are moved at the end.
+// When there's no style, the original sequencing is preserved.
+function formatSegments(segments: Segment[]) {
+    const {
+        textSegments,
+        objectSegments,
+        allUnwrappedSegments,
+        includeStyleOptions
+    } = parseSegments(segments);
+
+    // There's some style, merge all the text into a single string.
+    if (includeStyleOptions) {
+        let text = "";
+
+        const styling: string[] = [];
+
+        textSegments.forEach(x => {
+            if (x.options?.style) {
+                text = appendTextSegment(text, `%c${x.text}%c`);
+
+                styling.push(convertCssInlineStyleToConsoleStyle(x.options.style));
+                styling.push("%s");
+            } else {
+                text = appendTextSegment(text, x.text);
+            }
+        });
+
+        return [
+            text,
+            ...styling,
+            ...objectSegments
+        ];
+    }
+
+    // There's no style, preserve the original sequencing.
+    return allUnwrappedSegments;
+}
+
+type LogFunction = (...rest: unknown[]) => void;
+type PendingLog = () => void;
 
 export class ConsoleLoggerScope implements LoggerScope {
     readonly #logLevel: LogLevel;
     readonly #label: string;
+    readonly #labelStyle?: Partial<CSSStyleDeclaration>;
 
-    #logs: Log[] = [];
+    #segments: Segment[] = [];
+    #pendingLogs: PendingLog[] = [];
     #hasEnded: boolean = false;
 
-    constructor(label: string, logLevel: LogLevel) {
+    constructor(label: string, logLevel: LogLevel, options: LoggerScopeOptions = {}) {
         this.#logLevel = logLevel;
         this.#label = label;
+        this.#labelStyle = options.labelStyle;
     }
 
-    #log(log: Log, threshold: LogLevel, additionalLog?: Log) {
-        if (!this.#hasEnded) {
-            if (this.#logLevel <= threshold) {
-                this.#logs.push(log);
+    #resetSegments() {
+        this.#segments = [];
+    }
 
-                // Categorized logs will only show in the console when the console group is open, which is quite a weird
-                // behavior for categorized logs such as error.
-                // To alleviate the situation, those categorized logs are logged twice: one time in the group and one time at the root.
-                if (additionalLog) {
-                    additionalLog();
-                }
+    // Categorized logs (warn, error, etc..) will only show in the console when the console group is open, which is a weird
+    // behavior for categorized logs such as error.
+    // To alleviate the situation, those categorized logs are logged twice: one time in the group and one time at the root.
+    #log(fcts: LogFunction[], threshold: LogLevel) {
+        if (this.#segments.length > 0) {
+            if (this.#logLevel <= threshold) {
+                // Required closure to preserved the current segments for when they will be formatted when the scope is ended.
+                const segments = this.#segments;
+
+                this.#pendingLogs.push(() => {
+                    const formattedSegments = formatSegments(segments);
+
+                    fcts.forEach(x => {
+                        x(...formattedSegments);
+                    });
+                });
             }
+
+            this.#resetSegments();
         }
     }
 
-    debug(log: string, ...rest: unknown[]) {
-        return this.#log(() => console.log(log, ...rest), LogLevel.debug);
+    withText(text: string, options: LogOptions = {}) {
+        this.#segments.push({
+            text,
+            options
+        });
+
+        return this;
     }
 
-    information(log: string, ...rest: unknown[]) {
-        return this.#log(() => console.log(log, ...rest), LogLevel.information);
+    withError(error: Error) {
+        this.#segments.push({
+            error
+        });
+
+        return this;
     }
 
-    warning(log: string, ...rest: unknown[]) {
-        return this.#log(() => console.log(`%c${log}`, "color: yellow;", ...rest), LogLevel.warning, () => console.warn(log, ...rest));
+    withObject(obj: object) {
+        this.#segments.push({
+            obj
+        });
+
+        return this;
     }
 
-    error(log: string, ...rest: unknown[]) {
-        return this.#log(() => console.log(`%c${log}`, "color: red;", ...rest), LogLevel.error, () => console.error(log, ...rest));
+    debug(log?: string, options?: LogOptions) {
+        if (log) {
+            this.#segments.push({
+                text: log,
+                options
+            });
+        }
+
+        this.#log([console.log], LogLevel.debug);
     }
 
-    critical(log: string, ...rest: unknown[]) {
-        return this.#log(() => console.log(`%c${log}`, "color: red;", ...rest), LogLevel.critical, () => console.error(log, ...rest));
+    information(log?: string, options?: LogOptions) {
+        if (log) {
+            this.#segments.push({
+                text: log,
+                options
+            });
+        }
+
+        this.#log([console.log], LogLevel.information);
     }
 
-    end(options: EndConsoleLoggerScopeOptions = {}) {
+    warning(log?: string, options?: LogOptions) {
+        if (log) {
+            this.#segments.push({
+                text: log,
+                options
+            });
+        }
+
+        this.#log([console.log, console.warn], LogLevel.warning);
+    }
+
+    error(log?: string, options?: LogOptions) {
+        if (log) {
+            this.#segments.push({
+                text: log,
+                options
+            });
+        }
+
+        this.#log([console.log, console.error], LogLevel.error);
+    }
+
+    critical(log?: string, options?: LogOptions) {
+        if (log) {
+            this.#segments.push({
+                text: log,
+                options
+            });
+        }
+
+        this.#log([console.log, console.error], LogLevel.critical);
+    }
+
+    end(options: LoggerScopeEndOptions = {}) {
         const {
-            color,
+            labelStyle,
             dismiss = false
         } = options;
 
@@ -66,16 +226,17 @@ export class ConsoleLoggerScope implements LoggerScope {
             this.#hasEnded = true;
 
             if (!dismiss) {
-                if (this.#logs.length > 0) {
-                    const label = color ? [`%c${this.#label}`, `color: ${color};`] : [this.#label];
+                if (this.#pendingLogs.length > 0) {
+                    const style = labelStyle ?? this.#labelStyle;
+                    const label = style ? [`%c${this.#label}`, convertCssInlineStyleToConsoleStyle(style)] : [this.#label];
 
                     console.groupCollapsed(...label);
 
-                    this.#logs.forEach(x => {
+                    this.#pendingLogs.forEach(x => {
                         x();
                     });
 
-                    this.#logs = [];
+                    this.#pendingLogs = [];
 
                     console.groupEnd();
                 }
@@ -86,42 +247,115 @@ export class ConsoleLoggerScope implements LoggerScope {
 
 export class ConsoleLogger implements Logger {
     readonly #logLevel: LogLevel;
+    #segments: Segment[] = [];
 
-    constructor(logLevel: LogLevel = LogLevel.debug) {
+    constructor(options: LoggerOptions = {}) {
+        const {
+            logLevel = LogLevel.debug
+        } = options;
+
         this.#logLevel = logLevel;
+    }
+
+    #resetSegments() {
+        this.#segments = [];
+    }
+
+    #log(fct: LogFunction, threshold: LogLevel) {
+        if (this.#segments.length > 0) {
+            if (this.#logLevel <= threshold) {
+                fct(...formatSegments(this.#segments));
+            }
+
+            this.#resetSegments();
+        }
     }
 
     getName() {
         return ConsoleLogger.name;
     }
 
-    #log(log: Log, threshold: LogLevel) {
-        if (this.#logLevel <= threshold) {
-            log();
+    withText(text: string, options: LogOptions = {}) {
+        this.#segments.push({
+            text,
+            options
+        });
+
+        return this;
+    }
+
+    withError(error: Error) {
+        this.#segments.push({
+            error
+        });
+
+        return this;
+    }
+
+    withObject(obj: object) {
+        this.#segments.push({
+            obj
+        });
+
+        return this;
+    }
+
+    debug(log?: string, options?: LogOptions) {
+        if (log) {
+            this.#segments.push({
+                text: log,
+                options
+            });
         }
+
+        this.#log(console.log, LogLevel.debug);
     }
 
-    debug(log: string, ...rest: unknown[]) {
-        return this.#log(() => console.log(log, ...rest), LogLevel.debug);
+    information(log?: string, options?: LogOptions) {
+        if (log) {
+            this.#segments.push({
+                text: log,
+                options
+            });
+        }
+
+        this.#log(console.log, LogLevel.information);
     }
 
-    information(log: string, ...rest: unknown[]) {
-        return this.#log(() => console.log(log, ...rest), LogLevel.information);
+    warning(log?: string, options?: LogOptions) {
+        if (log) {
+            this.#segments.push({
+                text: log,
+                options
+            });
+        }
+
+        this.#log(console.warn, LogLevel.warning);
     }
 
-    warning(log: string, ...rest: unknown[]) {
-        return this.#log(() => console.warn(log, ...rest), LogLevel.warning);
+    error(log?: string, options?: LogOptions) {
+        if (log) {
+            this.#segments.push({
+                text: log,
+                options
+            });
+        }
+
+        this.#log(console.error, LogLevel.error);
     }
 
-    error(log: string, ...rest: unknown[]) {
-        return this.#log(() => console.error(log, ...rest), LogLevel.error);
+    critical(log?: string, options?: LogOptions) {
+        if (log) {
+            this.#segments.push({
+                text: log,
+                options
+            });
+        }
+
+        this.#log(console.error, LogLevel.critical);
     }
 
-    critical(log: string, ...rest: unknown[]) {
-        return this.#log(() => console.error(log, ...rest), LogLevel.critical);
-    }
-
-    startScope(label: string) {
-        return new ConsoleLoggerScope(label, this.#logLevel);
+    startScope(label: string, options?: LoggerScopeOptions) {
+        return new ConsoleLoggerScope(label, this.#logLevel, options);
     }
 }

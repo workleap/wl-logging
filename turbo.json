@@ -10,11 +10,6 @@
             "dependsOn": ["^build"],
             "outputs": ["dist/**"]
         },
-        "serve-build": {
-            "dependsOn": ["build"],
-            "cache": false,
-            "persistent": true
-        },
         "lint": {
             "dependsOn": ["eslint", "typecheck", "//#syncpack"]
         },

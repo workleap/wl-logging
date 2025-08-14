@@ -1,13 +1,14 @@
 {
-    "name": "@workleap/logging",
+    "private": true,
+    "name": "@workleap/logrocket-logger",
     "author": "Workleap",
     "version": "0.0.1",
-    "description": "A package including logging utilities for Workleap web applications.",
+    "description": "A logger for LogRocket.",
     "license": "Apache-2.0",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/workleap/wl-logging.git",
-        "directory": "packages/logging"
+        "directory": "packages/logrocket"
     },
     "type": "module",
     "publishConfig": {
@@ -33,6 +34,12 @@
         "eslint": "eslint . --max-warnings=-0 --cache --cache-location node_modules/.cache/eslint",
         "typecheck": "tsc",
         "test": "vitest --config vitest.config.ts --no-watch --passWithNoTests"
+    },
+    "peerDependencies": {
+        "logrocket": "^10.1.0"
+    },
+    "dependencies": {
+        "@workleap/logging": "workspace:*"
     },
     "devDependencies": {
         "@rsbuild/core": "1.4.15",
