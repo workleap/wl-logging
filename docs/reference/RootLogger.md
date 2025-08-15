@@ -7,7 +7,7 @@ toc:
     depth: 2-3
 ---
 
-# Logger
+# RootLogger
 
 Defines the interface for logger implementations.
 
