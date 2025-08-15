@@ -1,5 +1,4 @@
 import { CompositeLogger, type CompositeLoggerScope, ConsoleLogger, type ConsoleLoggerScope } from "@workleap/logging";
-import { LogRocketLogger, type LogRocketLoggerScope } from "@workleap/logrocket-logger";
 import { useCallback, useState } from "react";
 
 function getShortId() {
@@ -264,160 +263,8 @@ function ConsoleLoggerScopeSection() {
 
 //////////////////////
 
-const logRocketLogger = new LogRocketLogger();
-
-function useLogRocketLogCallback(level: string) {
-    return useCallback(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        logRocketLogger[level]();
-    }, [level]);
-}
-
-function useLogRocketLogWithTextCallback(level: string) {
-    return useCallback(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        logRocketLogger[level](`Log: ${getShortId()}`);
-    }, [level]);
-}
-
-function LogRocketLoggerSection() {
-    const handleTextClick = useCallback(() => {
-        logRocketLogger.withText(`Text: ${getShortId()}`);
-    }, []);
-
-    const handleObjectClick = useCallback(() => {
-        logRocketLogger.withObject(generateRandomObject());
-    }, []);
-
-    const handleErrorClick = useCallback(() => {
-        logRocketLogger.withError(generateRandomError());
-    }, []);
-
-    return (
-        <>
-            <h2>LogRocket Logger</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                <div style={{ display: "flex", gap: "10px" }}>
-                    <button type="button" onClick={handleTextClick}>Text</button>
-                    <button type="button" onClick={handleObjectClick}>Object</button>
-                    <button type="button" onClick={handleErrorClick}>Error</button>
-                </div>
-                <div style={{ display: "flex", gap: "10px" }}>
-                    <button type="button" onClick={useLogRocketLogCallback("debug")}>Debug</button>
-                    <button type="button" onClick={useLogRocketLogWithTextCallback("debug")}>Debug with text</button>
-                </div>
-                <div style={{ display: "flex", gap: "10px" }}>
-                    <button type="button" onClick={useLogRocketLogCallback("information")}>Information</button>
-                    <button type="button" onClick={useLogRocketLogWithTextCallback("information")}>Information with text</button>
-                </div>
-                <div style={{ display: "flex", gap: "10px" }}>
-                    <button type="button" onClick={useLogRocketLogCallback("warning")}>Warning</button>
-                    <button type="button" onClick={useLogRocketLogWithTextCallback("warning")}>Warning with text</button>
-                </div>
-                <div style={{ display: "flex", gap: "10px" }}>
-                    <button type="button" onClick={useLogRocketLogCallback("error")}>Error</button>
-                    <button type="button" onClick={useLogRocketLogWithTextCallback("error")}>Error with text</button>
-                </div>
-                <div style={{ display: "flex", gap: "10px" }}>
-                    <button type="button" onClick={useLogRocketLogCallback("critical")}>Critical</button>
-                    <button type="button" onClick={useLogRocketLogWithTextCallback("critical")}>Critical with text</button>
-                </div>
-            </div>
-        </>
-    );
-}
-
-//////////////////////
-
-function useLogRocketScopeLogCallback(level: string, scope?: LogRocketLoggerScope) {
-    return useCallback(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        scope?.[level]();
-    }, [scope, level]);
-}
-
-function useLogRocketScopeLogWithTextCallback(level: string, scope?: LogRocketLoggerScope) {
-    return useCallback(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        scope?.[level](`Log: ${getShortId()}`);
-    }, [scope, level]);
-}
-
-function LogRocketLoggerScopeSection() {
-    const [scope, setScope] = useState<LogRocketLoggerScope>();
-
-    const handleCreateScopeClick = useCallback(() => {
-        if (scope) {
-            scope.end({ dismiss: true });
-        }
-
-        setScope(logRocketLogger.startScope(getShortId()));
-    }, [scope]);
-
-    const handleEndScopeClick = useCallback(() => {
-        scope?.end();
-        setScope(undefined);
-    }, [scope]);
-
-    const handleTextClick = useCallback(() => {
-        scope?.withText(`Text: ${getShortId()}`);
-    }, [scope]);
-
-    const handleObjectClick = useCallback(() => {
-        scope?.withObject(generateRandomObject());
-    }, [scope]);
-
-    const handleErrorClick = useCallback(() => {
-        scope?.withError(generateRandomError());
-    }, [scope]);
-
-    return (
-        <>
-            <h3>Scope</h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                <div style={{ display: "flex", gap: "10px" }}>
-                    <button type="button" onClick={handleCreateScopeClick}>Create scope</button>
-                    <button type="button" onClick={handleEndScopeClick}>End scope</button>
-                </div>
-                <div style={{ display: "flex", gap: "10px" }}>
-                    <button type="button" onClick={handleTextClick}>Text</button>
-                    <button type="button" onClick={handleObjectClick}>Object</button>
-                    <button type="button" onClick={handleErrorClick}>Error</button>
-                </div>
-                <div style={{ display: "flex", gap: "10px" }}>
-                    <button type="button" onClick={useLogRocketScopeLogCallback("debug", scope)}>Debug</button>
-                    <button type="button" onClick={useLogRocketScopeLogWithTextCallback("debug", scope)}>Debug with text</button>
-                </div>
-                <div style={{ display: "flex", gap: "10px" }}>
-                    <button type="button" onClick={useLogRocketScopeLogCallback("information", scope)}>Information</button>
-                    <button type="button" onClick={useLogRocketScopeLogWithTextCallback("information", scope)}>Information with text</button>
-                </div>
-                <div style={{ display: "flex", gap: "10px" }}>
-                    <button type="button" onClick={useLogRocketScopeLogCallback("warning", scope)}>Warning</button>
-                    <button type="button" onClick={useLogRocketScopeLogWithTextCallback("warning", scope)}>Warning with text</button>
-                </div>
-                <div style={{ display: "flex", gap: "10px" }}>
-                    <button type="button" onClick={useLogRocketScopeLogCallback("error", scope)}>Error</button>
-                    <button type="button" onClick={useLogRocketScopeLogWithTextCallback("error", scope)}>Error with text</button>
-                </div>
-                <div style={{ display: "flex", gap: "10px" }}>
-                    <button type="button" onClick={useLogRocketScopeLogCallback("critical", scope)}>Critical</button>
-                    <button type="button" onClick={useLogRocketScopeLogWithTextCallback("critical", scope)}>Critical with text</button>
-                </div>
-            </div>
-        </>
-    );
-}
-
-//////////////////////
-
 const compositeLogger = new CompositeLogger([
-    new ConsoleLogger(),
-    new LogRocketLogger()
+    new ConsoleLogger()
 ]);
 
 function useCompositeLogCallback(level: string) {
@@ -654,8 +501,6 @@ export function App() {
         <>
             <ConsoleLoggerSection />
             <ConsoleLoggerScopeSection />
-            <LogRocketLoggerSection />
-            <LogRocketLoggerScopeSection />
             <CompositeLoggerSection />
             <CompositeLoggerScopeSection />
         </>
