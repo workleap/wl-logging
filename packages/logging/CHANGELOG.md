@@ -1,5 +1,11 @@
 # @workleap/logging
 
+## 1.0.1
+
+### Patch Changes
+
+- [#8](https://github.com/workleap/wl-logging/pull/8) [`063cbd7`](https://github.com/workleap/wl-logging/commit/063cbd7e8dbafcf2d32bad16dcb487deb91c17d6) Thanks [@patricklafrance](https://github.com/patricklafrance)! - Removed LogRocket stuff and renamed Logger interface to RootLogger.
+
 ## 1.0.0
 
 ### Major Changes
