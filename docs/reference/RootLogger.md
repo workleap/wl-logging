@@ -1,15 +1,15 @@
 ---
 order: 80
-label: Logger
+label: RootLogger
 meta:
-    title: Logger
+    title: RootLogger
 toc:
     depth: 2-3
 ---
 
 # Logger
 
-Defines the common contract for logger implementations.
+Defines the interface for logger implementations.
 
 ## Reference
 
@@ -28,9 +28,9 @@ Defines the common contract for logger implementations.
 ## Usage
 
 ```ts
-import { Logger } from "@workleap/logging";
+import { RootLogger } from "@workleap/logging";
 
-class DummyLogger implements Logger {
+class DummyLogger implements RootLogger {
     getName() {
         return DummyLogger.name;
     }

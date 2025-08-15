@@ -24,7 +24,7 @@ const logger = new ConsoleLogger(options?: { logLevel? })
 
 ### Methods
 
-Refer to the [Logger](./Logger.md) and [LoggerScope](./LoggerScope.md) documentation.
+Refer to the [RootLogger](./RootLogger.md) and [LoggerScope](./LoggerScope.md) documentation.
 
 !!!tip
 When styling is applied to any text segment, all error or object segments are appended at the end of the log entry. If no styling is applied, the original sequencing is preserved.
@@ -192,7 +192,7 @@ scope
 scope.debug("Fetching data...");
 
 // Will not output any log entries to the console.
-scope.end({  dismiss: true });
+scope.end({ dismiss: true });
 ```
 
 ### Style the scope label at creation

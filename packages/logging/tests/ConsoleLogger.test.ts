@@ -548,7 +548,7 @@ describe("ConsoleLoggerScope", () => {
         test.concurrent("can dismiss scope without logging", ({ expect }) => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
-            const groupLog = vi.spyOn(console, "log").mockImplementation(() => {});
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
 
@@ -556,14 +556,14 @@ describe("ConsoleLoggerScope", () => {
             scope.end({ dismiss: true });
 
             expect(groupCollapsedMock).not.toHaveBeenCalled();
-            expect(groupLog).not.toHaveBeenCalled();
+            expect(logMock).not.toHaveBeenCalled();
             expect(groupEndMock).not.toHaveBeenCalled();
         });
 
         test.concurrent("can end scope with custom label style", ({ expect }) => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
-            const groupLog = vi.spyOn(console, "log").mockImplementation(() => {});
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
 
@@ -574,14 +574,14 @@ describe("ConsoleLoggerScope", () => {
                 "%cfoo",
                 "color:purple;font-weight:bold"
             );
-            expect(groupLog).toHaveBeenCalledWith("content");
+            expect(logMock).toHaveBeenCalledWith("content");
             expect(groupEndMock).toHaveBeenCalled();
         });
 
         test.concurrent("can use initial label style if no end style provided", ({ expect }) => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
-            const groupLog = vi.spyOn(console, "log").mockImplementation(() => {});
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             const scope = new ConsoleLoggerScope("foo", LogLevel.debug, {
                 labelStyle: { color: "orange" }
@@ -594,7 +594,7 @@ describe("ConsoleLoggerScope", () => {
                 "%cfoo",
                 "color:orange"
             );
-            expect(groupLog).toHaveBeenCalledWith("content");
+            expect(logMock).toHaveBeenCalledWith("content");
             expect(groupEndMock).toHaveBeenCalled();
         });
 

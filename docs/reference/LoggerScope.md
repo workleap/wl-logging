@@ -9,7 +9,7 @@ toc:
 
 # LoggerScope
 
-Defines the common contract for logger scope implementations.
+Defines the interface for logger scope implementations.
 
 > A scope is a temporary, named logging context that groups related log entries together. A scope is typically created to trace the execution of a specific operation, request, or correlating events. All logs outputted through the scope are grouped under its label, making it easier to visually group messages. Scopes can include multiple log levels and chained segments.
 
