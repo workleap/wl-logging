@@ -8,5 +8,6 @@ meta:
 
 - [ConsoleLogger](./ConsoleLogger.md)
 - [CompositeLogger](./CompositeLogger.md)
-- [Logger](./Logger.md)
+- [RootLogger](./RootLogger.md)
 - [LoggerScope](./LoggerScope.md)
+- [createCompositeLogger](./createCompositeLogger.md)

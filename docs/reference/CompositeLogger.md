@@ -23,7 +23,7 @@ const logger = new CompositeLogger(loggers);
 
 ### Methods
 
-Refer to the [Logger](./Logger.md) and [LoggerScope](./LoggerScope.md) documentation.
+Refer to the [RootLogger](./RootLogger.md) and [LoggerScope](./LoggerScope.md) documentation.
 
 ## Usage
 
@@ -238,7 +238,7 @@ scope
 scope.debug("Fetching data...");
 
 // Will not output any log entries to the console.
-scope.end({  dismiss: true });
+scope.end({ dismiss: true });
 ```
 
 ### Style the scope label at creation

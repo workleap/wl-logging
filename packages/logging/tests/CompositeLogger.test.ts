@@ -337,7 +337,7 @@ describe("CompositeLoggerScope", () => {
         test.concurrent("can dismiss scopes without logging", ({ expect }) => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
-            const groupLog = vi.spyOn(console, "log").mockImplementation(() => {});
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             const scope = new CompositeLoggerScope([new ConsoleLoggerScope("foo", LogLevel.debug), new ConsoleLoggerScope("foo", LogLevel.debug)]);
 
@@ -345,7 +345,7 @@ describe("CompositeLoggerScope", () => {
             scope.end({ dismiss: true });
 
             expect(groupCollapsedMock).not.toHaveBeenCalled();
-            expect(groupLog).not.toHaveBeenCalled();
+            expect(logMock).not.toHaveBeenCalled();
             expect(groupEndMock).not.toHaveBeenCalled();
         });
     });

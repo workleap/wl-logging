@@ -13,21 +13,21 @@ export interface LogOptions {
     style?: Partial<CSSStyleDeclaration>;
 }
 
-export interface LogBuilder {
+export interface Logger {
     /**
      * Log some text.
      */
-    withText: (text: string, options?: LogOptions) => LogBuilder;
+    withText: (text: string, options?: LogOptions) => Logger;
 
     /**
      * Log an error object.
      */
-    withError: (error: Error, options?: LogOptions) => LogBuilder;
+    withError: (error: Error, options?: LogOptions) => Logger;
 
     /**
      * Log an unknown object.
      */
-    withObject: (obj: object, options?: LogOptions) => LogBuilder;
+    withObject: (obj: object, options?: LogOptions) => Logger;
 
     /**
      * Write a debug log. The log will be processed only if the logger LogLevel is >= debug.
@@ -77,14 +77,14 @@ export interface LoggerScopeEndOptions {
     dismiss?: boolean;
 }
 
-export interface LoggerScope extends LogBuilder {
+export interface LoggerScope extends Logger {
     /**
      * End the scope.
      */
     end: (options?: LoggerScopeEndOptions) => void;
 }
 
-export interface Logger extends LogBuilder {
+export interface RootLogger extends Logger {
     getName: () => string;
 
     /**

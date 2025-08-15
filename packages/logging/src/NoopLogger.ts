@@ -1,4 +1,4 @@
-import type { Logger, LoggerScope } from "./Logger.ts";
+import type { LoggerScope, RootLogger } from "./Logger.ts";
 
 export class NoopLoggerScope implements LoggerScope {
     withText() {
@@ -18,7 +18,7 @@ export class NoopLoggerScope implements LoggerScope {
     end() {}
 }
 
-export class NoopLogger implements Logger {
+export class NoopLogger implements RootLogger {
     getName() {
         return NoopLogger.name;
     }

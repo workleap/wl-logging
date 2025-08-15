@@ -1,4 +1,4 @@
-import { LogLevel, type Logger, type LoggerOptions, type LoggerScope, type LoggerScopeEndOptions, type LoggerScopeOptions, type LogOptions, type Segment } from "./Logger.ts";
+import { LogLevel, type LoggerOptions, type LoggerScope, type LoggerScopeEndOptions, type LoggerScopeOptions, type LogOptions, type RootLogger, type Segment } from "./Logger.ts";
 
 interface TextSegment {
     text: string;
@@ -22,7 +22,7 @@ function appendTextSegment(currentText: string, segment: string) {
 function parseSegments(segments: Segment[]) {
     const textSegments: TextSegment[] = [];
     const objectSegments: unknown[] = [];
-    const allUnwrappedSegments: unknown[] = [];
+    const allSegments: unknown[] = [];
 
     let includeStyleOptions = false;
 
@@ -33,20 +33,20 @@ function parseSegments(segments: Segment[]) {
 
         if (x.text) {
             textSegments.push(x as TextSegment);
-            allUnwrappedSegments.push(x.text);
+            allSegments.push(x.text);
         } else if (x.obj) {
             objectSegments.push(x.obj);
-            allUnwrappedSegments.push(x.obj);
+            allSegments.push(x.obj);
         } else if (x.error) {
             objectSegments.push(x.error);
-            allUnwrappedSegments.push(x.error);
+            allSegments.push(x.error);
         }
     });
 
     return {
         textSegments,
         objectSegments,
-        allUnwrappedSegments,
+        allSegments,
         includeStyleOptions
     };
 }
@@ -60,7 +60,7 @@ function formatSegments(segments: Segment[]) {
     const {
         textSegments,
         objectSegments,
-        allUnwrappedSegments,
+        allSegments,
         includeStyleOptions
     } = parseSegments(segments);
 
@@ -89,7 +89,7 @@ function formatSegments(segments: Segment[]) {
     }
 
     // There's no style, preserve the original sequencing.
-    return allUnwrappedSegments;
+    return allSegments;
 }
 
 type LogFunction = (...rest: unknown[]) => void;
@@ -245,7 +245,7 @@ export class ConsoleLoggerScope implements LoggerScope {
     }
 }
 
-export class ConsoleLogger implements Logger {
+export class ConsoleLogger implements RootLogger {
     readonly #logLevel: LogLevel;
     #segments: Segment[] = [];
 
