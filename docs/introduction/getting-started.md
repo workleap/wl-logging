@@ -20,9 +20,9 @@ pnpm add @workleap/logging
 A logger can output log entries with different levels (`debug`, `information`, `warning`, `error`, `critical`). This allows to filter logs according to a minimum severity:
 
 ```ts !#4
-import { ConsoleLogger, LogLevel } from "@workleap/logging";
+import { BrowserConsoleLogger, LogLevel } from "@workleap/logging";
 
-const logger = new ConsoleLogger({
+const logger = new BrowserConsoleLogger({
     logLevel: LogLevel.error
 });
 ```
@@ -34,9 +34,9 @@ In the previous example, the logger instance would process only `error` and `cri
 The simplest form is logging plain text directly at the desired level:
 
 ```ts !#5
-import { ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger } from "@workleap/logging";
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 
 logger.debug("Application started!");
 ```
@@ -46,9 +46,9 @@ logger.debug("Application started!");
 Segments can be chained to build richer log entries that include text, errors and objects:
 
 ```ts
-import { ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger } from "@workleap/logging";
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 
 logger
     .withText("Failed to process order")
@@ -62,9 +62,9 @@ logger
 When using a logger that supports styling, individual text segments can be styled:
 
 ```ts
-import { ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger } from "@workleap/logging";
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 
 logger
     .withText("Build completed", {
@@ -95,9 +95,9 @@ When styling is applied to any text segment, all error or object segments are ap
 Scopes group related log entries under a shared label or context. This is useful for tracing operations, request or correlating events:
 
 ```ts
-import { ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger } from "@workleap/logging";
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 const scope = logger.startScope("User signup");
 
 scope.information("Form loaded");
@@ -111,16 +111,28 @@ scope.
 scope.end();
 ```
 
+## LogRocket session replays
+
+By default, [LogRocket](https://logrocket.com/) session replays exclude console output. To send log entries to LogRocket, use the [LogRocketLogger](https://workleap.github.io/wl-telemetry/honeycomb/reference/logrocketlogger) class from the [@workleap/logrocket](https://www.npmjs.com/package/@workleap/logrocket):
+
+```ts
+import { LogRocketLogger } from "@workleap/logrocket";
+
+const logger = new LogRocketLogger();
+
+logger.debug("Application started!");
+```
+
 ## Compose loggers
 
 You can forward the same log entry to multiple destinations by composing loggers:
 
 ```ts
-import { ConsoleLogger, CompositeLogger } from "@workleap/logging";
+import { BrowserConsoleLogger, CompositeLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
-    new ConsoleLogger(),
+    new BrowserConsoleLogger(),
     new LogRocketLogger()
 ]);
 

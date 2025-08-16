@@ -1,4 +1,4 @@
-import { CompositeLogger, type CompositeLoggerScope, ConsoleLogger, type ConsoleLoggerScope } from "@workleap/logging";
+import { BrowserConsoleLogger, CompositeLogger, type BrowserConsoleLoggerScope, type CompositeLoggerScope } from "@workleap/logging";
 import { useCallback, useState } from "react";
 
 function getShortId() {
@@ -32,7 +32,7 @@ function generateRandomError(): Error {
 
 //////////////////////
 
-const consoleLogger = new ConsoleLogger();
+const consoleLogger = new BrowserConsoleLogger();
 
 function useConsoleLogCallback(level: string) {
     return useCallback(() => {
@@ -127,7 +127,7 @@ function ConsoleLoggerSection() {
 
 //////////////////////
 
-function useConsoleScopeLogCallback(level: string, scope?: ConsoleLoggerScope) {
+function useConsoleScopeLogCallback(level: string, scope?: BrowserConsoleLoggerScope) {
     return useCallback(() => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -135,7 +135,7 @@ function useConsoleScopeLogCallback(level: string, scope?: ConsoleLoggerScope) {
     }, [scope, level]);
 }
 
-function useConsoleScopeLogWithTextCallback(level: string, scope?: ConsoleLoggerScope) {
+function useConsoleScopeLogWithTextCallback(level: string, scope?: BrowserConsoleLoggerScope) {
     return useCallback(() => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -144,7 +144,7 @@ function useConsoleScopeLogWithTextCallback(level: string, scope?: ConsoleLogger
 }
 
 function ConsoleLoggerScopeSection() {
-    const [scope, setScope] = useState<ConsoleLoggerScope>();
+    const [scope, setScope] = useState<BrowserConsoleLoggerScope>();
 
     const handleCreateScopeClick = useCallback(() => {
         if (scope) {
@@ -264,7 +264,7 @@ function ConsoleLoggerScopeSection() {
 //////////////////////
 
 const compositeLogger = new CompositeLogger([
-    new ConsoleLogger()
+    new BrowserConsoleLogger()
 ]);
 
 function useCompositeLogCallback(level: string) {
