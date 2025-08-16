@@ -95,7 +95,7 @@ function formatSegments(segments: Segment[]) {
 type LogFunction = (...rest: unknown[]) => void;
 type PendingLog = () => void;
 
-export class ConsoleLoggerScope implements LoggerScope {
+export class BrowserConsoleLoggerScope implements LoggerScope {
     readonly #logLevel: LogLevel;
     readonly #label: string;
     readonly #labelStyle?: Partial<CSSStyleDeclaration>;
@@ -245,7 +245,7 @@ export class ConsoleLoggerScope implements LoggerScope {
     }
 }
 
-export class ConsoleLogger implements RootLogger {
+export class BrowserConsoleLogger implements RootLogger {
     readonly #logLevel: LogLevel;
     #segments: Segment[] = [];
 
@@ -272,7 +272,7 @@ export class ConsoleLogger implements RootLogger {
     }
 
     getName() {
-        return ConsoleLogger.name;
+        return BrowserConsoleLogger.name;
     }
 
     withText(text: string, options: LogOptions = {}) {
@@ -356,6 +356,6 @@ export class ConsoleLogger implements RootLogger {
     }
 
     startScope(label: string, options?: LoggerScopeOptions) {
-        return new ConsoleLoggerScope(label, this.#logLevel, options);
+        return new BrowserConsoleLoggerScope(label, this.#logLevel, options);
     }
 }

@@ -1,19 +1,19 @@
 import { afterEach, describe, test, vi } from "vitest";
-import { ConsoleLogger, ConsoleLoggerScope } from "../src/ConsoleLogger.ts";
+import { BrowserConsoleLogger, BrowserConsoleLoggerScope } from "../src/BrowserConsoleLogger.ts";
 import { LogLevel } from "../src/Logger.ts";
 
 afterEach(() => {
     vi.restoreAllMocks();
 });
 
-describe("ConsoleLogger", () => {
+describe("BrowserConsoleLogger", () => {
     describe.each([
         ["debug", "log", [true, false, false, false, false]],
         ["information", "log", [true, true, false, false, false]],
         ["warning", "warn", [true, true, true, false, false]],
         ["error", "error", [true, true, true, true, false]],
         ["critical", "error", [true, true, true, true, true]]
-    ] satisfies [keyof ConsoleLogger, keyof typeof console, boolean[]][]
+    ] satisfies [keyof BrowserConsoleLogger, keyof typeof console, boolean[]][]
     )("can write a \"%s\" log", (loggerFunction, consoleFunction, expectedResults) => {
         test.concurrent.for([
             ["debug", LogLevel.debug],
@@ -21,10 +21,10 @@ describe("ConsoleLogger", () => {
             ["warning", LogLevel.warning],
             ["error", LogLevel.error],
             ["critical", LogLevel.critical]
-        ] satisfies [keyof ConsoleLogger, LogLevel][])("when the log level is \"%s\"", ([, logLevel], { expect }) => {
+        ] satisfies [keyof BrowserConsoleLogger, LogLevel][])("when the log level is \"%s\"", ([, logLevel], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
-            const logger = new ConsoleLogger({ logLevel });
+            const logger = new BrowserConsoleLogger({ logLevel });
             const logValue = "foo";
 
             logger[loggerFunction](logValue);
@@ -51,12 +51,12 @@ describe("ConsoleLogger", () => {
             ["warning", "warn"],
             ["error", "error"],
             ["critical", "error"]
-        ] satisfies [keyof ConsoleLogger, keyof typeof console][];
+        ] satisfies [keyof BrowserConsoleLogger, keyof typeof console][];
 
         test.concurrent.for(pairs)("can build a \"%s\" log with text", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
-            const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
 
             logger.withText("Hello").withText(" World")[loggerFunction]();
 
@@ -67,7 +67,7 @@ describe("ConsoleLogger", () => {
         test.concurrent.for(pairs)("can build a \"%s\" log with object", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
-            const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
             const obj = { name: "John", age: 30 };
 
             logger.withText("User:").withObject(obj)[loggerFunction]();
@@ -79,7 +79,7 @@ describe("ConsoleLogger", () => {
         test.concurrent.for(pairs)("can build a \"%s\" log with error", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
-            const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
             const error = new Error("Test error");
 
             logger.withText("Error occurred:").withError(error)[loggerFunction]();
@@ -91,7 +91,7 @@ describe("ConsoleLogger", () => {
         test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
-            const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
             const obj = { id: 1 };
             const error = new Error("Test error");
 
@@ -116,12 +116,12 @@ describe("ConsoleLogger", () => {
             ["warning", "warn"],
             ["error", "error"],
             ["critical", "error"]
-        ] satisfies [keyof ConsoleLogger, keyof typeof console][];
+        ] satisfies [keyof BrowserConsoleLogger, keyof typeof console][];
 
         test.concurrent.for(pairs)("can apply styling to text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
-            const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
 
             logger.withText("Styled text", { style: { color: "red", fontWeight: "bold" } })[loggerFunction]();
 
@@ -132,7 +132,7 @@ describe("ConsoleLogger", () => {
         test.concurrent.for(pairs)("can handle multiple styled text segments with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
-            const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
 
             logger
                 .withText("Red text", { style: { color: "red" } })
@@ -153,7 +153,7 @@ describe("ConsoleLogger", () => {
         test.concurrent.for(pairs)("can mix styled and unstyled text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
-            const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
 
             logger
                 .withText("Normal text")
@@ -173,7 +173,7 @@ describe("ConsoleLogger", () => {
         test.concurrent("when there are objects or errors, they are moved to the end", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
-            const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
             const obj = { id: 1 };
             const error = new Error("Test error");
 
@@ -200,7 +200,7 @@ describe("ConsoleLogger", () => {
 
     describe("scope", () => {
         test.concurrent("starting a scope always return a new instance", ({ expect }) => {
-            const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
 
             const scope1 = logger.startScope("foo");
             const scope2 = logger.startScope("bar");
@@ -211,7 +211,7 @@ describe("ConsoleLogger", () => {
         test.concurrent("a scope inherit from the root logger log level", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
-            const logger = new ConsoleLogger({ logLevel: LogLevel.error });
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.error });
             const scope = logger.startScope("foo");
 
             scope.information("bar");
@@ -223,7 +223,7 @@ describe("ConsoleLogger", () => {
         test.concurrent("when a scope is started, the root logger can still write logs", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
-            const logger = new ConsoleLogger({ logLevel: LogLevel.debug });
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
             const logValue = "bar";
 
             logger.startScope("foo");
@@ -235,21 +235,21 @@ describe("ConsoleLogger", () => {
     });
 });
 
-describe("ConsoleLoggerScope", () => {
+describe("BrowserConsoleLoggerScope", () => {
     describe.each([
         ["debug", "log", [true, false, false, false, false]],
         ["information", "log", [true, true, false, false, false]],
         ["warning", "warn", [true, true, true, false, false]],
         ["error", "error", [true, true, true, true, false]],
         ["critical", "error", [true, true, true, true, true]]
-    ] satisfies [keyof ConsoleLogger, keyof typeof console, boolean[]][])("can write a \"%s\" log", (loggerFunction, consoleFunction, expectedResults) => {
+    ] satisfies [keyof BrowserConsoleLogger, keyof typeof console, boolean[]][])("can write a \"%s\" log", (loggerFunction, consoleFunction, expectedResults) => {
         test.concurrent.for([
             ["debug", LogLevel.debug],
             ["information", LogLevel.information],
             ["warning", LogLevel.warning],
             ["error", LogLevel.error],
             ["critical", LogLevel.critical]
-        ] satisfies [keyof ConsoleLogger, LogLevel][])("when the log level is \"%s\"", ([, logLevel], { expect }) => {
+        ] satisfies [keyof BrowserConsoleLogger, LogLevel][])("when the log level is \"%s\"", ([, logLevel], { expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             // This code is a bit stupid, it's only to mute the console if the console function is not "log" (which
@@ -261,7 +261,7 @@ describe("ConsoleLoggerScope", () => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
 
-            const scope = new ConsoleLoggerScope("foo", logLevel);
+            const scope = new BrowserConsoleLoggerScope("foo", logLevel);
             const logValue = "bar";
 
             scope[loggerFunction](logValue);
@@ -292,7 +292,7 @@ describe("ConsoleLoggerScope", () => {
             ["warning", "warn"],
             ["error", "error"],
             ["critical", "error"]
-        ] satisfies [keyof ConsoleLoggerScope, keyof typeof console][];
+        ] satisfies [keyof BrowserConsoleLoggerScope, keyof typeof console][];
 
         test.concurrent.for(pairs)("can build a \"%s\" log with text", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
@@ -305,7 +305,7 @@ describe("ConsoleLoggerScope", () => {
                 vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             }
 
-            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
 
             scope.withText("Hello").withText(" World")[loggerFunction]();
             scope.end();
@@ -328,7 +328,7 @@ describe("ConsoleLoggerScope", () => {
                 vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             }
 
-            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
             const obj = { name: "John", age: 30 };
 
             scope.withText("User:").withObject(obj)[loggerFunction]();
@@ -352,7 +352,7 @@ describe("ConsoleLoggerScope", () => {
                 vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             }
 
-            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
             const error = new Error("Test error");
 
             scope.withText("Error occurred:").withError(error)[loggerFunction]();
@@ -376,7 +376,7 @@ describe("ConsoleLoggerScope", () => {
                 vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             }
 
-            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
             const obj = { id: 1 };
             const error = new Error("Test error");
 
@@ -405,7 +405,7 @@ describe("ConsoleLoggerScope", () => {
             ["warning", "warn"],
             ["error", "error"],
             ["critical", "error"]
-        ] satisfies [keyof ConsoleLoggerScope, keyof typeof console][];
+        ] satisfies [keyof BrowserConsoleLoggerScope, keyof typeof console][];
 
         test.concurrent.for(pairs)("can apply styling to text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
@@ -418,7 +418,7 @@ describe("ConsoleLoggerScope", () => {
                 vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             }
 
-            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
 
             scope.withText("Styled text", { style: { color: "red", fontWeight: "bold" } })[loggerFunction]();
             scope.end();
@@ -441,7 +441,7 @@ describe("ConsoleLoggerScope", () => {
                 vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             }
 
-            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
 
             scope
                 .withText("Red text", { style: { color: "red" } })
@@ -475,7 +475,7 @@ describe("ConsoleLoggerScope", () => {
                 vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             }
 
-            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
 
             scope
                 .withText("Normal text")
@@ -502,7 +502,7 @@ describe("ConsoleLoggerScope", () => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
 
-            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
             const obj = { id: 1 };
             const error = new Error("Test error");
 
@@ -537,7 +537,7 @@ describe("ConsoleLoggerScope", () => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
 
-            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
 
             scope.end();
 
@@ -550,7 +550,7 @@ describe("ConsoleLoggerScope", () => {
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
-            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
 
             scope.debug("This should not appear");
             scope.end({ dismiss: true });
@@ -565,7 +565,7 @@ describe("ConsoleLoggerScope", () => {
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
-            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
 
             scope.debug("content");
             scope.end({ labelStyle: { color: "purple", fontWeight: "bold" } });
@@ -583,7 +583,7 @@ describe("ConsoleLoggerScope", () => {
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
-            const scope = new ConsoleLoggerScope("foo", LogLevel.debug, {
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug, {
                 labelStyle: { color: "orange" }
             });
 
@@ -602,7 +602,7 @@ describe("ConsoleLoggerScope", () => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
 
-            const scope = new ConsoleLoggerScope("foo", LogLevel.debug);
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
 
             scope.debug("first log");
             scope.end();

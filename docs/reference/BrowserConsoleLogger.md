@@ -1,20 +1,20 @@
 ---
 order: 100
-label: ConsoleLogger
+label: BrowserConsoleLogger
 meta:
-    title: ConsoleLogger
+    title: BrowserConsoleLogger
 toc:
     depth: 2-3
 ---
 
-# ConsoleLogger
+# BrowserConsoleLogger
 
 A logger outputting messages to a browser console.
 
 ## Reference
 
 ```ts
-const logger = new ConsoleLogger(options?: { logLevel? })
+const logger = new BrowserConsoleLogger(options?: { logLevel? })
 ```
 
 ### Parameters
@@ -35,45 +35,45 @@ When styling is applied to any text segment, all error or object segments are ap
 ### Log a debug entry
 
 ```ts !#4
-import { ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger } from "@workleap/logging";
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 logger.debug("Hello world!");
 ```
 
 ### Log an information entry
 
 ```ts !#4
-import { ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger } from "@workleap/logging";
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 logger.information("Hello world!");
 ```
 
 ### Log a warning entry
 
 ```ts !#4
-import { ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger } from "@workleap/logging";
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 logger.warning("Hello world!");
 ```
 
 ### Log an error entry
 
 ```ts !#4
-import { ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger } from "@workleap/logging";
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 logger.error("Hello world!");
 ```
 
 ### Log a critical entry
 
 ```ts !#4
-import { ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger } from "@workleap/logging";
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 logger.critical("Hello world!");
 ```
 
@@ -82,9 +82,9 @@ logger.critical("Hello world!");
 A minimum severity of entries to process can be configured as an option. Messages with a lower severity than the configured level will then be ignored.
 
 ```ts !#4
-import { ConsoleLogger, LogLevel } from "@workleap/logging";
+import { BrowserConsoleLogger, LogLevel } from "@workleap/logging";
 
-const logger = new ConsoleLogger({
+const logger = new BrowserConsoleLogger({
     logLevel: LogLevel.error
 });
 
@@ -97,9 +97,9 @@ logger.debug("Hello world!");
 Multiple segments can be chained to create a log entry that combines styled text, errors, and objects. To process all segments and output the log to the console, complete the chain by calling any log method.
 
 ```ts
-import { ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger } from "@workleap/logging";
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 
 logger
     .withText("Processing segment")
@@ -112,9 +112,9 @@ logger
 ### Style a log entry
 
 ```ts
-import { ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger } from "@workleap/logging";
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 
 logger
     .withText("Hello", {
@@ -135,9 +135,9 @@ logger
 ### Use a logging scope
 
 ```ts !#4
-import { ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger } from "@workleap/logging";
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 const scope = logger.startScope("Module 1 registration");
 
 scope.debug("Registering routes...");
@@ -174,9 +174,9 @@ scope.end();
 A scope can be dismissed to prevent it's log entries from being outputted to the console.
 
 ```ts !#18-19
-import { ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger } from "@workleap/logging";
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 const scope = logger.startScope("Module 1 registration");
 
 scope.debug("Registering routes...");
@@ -200,9 +200,9 @@ scope.end({ dismiss: true });
 A scope label can be styled when the scope is created.
 
 ```ts !#5-10
-import { ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger } from "@workleap/logging";
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 
 const scope = logger.startScope("A scope", {
     labelStyle: {
@@ -220,9 +220,9 @@ scope.end();
 A scope label can be styled when the scope it's ended. This is particularly useful to style the label accordingly to the status of an operation or request.
 
 ```ts !#8-13
-import { ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger } from "@workleap/logging";
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 const scope = logger.startScope("A scope");
 
 scope.information("Hello world!");
