@@ -1,5 +1,11 @@
 # @workleap/logging
 
+## 1.0.2
+
+### Patch Changes
+
+- [#10](https://github.com/workleap/wl-logging/pull/10) [`3aa08de`](https://github.com/workleap/wl-logging/commit/3aa08de20f15cf82280bbbda5fe38fb9bbc18129) Thanks [@patricklafrance](https://github.com/patricklafrance)! - The ConsoleLogger has been renamed to BrowserConsoleLogger.
+
 ## 1.0.1
 
 ### Patch Changes
