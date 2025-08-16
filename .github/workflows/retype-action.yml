@@ -2,7 +2,7 @@ name: Publish documentation website to GitHub Pages
 on:
   workflow_dispatch: {}
   push:
-    branches: ["main"]
+    branches: ["*"]
 
 jobs:
   publish:
@@ -24,6 +24,4 @@ jobs:
           with:
             license: ${{ secrets.RETYPE_API_KEY }}
 
-        - uses: retypeapp/action-github-pages@latest
-          with:
-            update-branch: true
+        - uses: alexasselin008/retypeapp-action-build-llms@main
