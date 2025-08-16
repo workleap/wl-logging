@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="turbo-root" content="/wl-logging">
-    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="3.11.0.808602429049">
+    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="3.11.0.808619463386">
 
     <!-- See retype.com -->
     <meta name="generator" content="Retype 3.11.0">
@@ -32,12 +32,12 @@
     <script data-cfasync="false">(function(){var cl=document.documentElement.classList,ls=localStorage.getItem("retype_scheme"),hd=cl.contains("dark"),hl=cl.contains("light"),wm=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;if(ls==="dark"||(!ls&&wm&&!hd&&!hl)){cl.remove("light");cl.add("dark")}else if(ls==="light"||(!ls&&!wm&&!hd&&!hl)){cl.remove("dark");cl.add("light")}})();</script>
 
     <link href="../../static/favicon.png" rel="icon">
-    <link href="../../resources/css/retype.css?v=3.11.0.808602429049" rel="stylesheet">
+    <link href="../../resources/css/retype.css?v=3.11.0.808619463386" rel="stylesheet">
 
-    <script data-cfasync="false" src="../../resources/js/config.js?v=3.11.0.808602429049" data-turbo-eval="false" defer></script>
+    <script data-cfasync="false" src="../../resources/js/config.js?v=3.11.0.808619463386" data-turbo-eval="false" defer></script>
     <script data-cfasync="false" src="../../resources/js/retype.js?v=3.11.0" data-turbo-eval="false" defer></script>
-    <script id="lunr-js" data-cfasync="false" src="../../resources/js/lunr.js?v=3.11.0.808602429049" data-turbo-eval="false" defer></script>
-    <script id="prism-js" data-cfasync="false" src="../../resources/js/prism.js?v=3.11.0.808602429049" defer></script>
+    <script id="lunr-js" data-cfasync="false" src="../../resources/js/lunr.js?v=3.11.0.808619463386" data-turbo-eval="false" defer></script>
+    <script id="prism-js" data-cfasync="false" src="../../resources/js/prism.js?v=3.11.0.808619463386" defer></script>
 
     <link href="https://workleap.github.io/wl-idp-docs-hub/static/retype-customization.css" rel="stylesheet" />
 
@@ -320,9 +320,9 @@
 </doc-anchor-target>
 <p>A logger can output log entries with different levels (<code v-pre>debug</code>, <code v-pre>information</code>, <code v-pre>warning</code>, <code v-pre>error</code>, <code v-pre>critical</code>). This allows to filter logs according to a minimum severity:</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-typescript" data-line="4"><code v-pre class="language-typescript">import { ConsoleLogger, LogLevel } from &quot;@workleap/logging&quot;;
+<pre translate="no" class="language-typescript" data-line="4"><code v-pre class="language-typescript">import { BrowserConsoleLogger, LogLevel } from &quot;@workleap/logging&quot;;
 
-const logger = new ConsoleLogger({
+const logger = new BrowserConsoleLogger({
     logLevel: LogLevel.error
 });</code></pre>
 </doc-codeblock></div>
@@ -335,9 +335,9 @@ const logger = new ConsoleLogger({
 </doc-anchor-target>
 <p>The simplest form is logging plain text directly at the desired level:</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-typescript" data-line="5"><code v-pre class="language-typescript">import { ConsoleLogger } from &quot;@workleap/logging&quot;;
+<pre translate="no" class="language-typescript" data-line="5"><code v-pre class="language-typescript">import { BrowserConsoleLogger } from &quot;@workleap/logging&quot;;
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 
 logger.debug(&quot;Application started!&quot;);</code></pre>
 </doc-codeblock></div>
@@ -349,9 +349,9 @@ logger.debug(&quot;Application started!&quot;);</code></pre>
 </doc-anchor-target>
 <p>Segments can be chained to build richer log entries that include text, errors and objects:</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-typescript"><code v-pre class="language-typescript">import { ConsoleLogger } from &quot;@workleap/logging&quot;;
+<pre translate="no" class="language-typescript"><code v-pre class="language-typescript">import { BrowserConsoleLogger } from &quot;@workleap/logging&quot;;
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 
 logger
     .withText(&quot;Failed to process order&quot;)
@@ -367,9 +367,9 @@ logger
 </doc-anchor-target>
 <p>When using a logger that supports styling, individual text segments can be styled:</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-typescript"><code v-pre class="language-typescript">import { ConsoleLogger } from &quot;@workleap/logging&quot;;
+<pre translate="no" class="language-typescript"><code v-pre class="language-typescript">import { BrowserConsoleLogger } from &quot;@workleap/logging&quot;;
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 
 logger
     .withText(&quot;Build completed&quot;, {
@@ -424,9 +424,9 @@ logger
 </doc-anchor-target>
 <p>Scopes group related log entries under a shared label or context. This is useful for tracing operations, request or correlating events:</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-typescript"><code v-pre class="language-typescript">import { ConsoleLogger } from &quot;@workleap/logging&quot;;
+<pre translate="no" class="language-typescript"><code v-pre class="language-typescript">import { BrowserConsoleLogger } from &quot;@workleap/logging&quot;;
 
-const logger = new ConsoleLogger();
+const logger = new BrowserConsoleLogger();
 const scope = logger.startScope(&quot;User signup&quot;);
 
 scope.information(&quot;Form loaded&quot;);
@@ -439,6 +439,20 @@ scope.
 
 scope.end();</code></pre>
 </doc-codeblock></div>
+<doc-anchor-target id="logrocket-session-replays">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#logrocket-session-replays">#</doc-anchor-trigger>
+        <span>LogRocket session replays</span>
+    </h2>
+</doc-anchor-target>
+<p>By default, <a href="https://logrocket.com/" class="outbound" target="_blank">LogRocket</a> session replays exclude console output. To send log entries to LogRocket, use the <a href="https://workleap.github.io/wl-telemetry/honeycomb/reference/logrocketlogger" class="outbound" target="_blank">LogRocketLogger</a> class from the <a href="https://www.npmjs.com/package/@workleap/logrocket" class="outbound" target="_blank">@workleap/logrocket</a>:</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-typescript"><code v-pre class="language-typescript">import { LogRocketLogger } from &quot;@workleap/logrocket&quot;;
+
+const logger = new LogRocketLogger();
+
+logger.debug(&quot;Application started!&quot;);</code></pre>
+</doc-codeblock></div>
 <doc-anchor-target id="compose-loggers">
     <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#compose-loggers">#</doc-anchor-trigger>
@@ -447,11 +461,11 @@ scope.end();</code></pre>
 </doc-anchor-target>
 <p>You can forward the same log entry to multiple destinations by composing loggers:</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-typescript"><code v-pre class="language-typescript">import { ConsoleLogger, CompositeLogger } from &quot;@workleap/logging&quot;;
+<pre translate="no" class="language-typescript"><code v-pre class="language-typescript">import { BrowserConsoleLogger, CompositeLogger } from &quot;@workleap/logging&quot;;
 import { LogRocketLogger } from &quot;@workleap/logrocket&quot;;
 
 const logger = new CompositeLogger([
-    new ConsoleLogger(),
+    new BrowserConsoleLogger(),
     new LogRocketLogger()
 ]);
 
