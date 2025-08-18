@@ -6,7 +6,7 @@ meta:
 
 # Reference
 
-- [ConsoleLogger](./ConsoleLogger.md)
+- [BrowserConsoleLogger](./BrowserConsoleLogger.md)
 - [CompositeLogger](./CompositeLogger.md)
 - [RootLogger](./RootLogger.md)
 - [LoggerScope](./LoggerScope.md)
