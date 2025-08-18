@@ -28,7 +28,7 @@ A `CompositeLogger` instance.
 
 ## Usage
 
-```ts
+```ts !#4
 import { ConsoleLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/logrocket";
 
