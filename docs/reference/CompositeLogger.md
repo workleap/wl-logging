@@ -9,7 +9,7 @@ toc:
 
 # CompositeLogger
 
-A logger implementation that delegates log entries to multiple underlying loggers. It implements the standard [Logger](./Logger.md) and [LoggerScope](./LoggerScope.md) interfaces so it can be used anywhere a single logger is expected, but internally it forwards each chained segment-building and logging calls to underlying loggers.
+A logger implementation that delegates log entries to multiple underlying loggers. It implements the standard [RootLogger](./RootLogger.md) and [LoggerScope](./LoggerScope.md) interfaces so it can be used anywhere a single logger is expected, but internally it forwards each chained segment-building and logging calls to underlying loggers.
 
 ## Reference
 
