@@ -25,3 +25,5 @@ jobs:
             license: ${{ secrets.RETYPE_API_KEY }}
 
         - uses: alexasselin008/retypeapp-action-build-llms@main
+          with:
+            verbose: true
