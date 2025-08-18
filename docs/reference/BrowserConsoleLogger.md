@@ -96,7 +96,7 @@ logger.debug("Hello world!");
 
 Multiple segments can be chained to create a log entry that combines styled text, errors, and objects. To process all segments and output the log to the console, complete the chain by calling any log method.
 
-```ts
+```ts !#5-10
 import { BrowserConsoleLogger } from "@workleap/logging";
 
 const logger = new BrowserConsoleLogger();
@@ -111,7 +111,7 @@ logger
 
 ### Style a log entry
 
-```ts
+```ts !#7-10,13-16
 import { BrowserConsoleLogger } from "@workleap/logging";
 
 const logger = new BrowserConsoleLogger();
@@ -199,7 +199,7 @@ scope.end({ dismiss: true });
 
 A scope label can be styled when the scope is created.
 
-```ts !#5-10
+```ts !#6-9
 import { BrowserConsoleLogger } from "@workleap/logging";
 
 const logger = new BrowserConsoleLogger();
@@ -219,7 +219,7 @@ scope.end();
 
 A scope label can be styled when the scope it's ended. This is particularly useful to style the label accordingly to the status of an operation or request.
 
-```ts !#8-13
+```ts !#9-12
 import { BrowserConsoleLogger } from "@workleap/logging";
 
 const logger = new BrowserConsoleLogger();

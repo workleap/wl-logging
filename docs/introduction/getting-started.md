@@ -45,7 +45,7 @@ logger.debug("Application started!");
 
 Segments can be chained to build richer log entries that include text, errors and objects:
 
-```ts
+```ts !#5-9
 import { BrowserConsoleLogger } from "@workleap/logging";
 
 const logger = new BrowserConsoleLogger();
@@ -61,7 +61,7 @@ logger
 
 When using a logger that supports styling, individual text segments can be styled:
 
-```ts
+```ts !#7-10,14-16
 import { BrowserConsoleLogger } from "@workleap/logging";
 
 const logger = new BrowserConsoleLogger();
@@ -94,7 +94,7 @@ When styling is applied to any text segment, all error or object segments are ap
 
 Scopes group related log entries under a shared label or context. This is useful for tracing operations, request or correlating events:
 
-```ts
+```ts !#4
 import { BrowserConsoleLogger } from "@workleap/logging";
 
 const logger = new BrowserConsoleLogger();
@@ -115,7 +115,7 @@ scope.end();
 
 By default, [LogRocket](https://logrocket.com/) session replays exclude console output. To send log entries to LogRocket, use the [LogRocketLogger](https://workleap.github.io/wl-telemetry/honeycomb/reference/logrocketlogger) class from the [@workleap/logrocket](https://www.npmjs.com/package/@workleap/logrocket):
 
-```ts
+```ts !#3
 import { LogRocketLogger } from "@workleap/logrocket";
 
 const logger = new LogRocketLogger();
@@ -127,7 +127,7 @@ logger.debug("Application started!");
 
 You can forward the same log entry to multiple destinations by composing loggers:
 
-```ts
+```ts !#4-7
 import { BrowserConsoleLogger, CompositeLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/logrocket";
 

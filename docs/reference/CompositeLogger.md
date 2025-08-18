@@ -122,7 +122,7 @@ logger.debug("Hello world!");
 
 Multiple segments can be chained to create a log entry that combines styled text, errors, and objects. To process all segments and output the log to the console, complete the chain by calling any log method.
 
-```ts
+```ts !#9-14
 import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/logrocket";
 
@@ -143,7 +143,7 @@ logger
 
 Not all loggers support styled log entries. When the underlying loggers do support styling, those styles will be passed forwared to them.
 
-```ts
+```ts !#11-14,17-20
 import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/logrocket";
 
@@ -245,7 +245,7 @@ scope.end({ dismiss: true });
 
 A scope label can be styled when the scope is created.
 
-```ts !#9-14
+```ts !#10-13
 import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/logrocket";
 
@@ -269,7 +269,7 @@ scope.end();
 
 A scope label can be styled when the scope it's ended. This is particularly useful to style the label accordingly to the status of an operation or request.
 
-```ts !#13-18
+```ts !#14-17
 import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/logrocket";
 
