@@ -24,6 +24,16 @@ jobs:
           with:
             license: ${{ secrets.RETYPE_API_KEY }}
 
+        - id: repo_meta
+          name: Get repository description
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            desc=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+                "https://api.github.com/repos/${GITHUB_REPOSITORY}" | jq -r '.description // ""')
+            echo "description=$desc" >> $GITHUB_OUTPUT;
+
         - uses: alexasselin008/retypeapp-action-build-llms@main
           with:
             verbose: true
+            description: ${{ steps.repo_meta.outputs.description }}
