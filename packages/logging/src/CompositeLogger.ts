@@ -1,12 +1,22 @@
 import type { LoggerScope, LoggerScopeEndOptions, LoggerScopeOptions, LogOptions, RootLogger } from "./Logger.ts";
 
+/**
+ * A scope implementation for a logger that delegates log entries to multiple underlying loggers.
+ * @see {@link https://workleap.github.io/wl-logging}
+ */
 export class CompositeLoggerScope implements LoggerScope {
     readonly #scopes: LoggerScope[];
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     constructor(scopes: LoggerScope[] = []) {
         this.#scopes = scopes;
     }
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     withText(text: string, options?: LogOptions) {
         this.#scopes.forEach(x => {
             try {
@@ -20,6 +30,9 @@ export class CompositeLoggerScope implements LoggerScope {
         return this;
     }
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     withError(error: Error, options?: LogOptions) {
         this.#scopes.forEach(x => {
             try {
@@ -33,6 +46,9 @@ export class CompositeLoggerScope implements LoggerScope {
         return this;
     }
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     withObject(obj: object, options?: LogOptions) {
         this.#scopes.forEach(x => {
             try {
@@ -46,6 +62,10 @@ export class CompositeLoggerScope implements LoggerScope {
         return this;
     }
 
+    /**
+     * Write a debug log. The log will be processed only if the logger LogLevel is >= debug.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     debug(log?: string, options?: LogOptions) {
         this.#scopes.forEach(x => {
             try {
@@ -57,6 +77,10 @@ export class CompositeLoggerScope implements LoggerScope {
         });
     }
 
+    /**
+     * Write an information log. The log will be processed only if the logger LogLevel is >= information.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     information(log?: string, options?: LogOptions) {
         this.#scopes.forEach(x => {
             try {
@@ -68,6 +92,10 @@ export class CompositeLoggerScope implements LoggerScope {
         });
     }
 
+    /**
+     * Write a warning log. The log will be processed only if the logger LogLevel is >= warning.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     warning(log?: string, options?: LogOptions) {
         this.#scopes.forEach(x => {
             try {
@@ -79,6 +107,10 @@ export class CompositeLoggerScope implements LoggerScope {
         });
     }
 
+    /**
+     * Write an error log. The log will be processed only if the logger LogLevel is >= error.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     error(log?: string, options?: LogOptions) {
         this.#scopes.forEach(x => {
             try {
@@ -90,6 +122,10 @@ export class CompositeLoggerScope implements LoggerScope {
         });
     }
 
+    /**
+     * Write a critical log. The log will be processed only if the logger LogLevel is >= critical.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     critical(log?: string, options?: LogOptions) {
         this.#scopes.forEach(x => {
             try {
@@ -101,6 +137,9 @@ export class CompositeLoggerScope implements LoggerScope {
         });
     }
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     end(options?: LoggerScopeEndOptions) {
         this.#scopes.forEach(x => {
             try {
@@ -113,17 +152,30 @@ export class CompositeLoggerScope implements LoggerScope {
     }
 }
 
+/**
+ * A logger implementation that delegates log entries to multiple underlying loggers.
+ * @see {@link https://workleap.github.io/wl-logging}
+ */
 export class CompositeLogger implements RootLogger {
     readonly #loggers: RootLogger[];
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     constructor(loggers: RootLogger[] = []) {
         this.#loggers = loggers;
     }
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     getName() {
         return CompositeLogger.name;
     }
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     withText(text: string, options?: LogOptions) {
         this.#loggers.forEach(x => {
             try {
@@ -137,6 +189,9 @@ export class CompositeLogger implements RootLogger {
         return this;
     }
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     withError(error: Error, options?: LogOptions) {
         this.#loggers.forEach(x => {
             try {
@@ -150,6 +205,9 @@ export class CompositeLogger implements RootLogger {
         return this;
     }
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     withObject(obj: object, options?: LogOptions) {
         this.#loggers.forEach(x => {
             try {
@@ -163,6 +221,10 @@ export class CompositeLogger implements RootLogger {
         return this;
     }
 
+    /**
+     * Write a debug log. The log will be processed only if the logger LogLevel is >= debug.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     debug(log?: string, options?: LogOptions) {
         this.#loggers.forEach(x => {
             try {
@@ -174,6 +236,10 @@ export class CompositeLogger implements RootLogger {
         });
     }
 
+    /**
+     * Write an information log. The log will be processed only if the logger LogLevel is >= information.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     information(log?: string, options?: LogOptions) {
         this.#loggers.forEach(x => {
             try {
@@ -185,6 +251,10 @@ export class CompositeLogger implements RootLogger {
         });
     }
 
+    /**
+     * Write a warning log. The log will be processed only if the logger LogLevel is >= warning.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     warning(log?: string, options?: LogOptions) {
         this.#loggers.forEach(x => {
             try {
@@ -196,6 +266,10 @@ export class CompositeLogger implements RootLogger {
         });
     }
 
+    /**
+     * Write an error log. The log will be processed only if the logger LogLevel is >= error.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     error(log?: string, options?: LogOptions) {
         this.#loggers.forEach(x => {
             try {
@@ -207,6 +281,10 @@ export class CompositeLogger implements RootLogger {
         });
     }
 
+    /**
+     * Write a critical log. The log will be processed only if the logger LogLevel is >= critical.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     critical(log?: string, options?: LogOptions) {
         this.#loggers.forEach(x => {
             try {
@@ -218,6 +296,10 @@ export class CompositeLogger implements RootLogger {
         });
     }
 
+    /**
+     * Start a new logging scope. The scope will inherit the LogLevel of the root logger.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     startScope(label: string, options?: LoggerScopeOptions) {
         const scopes = this.#loggers.map(x => x.startScope(label, options));
 
