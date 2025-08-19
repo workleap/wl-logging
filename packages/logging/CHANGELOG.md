@@ -1,5 +1,11 @@
 # @workleap/logging
 
+## 1.1.0
+
+### Minor Changes
+
+- [#14](https://github.com/workleap/wl-logging/pull/14) [`f33b492`](https://github.com/workleap/wl-logging/commit/f33b492aa92806eec03b2b1065de2f71ef7e2c99) Thanks [@patricklafrance](https://github.com/patricklafrance)! - Added JsDoc.
+
 ## 1.0.2
 
 ### Patch Changes
