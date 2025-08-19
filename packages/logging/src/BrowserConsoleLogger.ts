@@ -1,5 +1,8 @@
 import { LogLevel, type LoggerOptions, type LoggerScope, type LoggerScopeEndOptions, type LoggerScopeOptions, type LogOptions, type RootLogger, type Segment } from "./Logger.ts";
 
+/**
+ * @see {@link https://workleap.github.io/wl-logging}
+ */
 interface TextSegment {
     text: string;
     options?: LogOptions;
@@ -95,6 +98,9 @@ function formatSegments(segments: Segment[]) {
 type LogFunction = (...rest: unknown[]) => void;
 type PendingLog = () => void;
 
+/**
+ * @see {@link https://workleap.github.io/wl-logging}
+ */
 export class BrowserConsoleLoggerScope implements LoggerScope {
     readonly #logLevel: LogLevel;
     readonly #label: string;
@@ -104,6 +110,9 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
     #pendingLogs: PendingLog[] = [];
     #hasEnded: boolean = false;
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     constructor(label: string, logLevel: LogLevel, options: LoggerScopeOptions = {}) {
         this.#logLevel = logLevel;
         this.#label = label;
@@ -136,6 +145,9 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
         }
     }
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     withText(text: string, options: LogOptions = {}) {
         this.#segments.push({
             text,
@@ -145,6 +157,9 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
         return this;
     }
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     withError(error: Error) {
         this.#segments.push({
             error
@@ -153,6 +168,9 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
         return this;
     }
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     withObject(obj: object) {
         this.#segments.push({
             obj
@@ -161,6 +179,10 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
         return this;
     }
 
+    /**
+     * Write a debug log. The log will be processed only if the logger LogLevel is >= debug.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     debug(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
@@ -172,6 +194,10 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
         this.#log([console.log], LogLevel.debug);
     }
 
+    /**
+     * Write an information log. The log will be processed only if the logger LogLevel is >= information.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     information(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
@@ -183,6 +209,10 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
         this.#log([console.log], LogLevel.information);
     }
 
+    /**
+     * Write a warning log. The log will be processed only if the logger LogLevel is >= warning.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     warning(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
@@ -194,6 +224,10 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
         this.#log([console.log, console.warn], LogLevel.warning);
     }
 
+    /**
+     * Write an error log. The log will be processed only if the logger LogLevel is >= error.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     error(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
@@ -205,6 +239,10 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
         this.#log([console.log, console.error], LogLevel.error);
     }
 
+    /**
+     * Write a critical log. The log will be processed only if the logger LogLevel is >= critical.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     critical(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
@@ -216,6 +254,10 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
         this.#log([console.log, console.error], LogLevel.critical);
     }
 
+    /**
+     * End the scope.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     end(options: LoggerScopeEndOptions = {}) {
         const {
             labelStyle,
@@ -245,10 +287,17 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
     }
 }
 
+/**
+ *
+ * @see {@link https://workleap.github.io/wl-logging}
+ */
 export class BrowserConsoleLogger implements RootLogger {
     readonly #logLevel: LogLevel;
     #segments: Segment[] = [];
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     constructor(options: LoggerOptions = {}) {
         const {
             logLevel = LogLevel.debug
@@ -271,10 +320,16 @@ export class BrowserConsoleLogger implements RootLogger {
         }
     }
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     getName() {
         return BrowserConsoleLogger.name;
     }
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     withText(text: string, options: LogOptions = {}) {
         this.#segments.push({
             text,
@@ -284,6 +339,9 @@ export class BrowserConsoleLogger implements RootLogger {
         return this;
     }
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     withError(error: Error) {
         this.#segments.push({
             error
@@ -292,6 +350,9 @@ export class BrowserConsoleLogger implements RootLogger {
         return this;
     }
 
+    /**
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     withObject(obj: object) {
         this.#segments.push({
             obj
@@ -300,6 +361,10 @@ export class BrowserConsoleLogger implements RootLogger {
         return this;
     }
 
+    /**
+     * Write a debug log. The log will be processed only if the logger LogLevel is >= debug.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     debug(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
@@ -311,6 +376,10 @@ export class BrowserConsoleLogger implements RootLogger {
         this.#log(console.log, LogLevel.debug);
     }
 
+    /**
+     * Write an information log. The log will be processed only if the logger LogLevel is >= information.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     information(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
@@ -322,6 +391,10 @@ export class BrowserConsoleLogger implements RootLogger {
         this.#log(console.log, LogLevel.information);
     }
 
+    /**
+     * Write a warning log. The log will be processed only if the logger LogLevel is >= warning.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     warning(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
@@ -333,6 +406,10 @@ export class BrowserConsoleLogger implements RootLogger {
         this.#log(console.warn, LogLevel.warning);
     }
 
+    /**
+     * Write an error log. The log will be processed only if the logger LogLevel is >= error.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     error(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
@@ -344,6 +421,10 @@ export class BrowserConsoleLogger implements RootLogger {
         this.#log(console.error, LogLevel.error);
     }
 
+    /**
+     * Write a critical log. The log will be processed only if the logger LogLevel is >= critical.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     critical(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
@@ -355,6 +436,10 @@ export class BrowserConsoleLogger implements RootLogger {
         this.#log(console.error, LogLevel.critical);
     }
 
+    /**
+     * Start a new logging scope. The scope will inherit the LogLevel of the root logger.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
     startScope(label: string, options?: LoggerScopeOptions) {
         return new BrowserConsoleLoggerScope(label, this.#logLevel, options);
     }
