@@ -130,7 +130,6 @@ export interface RootLogger extends Logger {
 
     /**
      * Start a new logging scope. The scope will inherit the LogLevel of the root logger.
-     * @param label The label of scope, usually displayed into the log.
      * @see {@link https://workleap.github.io/wl-logging}
      */
     startScope: (label: string, options?: LoggerScopeOptions) => LoggerScope;

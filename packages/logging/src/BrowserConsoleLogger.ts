@@ -99,6 +99,7 @@ type LogFunction = (...rest: unknown[]) => void;
 type PendingLog = () => void;
 
 /**
+ * A scope for a logger outputting messages to a browser console.
  * @see {@link https://workleap.github.io/wl-logging}
  */
 export class BrowserConsoleLoggerScope implements LoggerScope {
@@ -288,7 +289,7 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
 }
 
 /**
- *
+ * A logger outputting messages to a browser console.
  * @see {@link https://workleap.github.io/wl-logging}
  */
 export class BrowserConsoleLogger implements RootLogger {
