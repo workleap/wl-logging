@@ -17,15 +17,17 @@ export class CompositeLoggerScope implements LoggerScope {
     /**
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withText(text: string, options?: LogOptions) {
-        this.#scopes.forEach(x => {
-            try {
-                x.withText(text, options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+    withText(text?: string, options?: LogOptions) {
+        if (text) {
+            this.#scopes.forEach(x => {
+                try {
+                    x.withText(text, options);
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                } catch (error: unknown) {
                 // Do nothing...
-            }
-        });
+                }
+            });
+        }
 
         return this;
     }
@@ -33,15 +35,17 @@ export class CompositeLoggerScope implements LoggerScope {
     /**
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withError(error: Error, options?: LogOptions) {
-        this.#scopes.forEach(x => {
-            try {
-                x.withError(error, options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (_error: unknown) {
+    withError(error?: Error, options?: LogOptions) {
+        if (error) {
+            this.#scopes.forEach(x => {
+                try {
+                    x.withError(error, options);
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                } catch (_error: unknown) {
                 // Do nothing...
-            }
-        });
+                }
+            });
+        }
 
         return this;
     }
@@ -49,15 +53,17 @@ export class CompositeLoggerScope implements LoggerScope {
     /**
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withObject(obj: object, options?: LogOptions) {
-        this.#scopes.forEach(x => {
-            try {
-                x.withObject(obj, options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+    withObject(obj?: object, options?: LogOptions) {
+        if (obj) {
+            this.#scopes.forEach(x => {
+                try {
+                    x.withObject(obj, options);
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                } catch (error: unknown) {
                 // Do nothing...
-            }
-        });
+                }
+            });
+        }
 
         return this;
     }
@@ -189,15 +195,17 @@ export class CompositeLogger implements RootLogger {
     /**
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withText(text: string, options?: LogOptions) {
-        this.#loggers.forEach(x => {
-            try {
-                x.withText(text, options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+    withText(text?: string, options?: LogOptions) {
+        if (text) {
+            this.#loggers.forEach(x => {
+                try {
+                    x.withText(text, options);
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                } catch (error: unknown) {
                 // Do nothing...
-            }
-        });
+                }
+            });
+        }
 
         return this;
     }
@@ -205,15 +213,17 @@ export class CompositeLogger implements RootLogger {
     /**
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withError(error: Error, options?: LogOptions) {
-        this.#loggers.forEach(x => {
-            try {
-                x.withError(error, options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (_error: unknown) {
+    withError(error?: Error, options?: LogOptions) {
+        if (error) {
+            this.#loggers.forEach(x => {
+                try {
+                    x.withError(error, options);
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                } catch (_error: unknown) {
                 // Do nothing...
-            }
-        });
+                }
+            });
+        }
 
         return this;
     }
@@ -221,15 +231,17 @@ export class CompositeLogger implements RootLogger {
     /**
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withObject(obj: object, options?: LogOptions) {
-        this.#loggers.forEach(x => {
-            try {
-                x.withObject(obj, options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+    withObject(obj?: object, options?: LogOptions) {
+        if (obj) {
+            this.#loggers.forEach(x => {
+                try {
+                    x.withObject(obj, options);
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                } catch (error: unknown) {
                 // Do nothing...
-            }
-        });
+                }
+            });
+        }
 
         return this;
     }
