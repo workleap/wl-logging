@@ -40,7 +40,7 @@ export interface Logger {
      * Log an unknown object.
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withObject: (obj?: object, options?: LogOptions) => Logger;
+    withObject: (obj?: unknown, options?: LogOptions) => Logger;
 
     /**
      * Add line change characters.
