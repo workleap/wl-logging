@@ -88,27 +88,7 @@ describe("BrowserConsoleLogger", () => {
             expect(logMock).toHaveBeenCalledWith("Error occurred:", error);
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
-            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
-
-            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
-            const obj = { id: 1 };
-            const error = new Error("Test error");
-
-            logger
-                .withText("Processing segment")
-                .withObject(obj)
-                .withText("failed with error")
-                .withError(error)
-                // eslint-disable-next-line no-unexpected-multiline
-                [loggerFunction]();
-
-            expect(logMock).toHaveBeenCalledOnce();
-            // The sequencing has been preserved because there's no styling.
-            expect(logMock).toHaveBeenCalledWith("Processing segment", obj, "failed with error", error);
-        });
-
-        test.concurrent.for(pairs)("can add line change segments", ([loggerFunction, consoleFunction], { expect }) => {
+        test.concurrent.for(pairs)("can build a \"%s\" log with line changes", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -129,6 +109,53 @@ describe("BrowserConsoleLogger", () => {
             expect(logMock).toHaveBeenCalledOnce();
             // The sequencing has been preserved because there's no styling.
             expect(logMock).toHaveBeenCalledWith("Processing segment", "\r\n", "on multiple lines", obj, "\r\n", "failed with error", error);
+        });
+
+        test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
+            const obj = { id: 1 };
+            const error = new Error("Test error");
+
+            logger
+                .withText("Processing segment")
+                .withObject(obj)
+                .withText("failed with error")
+                .withError(error)
+                // eslint-disable-next-line no-unexpected-multiline
+                [loggerFunction]();
+
+            expect(logMock).toHaveBeenCalledOnce();
+            // The sequencing has been preserved because there's no styling.
+            expect(logMock).toHaveBeenCalledWith("Processing segment", obj, "failed with error", error);
+        });
+
+        test.concurrent("when the text is undefined, do not log an entry", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
+            logger.withText().debug();
+
+            expect(logMock).not.toHaveBeenCalled();
+        });
+
+        test.concurrent("when the object is undefined, do not log an entry", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
+            logger.withObject().debug();
+
+            expect(logMock).not.toHaveBeenCalled();
+        });
+
+        test.concurrent("when the error is undefined, do not log an entry", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
+            logger.withError().debug();
+
+            expect(logMock).not.toHaveBeenCalled();
         });
     });
 
@@ -441,39 +468,7 @@ describe("BrowserConsoleLoggerScope", () => {
             expect(logMock).toHaveBeenCalledWith("Error occurred:", error);
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
-            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
-            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
-            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
-
-            // This code is a bit stupid, it's only to mute the console if the console function is not "log" (which
-            // has been previously mocked).
-            if (consoleFunction !== "log") {
-                vi.spyOn(console, consoleFunction).mockImplementation(() => {});
-            }
-
-            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
-            const obj = { id: 1 };
-            const error = new Error("Test error");
-
-            scope
-                .withText("Processing segment")
-                .withObject(obj)
-                .withText("failed with error")
-                .withError(error)
-                // eslint-disable-next-line no-unexpected-multiline
-                [loggerFunction]();
-
-            scope.end();
-
-            expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith("Processing segment", obj, "failed with error", error);
-        });
-
-        test.concurrent.for(pairs)("can add line change segments", ([loggerFunction, consoleFunction], { expect }) => {
+        test.concurrent.for(pairs)("can build a \"%s\" log with line changes", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -515,6 +510,71 @@ describe("BrowserConsoleLoggerScope", () => {
                 "failed with error",
                 error
             );
+        });
+
+        test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+
+            // This code is a bit stupid, it's only to mute the console if the console function is not "log" (which
+            // has been previously mocked).
+            if (consoleFunction !== "log") {
+                vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            }
+
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
+            const obj = { id: 1 };
+            const error = new Error("Test error");
+
+            scope
+                .withText("Processing segment")
+                .withObject(obj)
+                .withText("failed with error")
+                .withError(error)
+                // eslint-disable-next-line no-unexpected-multiline
+                [loggerFunction]();
+
+            scope.end();
+
+            expect(groupCollapsedMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(groupEndMock).toHaveBeenCalledOnce();
+
+            expect(logMock).toHaveBeenCalledWith("Processing segment", obj, "failed with error", error);
+        });
+
+        test.concurrent("when the text is undefined, do not log an entry", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
+
+            scope.withText().debug();
+            scope.end();
+
+            expect(logMock).not.toHaveBeenCalled();
+        });
+
+        test.concurrent("when the object is undefined, do not log an entry", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
+
+            scope.withObject().debug();
+            scope.end();
+
+            expect(logMock).not.toHaveBeenCalled();
+        });
+
+        test.concurrent("when the error is undefined, do not log an entry", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
+
+            scope.withError().debug();
+            scope.end();
+
+            expect(logMock).not.toHaveBeenCalled();
         });
     });
 

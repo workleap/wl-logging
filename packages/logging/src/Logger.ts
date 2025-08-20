@@ -28,19 +28,19 @@ export interface Logger {
      * Log some text.
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withText: (text: string, options?: LogOptions) => Logger;
+    withText: (text?: string, options?: LogOptions) => Logger;
 
     /**
      * Log an error object.
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withError: (error: Error, options?: LogOptions) => Logger;
+    withError: (error?: Error, options?: LogOptions) => Logger;
 
     /**
      * Log an unknown object.
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withObject: (obj: object, options?: LogOptions) => Logger;
+    withObject: (obj?: object, options?: LogOptions) => Logger;
 
     /**
      * Add line change characters.

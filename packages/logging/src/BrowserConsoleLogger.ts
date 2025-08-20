@@ -24,8 +24,6 @@ function appendText(currentText: string, newText: string, options: { addSpace?: 
     return newText;
 }
 
-const LineChange = "\r\n";
-
 function parseSegments(segments: Segment[]) {
     const textSegments: TextSegment[] = [];
     const otherSegments: unknown[] = [];
@@ -45,22 +43,24 @@ function parseSegments(segments: Segment[]) {
             otherSegments.push(x.error);
             allSegments.push(x.error);
         } else if (x.lineChange) {
+            const lineChange = "\r\n";
+
             // If there are style associated to this log entry and the current segment is not the last one...
             if (includeStyleOptions && (index + 1) <= segments.length) {
                 // And the next segment is a text segment...
                 if (segments[index + 1].text) {
                     // Append the line change segment as a text segment so it's merged with the other text segments.
                     textSegments.push({
-                        text: LineChange,
+                        text: lineChange,
                         isLineChange: true
                     });
                 } else {
                     // Otherwise, add it to the other segments.
-                    otherSegments.push(LineChange);
+                    otherSegments.push(lineChange);
                 }
             }
 
-            allSegments.push(LineChange);
+            allSegments.push(lineChange);
         }
     });
 
@@ -187,11 +187,13 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
     /**
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withText(text: string, options: LogOptions = {}) {
-        this.#segments.push({
-            text,
-            options
-        });
+    withText(text?: string, options: LogOptions = {}) {
+        if (text) {
+            this.#segments.push({
+                text,
+                options
+            });
+        }
 
         return this;
     }
@@ -199,10 +201,12 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
     /**
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withError(error: Error) {
-        this.#segments.push({
-            error
-        });
+    withError(error?: Error) {
+        if (error) {
+            this.#segments.push({
+                error
+            });
+        }
 
         return this;
     }
@@ -210,10 +214,12 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
     /**
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withObject(obj: object) {
-        this.#segments.push({
-            obj
-        });
+    withObject(obj?: object) {
+        if (obj) {
+            this.#segments.push({
+                obj
+            });
+        }
 
         return this;
     }
@@ -379,11 +385,13 @@ export class BrowserConsoleLogger implements RootLogger {
     /**
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withText(text: string, options: LogOptions = {}) {
-        this.#segments.push({
-            text,
-            options
-        });
+    withText(text?: string, options: LogOptions = {}) {
+        if (text) {
+            this.#segments.push({
+                text,
+                options
+            });
+        }
 
         return this;
     }
@@ -391,10 +399,12 @@ export class BrowserConsoleLogger implements RootLogger {
     /**
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withError(error: Error) {
-        this.#segments.push({
-            error
-        });
+    withError(error?: Error) {
+        if (error) {
+            this.#segments.push({
+                error
+            });
+        }
 
         return this;
     }
@@ -402,10 +412,12 @@ export class BrowserConsoleLogger implements RootLogger {
     /**
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withObject(obj: object) {
-        this.#segments.push({
-            obj
-        });
+    withObject(obj?: object) {
+        if (obj) {
+            this.#segments.push({
+                obj
+            });
+        }
 
         return this;
     }
