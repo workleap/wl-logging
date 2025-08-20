@@ -53,7 +53,7 @@ export class CompositeLoggerScope implements LoggerScope {
     /**
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withObject(obj?: object, options?: LogOptions) {
+    withObject(obj?: unknown, options?: LogOptions) {
         if (obj) {
             this.#scopes.forEach(x => {
                 try {
@@ -231,7 +231,7 @@ export class CompositeLogger implements RootLogger {
     /**
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withObject(obj?: object, options?: LogOptions) {
+    withObject(obj?: unknown, options?: LogOptions) {
         if (obj) {
             this.#loggers.forEach(x => {
                 try {
