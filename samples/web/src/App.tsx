@@ -332,7 +332,7 @@ export function CompositeLoggerSection() {
     }, []);
 
     const handleLineChangeClick = useCallback(() => {
-        consoleLogger.withLineChange();
+        compositeLogger.withLineChange();
     }, []);
 
     return (
