@@ -2,4 +2,4 @@
 "@workleap/logging": patch
 ---
 
-Segments are now optionnal.
+Segments are now optional.
