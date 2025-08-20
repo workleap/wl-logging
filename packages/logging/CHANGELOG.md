@@ -1,5 +1,11 @@
 # @workleap/logging
 
+## 1.2.2
+
+### Patch Changes
+
+- [#20](https://github.com/workleap/wl-logging/pull/20) [`ec1b201`](https://github.com/workleap/wl-logging/commit/ec1b2011909dd0ab99645e694e04e0b89ce85ef0) Thanks [@patricklafrance](https://github.com/patricklafrance)! - Object segment type is now `unknown`.
+
 ## 1.2.1
 
 ### Patch Changes
