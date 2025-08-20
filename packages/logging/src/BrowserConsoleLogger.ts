@@ -1,10 +1,8 @@
 import { LogLevel, type LoggerOptions, type LoggerScope, type LoggerScopeEndOptions, type LoggerScopeOptions, type LogOptions, type RootLogger, type Segment } from "./Logger.ts";
 
-/**
- * @see {@link https://workleap.github.io/wl-logging}
- */
 interface TextSegment {
     text: string;
+    isLineChange?: boolean;
     options?: LogOptions;
 }
 
@@ -14,41 +12,61 @@ function convertCssInlineStyleToConsoleStyle(cssInlineStyle: Partial<CSSStyleDec
         .join(";");
 }
 
-function appendTextSegment(currentText: string, segment: string) {
+function appendText(currentText: string, newText: string, options: { addSpace?: boolean } = {}) {
+    const {
+        addSpace = true
+    } = options;
+
     if (currentText.length > 0) {
-        return `${currentText} ${segment}`;
+        return `${currentText}${addSpace ? " " : ""}${newText}`;
     }
 
-    return segment;
+    return newText;
 }
+
+const LineChange = "\r\n";
 
 function parseSegments(segments: Segment[]) {
     const textSegments: TextSegment[] = [];
-    const objectSegments: unknown[] = [];
+    const otherSegments: unknown[] = [];
     const allSegments: unknown[] = [];
 
-    let includeStyleOptions = false;
+    // Is there at least one items that includes styling options?
+    const includeStyleOptions = segments.some(x => x.options?.style);
 
-    segments.forEach(x => {
-        if (x.options?.style) {
-            includeStyleOptions = true;
-        }
-
+    segments.forEach((x, index) => {
         if (x.text) {
             textSegments.push(x as TextSegment);
             allSegments.push(x.text);
         } else if (x.obj) {
-            objectSegments.push(x.obj);
+            otherSegments.push(x.obj);
             allSegments.push(x.obj);
         } else if (x.error) {
-            objectSegments.push(x.error);
+            otherSegments.push(x.error);
             allSegments.push(x.error);
+        } else if (x.lineChange) {
+            // If there are style associated to this log entry and the current segment is not the last one...
+            if (includeStyleOptions && (index + 1) <= segments.length) {
+                // And the next segment is a text segment...
+                if (segments[index + 1].text) {
+                    // Append the line change segment as a text segment so it's merged with the other text segments.
+                    textSegments.push({
+                        text: LineChange,
+                        isLineChange: true
+                    });
+                } else {
+                    // Otherwise, add it to the other segments.
+                    otherSegments.push(LineChange);
+                }
+            }
+
+            allSegments.push(LineChange);
         }
     });
 
     return {
         textSegments,
-        objectSegments,
+        otherSegments,
         allSegments,
         includeStyleOptions
     };
@@ -62,32 +80,52 @@ function parseSegments(segments: Segment[]) {
 function formatSegments(segments: Segment[]) {
     const {
         textSegments,
-        objectSegments,
+        otherSegments,
         allSegments,
         includeStyleOptions
     } = parseSegments(segments);
 
-    // There's some style, merge all the text into a single string.
+    // There's some style, merge all the text into a single string,
+    // Move all other segments at the end,
+    // Do not add spaces before and after line changes.
     if (includeStyleOptions) {
         let text = "";
+        let previousTextSegment: TextSegment;
 
         const styling: string[] = [];
 
         textSegments.forEach(x => {
             if (x.options?.style) {
-                text = appendTextSegment(text, `%c${x.text}%c`);
+                // Do not add a space after line change characters.
+                const addSpace = !previousTextSegment?.isLineChange;
+
+                text = appendText(text, `%c${x.text}%c`, {
+                    addSpace
+                });
 
                 styling.push(convertCssInlineStyleToConsoleStyle(x.options.style));
                 styling.push("%s");
             } else {
-                text = appendTextSegment(text, x.text);
+                // Do not add a space before line change characters.
+                let addSpace = !x.isLineChange;
+
+                // Do not add a space after line change characters.
+                if (previousTextSegment?.isLineChange) {
+                    addSpace = false;
+                }
+
+                text = appendText(text, x.text, {
+                    addSpace
+                });
             }
+
+            previousTextSegment = x;
         });
 
         return [
             text,
             ...styling,
-            ...objectSegments
+            ...otherSegments
         ];
     }
 
@@ -175,6 +213,14 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
     withObject(obj: object) {
         this.#segments.push({
             obj
+        });
+
+        return this;
+    }
+
+    withLineChange() {
+        this.#segments.push({
+            lineChange: true
         });
 
         return this;
@@ -314,7 +360,9 @@ export class BrowserConsoleLogger implements RootLogger {
     #log(fct: LogFunction, threshold: LogLevel) {
         if (this.#segments.length > 0) {
             if (this.#logLevel <= threshold) {
-                fct(...formatSegments(this.#segments));
+                const formattedSegments = formatSegments(this.#segments);
+
+                fct(...formattedSegments);
             }
 
             this.#resetSegments();
@@ -357,6 +405,14 @@ export class BrowserConsoleLogger implements RootLogger {
     withObject(obj: object) {
         this.#segments.push({
             obj
+        });
+
+        return this;
+    }
+
+    withLineChange() {
+        this.#segments.push({
+            lineChange: true
         });
 
         return this;

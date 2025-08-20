@@ -13,6 +13,9 @@ export class NoopLoggerScope implements LoggerScope {
     withObject() {
         return this;
     }
+    withLineChange() {
+        return this;
+    }
     debug() {}
     information() {}
     warning() {}
@@ -35,6 +38,9 @@ export class NoopLogger implements RootLogger {
         return this;
     }
     withObject() {
+        return this;
+    }
+    withLineChange() {
         return this;
     }
     debug() {}

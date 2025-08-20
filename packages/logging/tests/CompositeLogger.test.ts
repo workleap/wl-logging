@@ -89,6 +89,30 @@ describe("CompositeLogger", () => {
             expect(logMock).toHaveBeenCalledWith("Error occurred:", error);
         });
 
+        test.concurrent.for(pairs)("can build a \"%s\" log with line changes", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+
+            const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel: LogLevel.debug }), new BrowserConsoleLogger({ logLevel: LogLevel.debug })]);
+
+            logger
+                .withText("Foo")
+                .withLineChange()
+                .withText("Bar")
+                .withLineChange()
+                .withText("Hey")
+                // eslint-disable-next-line no-unexpected-multiline
+                [loggerFunction]();
+
+            expect(logMock).toHaveBeenCalledTimes(2);
+            expect(logMock).toHaveBeenCalledWith(
+                "Foo",
+                "\r\n",
+                "Bar",
+                "\r\n",
+                "Hey"
+            );
+        });
+
         test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
@@ -277,6 +301,37 @@ describe("CompositeLoggerScope", () => {
             expect(groupEndMock).toHaveBeenCalledTimes(2);
 
             expect(logMock).toHaveBeenCalledWith("Error occurred:", error);
+        });
+
+        test.concurrent.for(pairs)("can build a \"%s\" log with line changes", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+
+            const scope = new CompositeLoggerScope([new BrowserConsoleLoggerScope("foo", LogLevel.debug), new BrowserConsoleLoggerScope("foo", LogLevel.debug)]);
+
+            scope
+                .withText("Foo")
+                .withLineChange()
+                .withText("Bar")
+                .withLineChange()
+                .withText("Hey")
+                // eslint-disable-next-line no-unexpected-multiline
+                [loggerFunction]();
+
+            scope.end();
+
+            expect(groupCollapsedMock).toHaveBeenCalledTimes(2);
+            expect(logMock).toHaveBeenCalledTimes(2);
+            expect(groupEndMock).toHaveBeenCalledTimes(2);
+
+            expect(logMock).toHaveBeenCalledWith(
+                "Foo",
+                "\r\n",
+                "Bar",
+                "\r\n",
+                "Hey"
+            );
         });
 
         test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
