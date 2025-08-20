@@ -1,5 +1,11 @@
 # @workleap/logging
 
+## 1.2.0
+
+### Minor Changes
+
+- [#16](https://github.com/workleap/wl-logging/pull/16) [`7e68a99`](https://github.com/workleap/wl-logging/commit/7e68a994df2c52f13036319f38366af77e9d7a0d) Thanks [@patricklafrance](https://github.com/patricklafrance)! - Add support for line change segments.
+
 ## 1.1.0
 
 ### Minor Changes
