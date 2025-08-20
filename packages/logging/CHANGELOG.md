@@ -1,5 +1,11 @@
 # @workleap/logging
 
+## 1.2.1
+
+### Patch Changes
+
+- [#18](https://github.com/workleap/wl-logging/pull/18) [`8213927`](https://github.com/workleap/wl-logging/commit/82139273af32d9b092cf0dc5da3ede49828b3582) Thanks [@patricklafrance](https://github.com/patricklafrance)! - Segments are now optional.
+
 ## 1.2.0
 
 ### Minor Changes
