@@ -43,6 +43,12 @@ export interface Logger {
     withObject: (obj: object, options?: LogOptions) => Logger;
 
     /**
+     * Add line change characters.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
+    withLineChange: () => Logger;
+
+    /**
      * Write a debug log. The log will be processed only if the logger LogLevel is >= debug.
      * @see {@link https://workleap.github.io/wl-logging}
      */
@@ -139,5 +145,6 @@ export interface Segment {
     text?: string;
     error?: Error;
     obj?: unknown;
+    lineChange?: boolean;
     options?: LogOptions;
 }

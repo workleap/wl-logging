@@ -62,6 +62,19 @@ export class CompositeLoggerScope implements LoggerScope {
         return this;
     }
 
+    withLineChange() {
+        this.#scopes.forEach(x => {
+            try {
+                x.withLineChange();
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            } catch (error: unknown) {
+                // Do nothing...
+            }
+        });
+
+        return this;
+    }
+
     /**
      * Write a debug log. The log will be processed only if the logger LogLevel is >= debug.
      * @see {@link https://workleap.github.io/wl-logging}
@@ -212,6 +225,19 @@ export class CompositeLogger implements RootLogger {
         this.#loggers.forEach(x => {
             try {
                 x.withObject(obj, options);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            } catch (error: unknown) {
+                // Do nothing...
+            }
+        });
+
+        return this;
+    }
+
+    withLineChange() {
+        this.#loggers.forEach(x => {
+            try {
+                x.withLineChange();
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error: unknown) {
                 // Do nothing...

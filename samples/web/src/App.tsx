@@ -56,7 +56,7 @@ function ConsoleLoggerSection() {
     }, []);
 
     const handleColoredTextClick = useCallback(() => {
-        consoleLogger.withText(getShortId(), {
+        consoleLogger.withText(`Text: ${getShortId()}`, {
             style: {
                 color: getRandomHexColor()
             }
@@ -64,7 +64,7 @@ function ConsoleLoggerSection() {
     }, []);
 
     const handleColoredBackgroundClick = useCallback(() => {
-        consoleLogger.withText(getShortId(), {
+        consoleLogger.withText(`Text: ${getShortId()}`, {
             style: {
                 backgroundColor: getRandomHexColor(),
                 color: "white"
@@ -88,6 +88,10 @@ function ConsoleLoggerSection() {
         consoleLogger.withError(generateRandomError());
     }, []);
 
+    const handleLineChangeClick = useCallback(() => {
+        consoleLogger.withLineChange();
+    }, []);
+
     return (
         <>
             <h2>Console Logger</h2>
@@ -99,6 +103,7 @@ function ConsoleLoggerSection() {
                     <button type="button" onClick={handleBoldTextClick}>Bold text</button>
                     <button type="button" onClick={handleObjectClick}>Object</button>
                     <button type="button" onClick={handleErrorClick}>Error</button>
+                    <button type="button" onClick={handleLineChangeClick}>Line change</button>
                 </div>
                 <div style={{ display: "flex", gap: "10px" }}>
                     <button type="button" onClick={useConsoleLogCallback("debug")}>Debug</button>
@@ -186,7 +191,7 @@ function ConsoleLoggerScopeSection() {
     }, [scope]);
 
     const handleColoredTextClick = useCallback(() => {
-        scope?.withText(getShortId(), {
+        scope?.withText(`Text: ${getShortId()}`, {
             style: {
                 color: getRandomHexColor()
             }
@@ -194,7 +199,7 @@ function ConsoleLoggerScopeSection() {
     }, [scope]);
 
     const handleColoredBackgroundClick = useCallback(() => {
-        scope?.withText(getShortId(), {
+        scope?.withText(`Text: ${getShortId()}`, {
             style: {
                 backgroundColor: getRandomHexColor(),
                 color: "white"
@@ -218,6 +223,10 @@ function ConsoleLoggerScopeSection() {
         scope?.withError(generateRandomError());
     }, [scope]);
 
+    const handleLineChangeClick = useCallback(() => {
+        scope?.withLineChange();
+    }, [scope]);
+
     return (
         <>
             <h3>Scope</h3>
@@ -235,6 +244,7 @@ function ConsoleLoggerScopeSection() {
                     <button type="button" onClick={handleBoldTextClick}>Bold text</button>
                     <button type="button" onClick={handleObjectClick}>Object</button>
                     <button type="button" onClick={handleErrorClick}>Error</button>
+                    <button type="button" onClick={handleLineChangeClick}>Line change</button>
                 </div>
                 <div style={{ display: "flex", gap: "10px" }}>
                     <button type="button" onClick={useConsoleScopeLogCallback("debug", scope)}>Debug</button>
@@ -289,7 +299,7 @@ export function CompositeLoggerSection() {
     }, []);
 
     const handleColoredTextClick = useCallback(() => {
-        compositeLogger.withText(getShortId(), {
+        compositeLogger.withText(`Text: ${getShortId()}`, {
             style: {
                 color: getRandomHexColor()
             }
@@ -297,7 +307,7 @@ export function CompositeLoggerSection() {
     }, []);
 
     const handleColoredBackgroundClick = useCallback(() => {
-        compositeLogger.withText(getShortId(), {
+        compositeLogger.withText(`Text: ${getShortId()}`, {
             style: {
                 backgroundColor: getRandomHexColor(),
                 color: "white"
@@ -321,6 +331,10 @@ export function CompositeLoggerSection() {
         compositeLogger.withError(generateRandomError());
     }, []);
 
+    const handleLineChangeClick = useCallback(() => {
+        compositeLogger.withLineChange();
+    }, []);
+
     return (
         <>
             <h2>Composite Logger</h2>
@@ -332,6 +346,7 @@ export function CompositeLoggerSection() {
                     <button type="button" onClick={handleBoldTextClick}>Bold text</button>
                     <button type="button" onClick={handleObjectClick}>Object</button>
                     <button type="button" onClick={handleErrorClick}>Error</button>
+                    <button type="button" onClick={handleLineChangeClick}>Line change</button>
                 </div>
                 <div style={{ display: "flex", gap: "10px" }}>
                     <button type="button" onClick={useCompositeLogCallback("debug")}>Debug</button>
@@ -419,7 +434,7 @@ function CompositeLoggerScopeSection() {
     }, [scope]);
 
     const handleColoredTextClick = useCallback(() => {
-        scope?.withText(getShortId(), {
+        scope?.withText(`Text: ${getShortId()}`, {
             style: {
                 color: getRandomHexColor()
             }
@@ -451,6 +466,10 @@ function CompositeLoggerScopeSection() {
         scope?.withError(generateRandomError());
     }, [scope]);
 
+    const handleLineChangeClick = useCallback(() => {
+        scope?.withLineChange();
+    }, [scope]);
+
     return (
         <>
             <h3>Scope</h3>
@@ -468,6 +487,7 @@ function CompositeLoggerScopeSection() {
                     <button type="button" onClick={handleBoldTextClick}>Bold text</button>
                     <button type="button" onClick={handleObjectClick}>Object</button>
                     <button type="button" onClick={handleErrorClick}>Error</button>
+                    <button type="button" onClick={handleLineChangeClick}>Line change</button>
                 </div>
                 <div style={{ display: "flex", gap: "10px" }}>
                     <button type="button" onClick={useCompositeScopeLogCallback("debug", scope)}>Debug</button>

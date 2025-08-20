@@ -107,6 +107,29 @@ describe("BrowserConsoleLogger", () => {
             // The sequencing has been preserved because there's no styling.
             expect(logMock).toHaveBeenCalledWith("Processing segment", obj, "failed with error", error);
         });
+
+        test.concurrent.for(pairs)("can add line change segments", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
+            const obj = { id: 1 };
+            const error = new Error("Test error");
+
+            logger
+                .withText("Processing segment")
+                .withLineChange()
+                .withText("on multiple lines")
+                .withObject(obj)
+                .withLineChange()
+                .withText("failed with error")
+                .withError(error)
+                // eslint-disable-next-line no-unexpected-multiline
+                [loggerFunction]();
+
+            expect(logMock).toHaveBeenCalledOnce();
+            // The sequencing has been preserved because there's no styling.
+            expect(logMock).toHaveBeenCalledWith("Processing segment", "\r\n", "on multiple lines", obj, "\r\n", "failed with error", error);
+        });
     });
 
     describe("styling", () => {
@@ -193,6 +216,59 @@ describe("BrowserConsoleLogger", () => {
                 "color:red",
                 "%s",
                 obj,
+                error
+            );
+        });
+
+        test.concurrent("when a line change is between two text segments, it's merged with text segments", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
+            const obj = { id: 1 };
+            const error = new Error("Test error");
+
+            logger
+                .withObject(obj)
+                .withText("Normal text")
+                .withLineChange()
+                .withText("Green text", { style: { color: "green" } })
+                .withError(error)
+                .withText("Red text", { style: { color: "red" } })
+                .debug();
+
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledWith(
+                "Normal text\r\n%cGreen text%c %cRed text%c",
+                "color:green",
+                "%s",
+                "color:red",
+                "%s",
+                obj,
+                error
+            );
+        });
+
+        test.concurrent("can add a line change between two objects", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
+            const obj = { id: 1 };
+            const error = new Error("Test error");
+
+            logger
+                .withObject(obj)
+                .withLineChange()
+                .withError(error)
+                .withText("Green text", { style: { color: "green" } })
+                .debug();
+
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledWith(
+                "%cGreen text%c",
+                "color:green",
+                "%s",
+                obj,
+                "\r\n",
                 error
             );
         });
@@ -396,6 +472,50 @@ describe("BrowserConsoleLoggerScope", () => {
 
             expect(logMock).toHaveBeenCalledWith("Processing segment", obj, "failed with error", error);
         });
+
+        test.concurrent.for(pairs)("can add line change segments", ([loggerFunction, consoleFunction], { expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+
+            // This code is a bit stupid, it's only to mute the console if the console function is not "log" (which
+            // has been previously mocked).
+            if (consoleFunction !== "log") {
+                vi.spyOn(console, consoleFunction).mockImplementation(() => {});
+            }
+
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
+            const obj = { id: 1 };
+            const error = new Error("Test error");
+
+            scope
+                .withText("Processing segment")
+                .withLineChange()
+                .withText("on multiple lines")
+                .withObject(obj)
+                .withLineChange()
+                .withText("failed with error")
+                .withError(error)
+                // eslint-disable-next-line no-unexpected-multiline
+                [loggerFunction]();
+
+            scope.end();
+
+            expect(groupCollapsedMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(groupEndMock).toHaveBeenCalledOnce();
+
+            // The sequencing has been preserved because there's no styling.
+            expect(logMock).toHaveBeenCalledWith(
+                "Processing segment",
+                "\r\n",
+                "on multiple lines",
+                obj,
+                "\r\n",
+                "failed with error",
+                error
+            );
+        });
     });
 
     describe("styling", () => {
@@ -527,6 +647,73 @@ describe("BrowserConsoleLoggerScope", () => {
                 "color:red",
                 "%s",
                 obj,
+                error
+            );
+        });
+
+        test.concurrent("when a line change is between two text segments, it's merged with text segments", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
+            const obj = { id: 1 };
+            const error = new Error("Test error");
+
+            scope
+                .withObject(obj)
+                .withText("Normal text")
+                .withLineChange()
+                .withText("Green text", { style: { color: "green" } })
+                .withError(error)
+                .withText("Red text", { style: { color: "red" } })
+                .debug();
+
+            scope.end();
+
+            expect(groupCollapsedMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(groupEndMock).toHaveBeenCalledOnce();
+
+            expect(logMock).toHaveBeenCalledWith(
+                "Normal text\r\n%cGreen text%c %cRed text%c",
+                "color:green",
+                "%s",
+                "color:red",
+                "%s",
+                obj,
+                error
+            );
+        });
+
+        test.concurrent("can add a line change between two objects", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
+            const obj = { id: 1 };
+            const error = new Error("Test error");
+
+            scope
+                .withObject(obj)
+                .withLineChange()
+                .withError(error)
+                .withText("Green text", { style: { color: "green" } })
+                .debug();
+
+            scope.end();
+
+            expect(groupCollapsedMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(groupEndMock).toHaveBeenCalledOnce();
+
+            expect(logMock).toHaveBeenCalledWith(
+                "%cGreen text%c",
+                "color:green",
+                "%s",
+                obj,
+                "\r\n",
                 error
             );
         });
