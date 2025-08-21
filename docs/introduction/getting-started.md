@@ -141,6 +141,47 @@ logger.debug("Application started!");
 
 In the previous example, `Application started!` will be processed by both logger instances :point_up:
 
+## Filter log entries
+
+A minimum severity of entries to process can be configured as an option. Messages with a lower severity than the configured level will then be ignored.
+
+```ts !#4
+import { BrowserConsoleLogger, LogLevel } from "@workleap/logging";
+
+const logger = new BrowserConsoleLogger({
+    logLevel: LogLevel.error
+});
+
+// Will be ignored because "debug" is lower than the "error" severity.
+logger.debug("Hello world!");
+```
+
+For reference, here's a description of each level:
+
+### Debug
+
+- Very detailed, often verbose, logs used mainly during development.
+- _Example: API request/response bodies, lifecycle hooks, variable state._
+
+### Information
+
+- General events that show the normal flow of the application.
+- _Example: User login, component mounted, scheduled task started._
+
+### Warning
+
+- Non-critical issues that might need attention but don’t break functionality.
+- _Example: Deprecated API usage, retries after a failed network call._
+
+### Error
+
+- Failures that prevent part of the system from working as intended.
+- _Example: Unhandled exceptions, failed database query, API call failed with 500._
+
+### Critical
+
+- Severe errors that cause the application to stop functioning or risk data integrity.
+- _Example: Application crash, loss of critical service connection._
 
 
 
