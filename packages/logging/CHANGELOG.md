@@ -1,5 +1,11 @@
 # @workleap/logging
 
+## 1.2.4
+
+### Patch Changes
+
+- [#26](https://github.com/workleap/wl-logging/pull/26) [`f039c10`](https://github.com/workleap/wl-logging/commit/f039c10aee3b00e24c9da789dd66786a0108bb67) Thanks [@patricklafrance](https://github.com/patricklafrance)! - Refactor BrowserConsoleLogger.
+
 ## 1.2.3
 
 ### Patch Changes
