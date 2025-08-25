@@ -1,5 +1,11 @@
 # @workleap/logging
 
+## 1.2.3
+
+### Patch Changes
+
+- [#23](https://github.com/workleap/wl-logging/pull/23) [`84a837a`](https://github.com/workleap/wl-logging/commit/84a837ae0c0c2d9954ae0cc5e363b643c453e986) Thanks [@patricklafrance](https://github.com/patricklafrance)! - Updated how line change are handled to fix a few ongoing issues.
+
 ## 1.2.2
 
 ### Patch Changes
