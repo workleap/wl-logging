@@ -1,5 +1,11 @@
 # @workleap/logging
 
+## 1.2.5
+
+### Patch Changes
+
+- [#28](https://github.com/workleap/wl-logging/pull/28) [`f85ce47`](https://github.com/workleap/wl-logging/commit/f85ce47653f8378eb1b26e15ca6b82f2aa724be2) Thanks [@patricklafrance](https://github.com/patricklafrance)! - Minor tweak to the LogOptions interface.
+
 ## 1.2.4
 
 ### Patch Changes
