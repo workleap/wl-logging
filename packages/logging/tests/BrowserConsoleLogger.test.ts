@@ -157,6 +157,61 @@ describe("BrowserConsoleLogger", () => {
 
             expect(logMock).not.toHaveBeenCalled();
         });
+
+        test.concurrent("can add multiple line changes", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
+
+            logger
+                .withText("First line")
+                .withLineChange()
+                .withLineChange()
+                .withLineChange()
+                .withText("Last line")
+                .debug();
+
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledWith(
+                "First line",
+                "\r\n",
+                "\r\n",
+                "\r\n",
+                "Last line"
+            );
+        });
+
+        test.concurrent("can add multiple lines with text followed by an object", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+
+            const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
+            const obj1 = { id: 1 };
+            const obj2 = { id: 2 };
+            const obj3 = { id: 3 };
+
+            logger
+                .withText("First line")
+                .withObject(obj1)
+                .withLineChange()
+                .withText("Second line")
+                .withObject(obj2)
+                .withLineChange()
+                .withText("Third line")
+                .withObject(obj3)
+                .debug();
+
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledWith(
+                "First line",
+                obj1,
+                "\r\n",
+                "Second line",
+                obj2,
+                "\r\n",
+                "Third line",
+                obj3
+            );
+        });
     });
 
     describe("styling", () => {
@@ -247,7 +302,7 @@ describe("BrowserConsoleLogger", () => {
             );
         });
 
-        test.concurrent("when a line change is between two text segments, it's merged with text segments", ({ expect }) => {
+        test.concurrent("when there are text and an object on the first line, and there is styled text on subsequent lines, render all segment in their original order", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -265,17 +320,16 @@ describe("BrowserConsoleLogger", () => {
 
             expect(logMock).toHaveBeenCalledOnce();
             expect(logMock).toHaveBeenCalledWith(
-                "Normal text\r\n%cGreen text%c %cRed text%c",
-                "color:green",
-                "%s",
-                "color:red",
-                "%s",
                 obj,
-                error
+                "Normal text",
+                "\r\n",
+                "Green text",
+                error,
+                "Red text"
             );
         });
 
-        test.concurrent("can add a line change between two objects", ({ expect }) => {
+        test.concurrent("can add a line change between two objects when they are followed by styled text", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -291,12 +345,10 @@ describe("BrowserConsoleLogger", () => {
 
             expect(logMock).toHaveBeenCalledOnce();
             expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%c",
-                "color:green",
-                "%s",
                 obj,
                 "\r\n",
-                error
+                error,
+                "Green text"
             );
         });
     });
@@ -576,6 +628,75 @@ describe("BrowserConsoleLoggerScope", () => {
 
             expect(logMock).not.toHaveBeenCalled();
         });
+
+        test.concurrent("can add multiple line changes", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
+
+            scope
+                .withText("First line")
+                .withLineChange()
+                .withLineChange()
+                .withLineChange()
+                .withText("Last line")
+                .debug();
+
+            scope.end();
+
+            expect(groupCollapsedMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(groupEndMock).toHaveBeenCalledOnce();
+
+            expect(logMock).toHaveBeenCalledWith(
+                "First line",
+                "\r\n",
+                "\r\n",
+                "\r\n",
+                "Last line"
+            );
+        });
+
+        test.concurrent("can add multiple lines with text followed by an object", ({ expect }) => {
+            const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
+            const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
+            const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
+
+            const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
+            const obj1 = { id: 1 };
+            const obj2 = { id: 2 };
+            const obj3 = { id: 3 };
+
+            scope
+                .withText("First line")
+                .withObject(obj1)
+                .withLineChange()
+                .withText("Second line")
+                .withObject(obj2)
+                .withLineChange()
+                .withText("Third line")
+                .withObject(obj3)
+                .debug();
+
+            scope.end();
+
+            expect(groupCollapsedMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledOnce();
+            expect(groupEndMock).toHaveBeenCalledOnce();
+
+            expect(logMock).toHaveBeenCalledWith(
+                "First line",
+                obj1,
+                "\r\n",
+                "Second line",
+                obj2,
+                "\r\n",
+                "Third line",
+                obj3
+            );
+        });
     });
 
     describe("styling", () => {
@@ -711,7 +832,7 @@ describe("BrowserConsoleLoggerScope", () => {
             );
         });
 
-        test.concurrent("when a line change is between two text segments, it's merged with text segments", ({ expect }) => {
+        test.concurrent("when there are text and an object on the first line, and there is styled text on subsequent lines, render all segment in their original order", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -736,17 +857,16 @@ describe("BrowserConsoleLoggerScope", () => {
             expect(groupEndMock).toHaveBeenCalledOnce();
 
             expect(logMock).toHaveBeenCalledWith(
-                "Normal text\r\n%cGreen text%c %cRed text%c",
-                "color:green",
-                "%s",
-                "color:red",
-                "%s",
                 obj,
-                error
+                "Normal text",
+                "\r\n",
+                "Green text",
+                error,
+                "Red text"
             );
         });
 
-        test.concurrent("can add a line change between two objects", ({ expect }) => {
+        test.concurrent("can add a line change between two objects when they are followed by styled text", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -769,12 +889,10 @@ describe("BrowserConsoleLoggerScope", () => {
             expect(groupEndMock).toHaveBeenCalledOnce();
 
             expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%c",
-                "color:green",
-                "%s",
                 obj,
                 "\r\n",
-                error
+                error,
+                "Green text"
             );
         });
     });
