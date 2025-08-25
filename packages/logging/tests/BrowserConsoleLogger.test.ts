@@ -125,7 +125,6 @@ describe("BrowserConsoleLogger", () => {
                 [loggerFunction]();
 
             expect(logMock).toHaveBeenCalledOnce();
-            // The sequencing has been preserved because there's no styling.
             expect(logMock).toHaveBeenCalledWith(
                 "Processing segment",
                 "\r\n",
@@ -153,7 +152,6 @@ describe("BrowserConsoleLogger", () => {
                 [loggerFunction]();
 
             expect(logMock).toHaveBeenCalledOnce();
-            // The sequencing has been preserved because there's no styling.
             expect(logMock).toHaveBeenCalledWith(
                 "Processing segment",
                 obj,
@@ -731,7 +729,6 @@ describe("BrowserConsoleLoggerScope", () => {
             expect(logMock).toHaveBeenCalledOnce();
             expect(groupEndMock).toHaveBeenCalledOnce();
 
-            // The sequencing has been preserved because there's no styling.
             expect(logMock).toHaveBeenCalledWith(
                 "Processing segment",
                 "\r\n",
