@@ -1,8 +1,8 @@
-import { LogLevel, type LoggerOptions, type LoggerScope, type LoggerScopeEndOptions, type LoggerScopeOptions, type LogOptions, type RootLogger, type Segment } from "./Logger.ts";
+import { LogLevel, type LoggerOptions, type LoggerScope, type LoggerScopeEndOptions, type LoggerScopeOptions, type LogOptions, type RootLogger } from "./Logger.ts";
 
-interface TextSegment {
-    text: string;
-    isLineChange?: boolean;
+interface Segment {
+    type: "text" | "object" | "error" | "line-change";
+    value: unknown;
     options?: LogOptions;
 }
 
@@ -12,125 +12,134 @@ function convertCssInlineStyleToConsoleStyle(cssInlineStyle: Partial<CSSStyleDec
         .join(";");
 }
 
-function appendText(currentText: string, newText: string, options: { addSpace?: boolean } = {}) {
+function appendText(currentText: string, newText: string, options: { leadingSpace?: boolean } = {}) {
     const {
-        addSpace = true
+        leadingSpace = true
     } = options;
 
     if (currentText.length > 0) {
-        return `${currentText}${addSpace ? " " : ""}${newText}`;
+        return `${currentText}${leadingSpace ? " " : ""}${newText}`;
     }
 
     return newText;
 }
 
-function parseSegments(segments: Segment[]) {
-    const textSegments: TextSegment[] = [];
-    const otherSegments: unknown[] = [];
-    const allSegments: unknown[] = [];
+function analyzeSegments(segments: Segment[]) {
+    let includeStyleOptions = false;
+    let includeStyleOptionsOnFirstLine = false;
+    let includeLineChange = false;
 
-    // Is there at least one items that includes styling options?
-    const includeStyleOptions = segments.some(x => x.options?.style);
+    segments.forEach(x => {
+        if (x.options?.style) {
+            includeStyleOptions = true;
 
-    segments.forEach((x, index) => {
-        if (x.text) {
-            textSegments.push(x as TextSegment);
-            allSegments.push(x.text);
-        } else if (x.obj) {
-            otherSegments.push(x.obj);
-            allSegments.push(x.obj);
-        } else if (x.error) {
-            otherSegments.push(x.error);
-            allSegments.push(x.error);
-        } else if (x.lineChange) {
-            const lineChange = "\r\n";
-
-            // If there are style associated to this log entry and the current segment is not the last one...
-            if (includeStyleOptions && (index + 1) <= segments.length) {
-                // And the next segment is a text segment...
-                if (segments[index + 1].text) {
-                    // Append the line change segment as a text segment so it's merged with the other text segments.
-                    textSegments.push({
-                        text: lineChange,
-                        isLineChange: true
-                    });
-                } else {
-                    // Otherwise, add it to the other segments.
-                    otherSegments.push(lineChange);
-                }
+            if (!includeLineChange) {
+                includeStyleOptionsOnFirstLine = true;
             }
+        }
 
-            allSegments.push(lineChange);
+        if (x.type === "line-change") {
+            includeLineChange = true;
         }
     });
 
     return {
-        textSegments,
-        otherSegments,
-        allSegments,
-        includeStyleOptions
+        includeStyleOptions,
+        includeStyleOptionsOnFirstLine,
+        includeLineChange
     };
 }
 
-// If the text logs include style, all the text segments must be merged as a single string that will be returned as the first element of the array,
-// followed by segments for the included style.
-// This is done this way because the console functions expect all the styled text to be provided as the first argument, followed by the style segments.
-// Therefore, when there's styling, the original text / object / error sequencing is not preserved as object and error segments are moved at the end.
-// When there's no style, the original sequencing is preserved.
 function formatSegments(segments: Segment[]) {
     const {
-        textSegments,
-        otherSegments,
-        allSegments,
-        includeStyleOptions
-    } = parseSegments(segments);
+        includeStyleOptions,
+        includeStyleOptionsOnFirstLine,
+        includeLineChange
+    } = analyzeSegments(segments);
 
-    // There's some style, merge all the text into a single string,
-    // Move all other segments at the end,
-    // Do not add spaces before and after line changes.
-    if (includeStyleOptions) {
-        let text = "";
-        let previousTextSegment: TextSegment;
+    // Merge all the text segments of the first line into a single string that will be forwarded to the console
+    // as the first argument, followed by the styling, then the objects and errors.
+    // This rendering move all objects and errors of the first line at the end, then the original order
+    // is preserved for subsequent lines.
+    // This rendering also implies that any text that is not on the first line
+    if (includeStyleOptionsOnFirstLine && includeLineChange) {
+        let firstLineText = "";
 
         const styling: string[] = [];
+        const remainingValues: unknown[] = [];
 
-        textSegments.forEach(x => {
-            if (x.options?.style) {
-                // Do not add a space after line change characters.
-                const addSpace = !previousTextSegment?.isLineChange;
+        let visitedLineChange = false;
 
-                text = appendText(text, `%c${x.text}%c`, {
-                    addSpace
-                });
+        segments.forEach(x => {
+            // This is the first line.
+            if (!visitedLineChange) {
+                if (x.type === "text") {
+                    if (x.options?.style) {
+                        firstLineText = appendText(firstLineText, `%c${x.value}%c`, {
+                            leadingSpace: x.options.leadingSpace
+                        });
 
-                styling.push(convertCssInlineStyleToConsoleStyle(x.options.style));
-                styling.push("%s");
-            } else {
-                // Do not add a space before line change characters.
-                let addSpace = !x.isLineChange;
+                        styling.push(convertCssInlineStyleToConsoleStyle(x.options.style));
+                        styling.push("%s");
+                    } else {
+                        firstLineText = appendText(firstLineText, x.value as string, {
+                            leadingSpace: x.options?.leadingSpace
+                        });
+                    }
+                } else if (x.type === "line-change") {
+                    visitedLineChange = true;
 
-                // Do not add a space after line change characters.
-                if (previousTextSegment?.isLineChange) {
-                    addSpace = false;
+                    remainingValues.push(x.value);
+                } else {
+                    remainingValues.push(x.value);
                 }
-
-                text = appendText(text, x.text, {
-                    addSpace
-                });
+            } else {
+                remainingValues.push(x.value);
             }
-
-            previousTextSegment = x;
         });
 
         return [
-            text,
+            firstLineText.length > 0 ? firstLineText : undefined,
             ...styling,
-            ...otherSegments
+            ...remainingValues
+        ].filter(x => x);
+    // Merge all the text segments into a single string that will be forwarded to the console
+    // as the first argument, followed by the styling, then the objects and errors.
+    // This rendering move all objects and errors at the end.
+    } else if (includeStyleOptions && !includeLineChange) {
+        let mergedText = "";
+
+        const styling: string[] = [];
+        const remainingValues: unknown[] = [];
+
+        segments.forEach(x => {
+            if (x.type === "text") {
+                if (x.options?.style) {
+                    mergedText = appendText(mergedText, `%c${x.value}%c`, {
+                        leadingSpace: x.options.leadingSpace
+                    });
+
+                    styling.push(convertCssInlineStyleToConsoleStyle(x.options.style));
+                    styling.push("%s");
+                } else {
+                    mergedText = appendText(mergedText, x.value as string, {
+                        leadingSpace: x.options?.leadingSpace
+                    });
+                }
+            } else {
+                remainingValues.push(x.value);
+            }
+        });
+
+        return [
+            mergedText,
+            ...styling,
+            ...remainingValues
         ];
     }
 
-    // There's no style, preserve the original sequencing.
-    return allSegments;
+    // This rendering display all the parsed values in their original order.
+    return segments.map(x => x.value);
 }
 
 type LogFunction = (...rest: unknown[]) => void;
@@ -190,7 +199,8 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
     withText(text?: string, options: LogOptions = {}) {
         if (text) {
             this.#segments.push({
-                text,
+                type: "text",
+                value: text,
                 options
             });
         }
@@ -204,7 +214,8 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
     withError(error?: Error) {
         if (error) {
             this.#segments.push({
-                error
+                type: "error",
+                value: error
             });
         }
 
@@ -217,7 +228,8 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
     withObject(obj?: unknown) {
         if (obj) {
             this.#segments.push({
-                obj
+                type: "object",
+                value: obj
             });
         }
 
@@ -226,7 +238,8 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
 
     withLineChange() {
         this.#segments.push({
-            lineChange: true
+            type: "line-change",
+            value: "\r\n"
         });
 
         return this;
@@ -239,7 +252,8 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
     debug(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
-                text: log,
+                type: "text",
+                value: log,
                 options
             });
         }
@@ -254,7 +268,8 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
     information(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
-                text: log,
+                type: "text",
+                value: log,
                 options
             });
         }
@@ -269,7 +284,8 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
     warning(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
-                text: log,
+                type: "text",
+                value: log,
                 options
             });
         }
@@ -284,7 +300,8 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
     error(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
-                text: log,
+                type: "text",
+                value: log,
                 options
             });
         }
@@ -299,7 +316,8 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
     critical(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
-                text: log,
+                type: "text",
+                value: log,
                 options
             });
         }
@@ -388,7 +406,8 @@ export class BrowserConsoleLogger implements RootLogger {
     withText(text?: string, options: LogOptions = {}) {
         if (text) {
             this.#segments.push({
-                text,
+                type: "text",
+                value: text,
                 options
             });
         }
@@ -402,7 +421,8 @@ export class BrowserConsoleLogger implements RootLogger {
     withError(error?: Error) {
         if (error) {
             this.#segments.push({
-                error
+                type: "error",
+                value: error
             });
         }
 
@@ -415,7 +435,8 @@ export class BrowserConsoleLogger implements RootLogger {
     withObject(obj?: unknown) {
         if (obj) {
             this.#segments.push({
-                obj
+                type: "object",
+                value: obj
             });
         }
 
@@ -424,7 +445,8 @@ export class BrowserConsoleLogger implements RootLogger {
 
     withLineChange() {
         this.#segments.push({
-            lineChange: true
+            type: "line-change",
+            value: "\r\n"
         });
 
         return this;
@@ -437,7 +459,8 @@ export class BrowserConsoleLogger implements RootLogger {
     debug(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
-                text: log,
+                type: "text",
+                value: log,
                 options
             });
         }
@@ -452,7 +475,8 @@ export class BrowserConsoleLogger implements RootLogger {
     information(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
-                text: log,
+                type: "text",
+                value: log,
                 options
             });
         }
@@ -467,7 +491,8 @@ export class BrowserConsoleLogger implements RootLogger {
     warning(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
-                text: log,
+                type: "text",
+                value: log,
                 options
             });
         }
@@ -482,7 +507,8 @@ export class BrowserConsoleLogger implements RootLogger {
     error(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
-                text: log,
+                type: "text",
+                value: log,
                 options
             });
         }
@@ -497,7 +523,8 @@ export class BrowserConsoleLogger implements RootLogger {
     critical(log?: string, options?: LogOptions) {
         if (log) {
             this.#segments.push({
-                text: log,
+                type: "text",
+                value: log,
                 options
             });
         }

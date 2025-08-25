@@ -18,6 +18,13 @@ export interface LogOptions {
      * @see {@link https://workleap.github.io/wl-logging}
      */
     style?: Partial<CSSStyleDeclaration>;
+
+    /**
+     * Whether or not to add a leading space before the segment.
+     * @default true
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
+    leadingSpace?: boolean;
 }
 
 /**
@@ -139,12 +146,4 @@ export interface RootLogger extends Logger {
      * @see {@link https://workleap.github.io/wl-logging}
      */
     startScope: (label: string, options?: LoggerScopeOptions) => LoggerScope;
-}
-
-export interface Segment {
-    text?: string;
-    error?: Error;
-    obj?: unknown;
-    lineChange?: boolean;
-    options?: LogOptions;
 }
