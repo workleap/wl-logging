@@ -41,13 +41,13 @@ export interface Logger {
      * Log an error object.
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withError: (error?: Error, options?: LogOptions) => Logger;
+    withError: (error?: Error, options?: Omit<LogOptions, "leadingSpace">) => Logger;
 
     /**
      * Log an unknown object.
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    withObject: (obj?: unknown, options?: LogOptions) => Logger;
+    withObject: (obj?: unknown, options?: Omit<LogOptions, "leadingSpace">) => Logger;
 
     /**
      * Add line change characters.
@@ -59,27 +59,27 @@ export interface Logger {
      * Write a debug log. The log will be processed only if the logger LogLevel is >= debug.
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    debug: (log?: string, options?: LogOptions) => void;
+    debug: (log?: string, options?: Omit<LogOptions, "leadingSpace">) => void;
     /**
      * Write an information log. The log will be processed only if the logger LogLevel is >= information.
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    information: (log?: string, options?: LogOptions) => void;
+    information: (log?: string, options?: Omit<LogOptions, "leadingSpace">) => void;
     /**
      * Write a warning log. The log will be processed only if the logger LogLevel is >= warning.
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    warning: (log?: string, options?: LogOptions) => void;
+    warning: (log?: string, options?: Omit<LogOptions, "leadingSpace">) => void;
     /**
      * Write an error log. The log will be processed only if the logger LogLevel is >= error.
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    error: (log?: string, options?: LogOptions) => void;
+    error: (log?: string, options?: Omit<LogOptions, "leadingSpace">) => void;
     /**
      * Write a critical log. The log will be processed only if the logger LogLevel is >= critical.
      * @see {@link https://workleap.github.io/wl-logging}
      */
-    critical: (log?: string, options?: LogOptions) => void;
+    critical: (log?: string, options?: Omit<LogOptions, "leadingSpace">) => void;
 }
 
 /**
