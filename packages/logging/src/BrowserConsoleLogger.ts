@@ -52,94 +52,86 @@ function analyzeSegments(segments: Segment[]) {
 
 function formatSegments(segments: Segment[]) {
     const {
-        includeStyleOptions,
-        includeStyleOptionsOnFirstLine,
-        includeLineChange
+        includeStyleOptions
     } = analyzeSegments(segments);
 
-    // Merge all the text segments of the first line into a single string that will be forwarded to the console
-    // as the first argument, followed by the styling, then the objects and errors.
-    // This rendering move all objects and errors of the first line at the end, then the original order
-    // is preserved for subsequent lines.
-    // This rendering also implies that any text that is not on the first line
-    if (includeStyleOptionsOnFirstLine && includeLineChange) {
-        let firstLineText = "";
+    const logs: unknown[] = [];
 
-        const styling: string[] = [];
-        const remainingValues: unknown[] = [];
+    // This rendering:
+    // - style text segments that includes styling until a non textual segments is met.
+    // - concatenate text segments when possible to match the "leading space" option.
+    if (includeStyleOptions) {
+        let textBuffer = "";
+        let styling: string[] = [];
 
-        let visitedLineChange = false;
+        const flushText = () => {
+            if (textBuffer.length > 0) {
+                logs.push(textBuffer);
 
-        segments.forEach(x => {
-            // This is the first line.
-            if (!visitedLineChange) {
-                if (x.type === "text") {
-                    if (x.options?.style) {
-                        firstLineText = appendText(firstLineText, `%c${x.value}%c`, {
-                            leadingSpace: x.options.leadingSpace
-                        });
+                textBuffer = "";
 
-                        styling.push(convertCssInlineStyleToConsoleStyle(x.options.style));
-                        styling.push("%s");
-                    } else {
-                        firstLineText = appendText(firstLineText, x.value as string, {
-                            leadingSpace: x.options?.leadingSpace
-                        });
-                    }
-                } else if (x.type === "line-change") {
-                    visitedLineChange = true;
+                if (styling.length > 0) {
+                    logs.push(...styling);
 
-                    remainingValues.push(x.value);
-                } else {
-                    remainingValues.push(x.value);
+                    styling = [];
                 }
-            } else {
-                remainingValues.push(x.value);
             }
-        });
-
-        return [
-            firstLineText.length > 0 ? firstLineText : undefined,
-            ...styling,
-            ...remainingValues
-        ].filter(x => x);
-    // Merge all the text segments into a single string that will be forwarded to the console
-    // as the first argument, followed by the styling, then the objects and errors.
-    // This rendering move all objects and errors at the end.
-    } else if (includeStyleOptions && !includeLineChange) {
-        let mergedText = "";
-
-        const styling: string[] = [];
-        const remainingValues: unknown[] = [];
+        };
 
         segments.forEach(x => {
             if (x.type === "text") {
-                if (x.options?.style) {
-                    mergedText = appendText(mergedText, `%c${x.value}%c`, {
+                // Styled text must be the first entry of the logs.
+                if (logs.length === 0 && x.options?.style) {
+                    textBuffer = appendText(textBuffer, `%c${x.value}%c`, {
                         leadingSpace: x.options.leadingSpace
                     });
 
                     styling.push(convertCssInlineStyleToConsoleStyle(x.options.style));
                     styling.push("%s");
                 } else {
-                    mergedText = appendText(mergedText, x.value as string, {
+                    textBuffer = appendText(textBuffer, x.value as string, {
                         leadingSpace: x.options?.leadingSpace
                     });
                 }
             } else {
-                remainingValues.push(x.value);
+                flushText();
+
+                logs.push(x.value);
             }
         });
 
-        return [
-            mergedText,
-            ...styling,
-            ...remainingValues
-        ];
+        // If the last segment is text, the text buffer hasn't been flushed.
+        flushText();
+    // This rendering:
+    // - concatenate text segments when possible to match the "leading space" option.
+    } else {
+        let textBuffer = "";
+
+        const flushText = () => {
+            if (textBuffer.length > 0) {
+                logs.push(textBuffer);
+
+                textBuffer = "";
+            }
+        };
+
+        segments.forEach(x => {
+            if (x.type === "text") {
+                textBuffer = appendText(textBuffer, x.value as string, {
+                    leadingSpace: x.options?.leadingSpace
+                });
+            } else {
+                flushText();
+
+                logs.push(x.value);
+            }
+        });
+
+        // If the last segment is text, the text buffer hasn't been flushed.
+        flushText();
     }
 
-    // This rendering display all the parsed values in their original order.
-    return segments.map(x => x.value);
+    return logs;
 }
 
 type LogFunction = (...rest: unknown[]) => void;

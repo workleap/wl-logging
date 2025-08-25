@@ -80,6 +80,12 @@ function ConsoleLoggerSection() {
         });
     }, []);
 
+    const handleNoLeadingSpaceText = useCallback(() => {
+        consoleLogger.withText(`Text: ${getShortId()}`, {
+            leadingSpace: false
+        });
+    }, []);
+
     const handleObjectClick = useCallback(() => {
         consoleLogger.withObject(generateRandomObject());
     }, []);
@@ -101,6 +107,7 @@ function ConsoleLoggerSection() {
                     <button type="button" onClick={handleColoredTextClick}>Colored text</button>
                     <button type="button" onClick={handleColoredBackgroundClick}>Colored background</button>
                     <button type="button" onClick={handleBoldTextClick}>Bold text</button>
+                    <button type="button" onClick={handleNoLeadingSpaceText}>No leading space text</button>
                     <button type="button" onClick={handleObjectClick}>Object</button>
                     <button type="button" onClick={handleErrorClick}>Error</button>
                     <button type="button" onClick={handleLineChangeClick}>Line change</button>
