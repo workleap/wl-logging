@@ -343,4 +343,12 @@ export class CompositeLogger implements RootLogger {
 
         return new CompositeLoggerScope(scopes);
     }
+
+    /**
+     * Return the logger instances wrapped by this composite logger.
+     * @see {@link https://workleap.github.io/wl-logging}
+     */
+    getLoggers(): RootLogger[] {
+        return [...this.#loggers];
+    }
 }
