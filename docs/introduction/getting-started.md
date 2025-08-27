@@ -17,17 +17,19 @@ pnpm add @workleap/logging
 
 ## Write console logs
 
-A logger can output log entries with different levels (`debug`, `information`, `warning`, `error`, `critical`). This allows to filter logs according to a minimum severity:
+A logger can output log entries with different levels: `debug`, `information`, `warning`, `error`, `critical`. This allows to [filter log entries](#filter-log-entries) according to a minimum severity:
 
-```ts !#4
-import { BrowserConsoleLogger, LogLevel } from "@workleap/logging";
+```ts !#5-9
+import { BrowserConsoleLogger } from "@workleap/logging";
 
-const logger = new BrowserConsoleLogger({
-    logLevel: LogLevel.error
-});
+const logger = new BrowserConsoleLogger();
+
+logger.debug("Application started!");
+logger.information("Application started!");
+logger.warn("Application is slow to start.");
+logger.error("An error occurred while starting the application.");
+logger.critical("Application failed to start.");
 ```
-
-In the previous example, the logger instance would process only `error` and `critical` entries :point_up:
 
 ### Basic text logs
 
@@ -86,9 +88,21 @@ logger
 If styling is not supported by the logger, the text is logged without any styling.
 !!!
 
-!!!tip
-When styling is applied to any text segment, all error or object segments are appended at the end of the log entry.
-!!!
+### Line change
+
+A log entry can span multiple lines by adding line breaks:
+
+```ts !#7
+import { BrowserConsoleLogger } from "@workleap/logging";
+
+const logger = new BrowserConsoleLogger();
+
+logger
+    .withText("First line")
+    .withLineChange()
+    .withText("Second line")
+    .debug();
+```
 
 ## Create a logging scope
 
@@ -155,6 +169,8 @@ const logger = new BrowserConsoleLogger({
 // Will be ignored because "debug" is lower than the "error" severity.
 logger.debug("Hello world!");
 ```
+
+In the previous example, the logger instance would process only `error` and `critical` entries :point_up:
 
 For reference, here's a description of each level:
 
