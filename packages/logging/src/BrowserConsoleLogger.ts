@@ -26,30 +26,26 @@ function appendText(currentText: string, newText: string, options: { leadingSpac
 
 function analyzeSegments(segments: Segment[]) {
     let includeStyleOptions = false;
-    let includeStyleOptionsOnFirstLine = false;
-    let includeLineChange = false;
 
     segments.forEach(x => {
         if (x.options?.style) {
             includeStyleOptions = true;
-
-            if (!includeLineChange) {
-                includeStyleOptionsOnFirstLine = true;
-            }
-        }
-
-        if (x.type === "line-change") {
-            includeLineChange = true;
         }
     });
 
     return {
-        includeStyleOptions,
-        includeStyleOptionsOnFirstLine,
-        includeLineChange
+        includeStyleOptions
     };
 }
 
+/**
+ * Formats an array of log segments for browser console output.
+ *
+ * - If any segment includes style options, styled text segments are formatted using `%c` and CSS styles,
+ *   and concatenated when possible, respecting leading spaces. Non-text segments (objects, errors, etc.) are appended as-is.
+ * - If no style options are present, text segments are simply concatenated, respecting leading spaces,
+ *   and non-text segments are appended as-is.
+ */
 function formatSegments(segments: Segment[]) {
     const {
         includeStyleOptions
