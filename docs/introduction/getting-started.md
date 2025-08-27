@@ -98,9 +98,9 @@ import { BrowserConsoleLogger } from "@workleap/logging";
 const logger = new BrowserConsoleLogger();
 
 logger
-    .withText("First line)
+    .withText("First line")
     .withLineChange()
-    .withText("Second line)
+    .withText("Second line")
     .debug();
 ```
 
