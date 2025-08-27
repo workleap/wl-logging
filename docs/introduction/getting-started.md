@@ -27,7 +27,7 @@ const logger = new BrowserConsoleLogger();
 logger.debug("Application started!");
 logger.information("Application started!");
 logger.warn("Application is slow to start.");
-logger.error("An error occured while starting the application.");
+logger.error("An error occurred while starting the application.");
 logger.critical("Application failed to start.");
 ```
 
