@@ -170,7 +170,7 @@ const logger = new BrowserConsoleLogger({
 logger.debug("Hello world!");
 ```
 
-In the previous example, the logger instance would process only `error` and `critical` entries :point_up:
+In the previous example, the logger instance would process only `error` and `critical` entries :point_up:. For development environments, we generally recommend setting the minimum severity to `debug`, and for production environments to `information`. `information` provides a good balance, detailed enough for basic troubleshooting, while reducing noise in production.
 
 For reference, here's a description of each level:
 
