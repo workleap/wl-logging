@@ -1,5 +1,11 @@
 # @workleap/logging
 
+## 1.3.0
+
+### Minor Changes
+
+- [#30](https://github.com/workleap/wl-logging/pull/30) [`3ebc675`](https://github.com/workleap/wl-logging/commit/3ebc675ccbb33843c2ff6702963268f5af026837) Thanks [@patricklafrance](https://github.com/patricklafrance)! - Added a `getLoggers()` function to the CompositeLogger instance.
+
 ## 1.2.5
 
 ### Patch Changes
