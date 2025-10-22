@@ -44,7 +44,7 @@
         "typescript": "5.9.2"
     },
     "engines": {
-        "node": ">=22.0.0"
+        "node": ">=24.0.0"
     },
-    "packageManager": "pnpm@9.5.0+sha512.140036830124618d624a2187b50d04289d5a087f326c9edfc0ccd733d76c4f52c3a313d4fc148794a2a9d81553016004e6742e8cf850670268a7387fc220c903"
+    "packageManager": "pnpm@10.19.0+sha512.8de0b46ce11e9ca46c16b940bb13018b2cf044f9ae2ba2d16f7fb5a9a3c690dc8b4fd49d8b3ec6ec09d1ea7ba47cfe4a2a906a6c2f7a555a3ca6d0a65e5097c7"
 }
