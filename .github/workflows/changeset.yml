@@ -32,7 +32,6 @@ jobs:
         with:
           node-version: ">=24.0.0"
           check-latest: true
-          registry-url: "https://registry.npmjs.org"
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
 
