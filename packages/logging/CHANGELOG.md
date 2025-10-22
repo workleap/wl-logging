@@ -1,5 +1,11 @@
 # @workleap/logging
 
+## 1.3.1
+
+### Patch Changes
+
+- [#36](https://github.com/workleap/wl-logging/pull/36) [`8565279`](https://github.com/workleap/wl-logging/commit/8565279819d8064eb8b401c9d9689faa2506f9ea) Thanks [@copilot-swe-agent](https://github.com/apps/copilot-swe-agent)! - Testing NPM publishing with OIDC authentication
+
 ## 1.3.0
 
 ### Minor Changes
