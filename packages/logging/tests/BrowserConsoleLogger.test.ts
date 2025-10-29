@@ -1,9 +1,11 @@
+// Cannot use concurrent tests when mocking the global "console" object.
+
 import { afterEach, describe, test, vi } from "vitest";
 import { BrowserConsoleLogger, BrowserConsoleLoggerScope } from "../src/BrowserConsoleLogger.ts";
 import { LogLevel } from "../src/Logger.ts";
 
 afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
 });
 
 describe("BrowserConsoleLogger", () => {
@@ -15,7 +17,7 @@ describe("BrowserConsoleLogger", () => {
         ["critical", "error", [true, true, true, true, true]]
     ] satisfies [keyof BrowserConsoleLogger, keyof typeof console, boolean[]][]
     )("can write a \"%s\" log", (loggerFunction, consoleFunction, expectedResults) => {
-        test.concurrent.for([
+        test.for([
             ["debug", LogLevel.debug],
             ["information", LogLevel.information],
             ["warning", LogLevel.warning],
@@ -36,8 +38,7 @@ describe("BrowserConsoleLogger", () => {
             }
 
             if (expectedResult) {
-                expect(logMock).toHaveBeenCalledOnce();
-                expect(logMock).toHaveBeenCalledWith(logValue);
+                expect(logMock).toHaveBeenCalledExactlyOnceWith(logValue);
             } else {
                 expect(logMock).not.toHaveBeenCalled();
             }
@@ -53,7 +54,7 @@ describe("BrowserConsoleLogger", () => {
             ["critical", "error"]
         ] satisfies [keyof BrowserConsoleLogger, keyof typeof console][];
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with text", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with text", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -64,11 +65,10 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith("Hello World");
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Hello World");
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with object", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with object", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -80,14 +80,10 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "User:",
-                obj
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("User:", obj);
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with error", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with error", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -99,14 +95,10 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "Error occurred:",
-                error
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Error occurred:", error);
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with line changes", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with line changes", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -124,19 +116,10 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "Processing segment",
-                "\r\n",
-                "on multiple lines",
-                obj,
-                "\r\n",
-                "failed with error",
-                error
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Processing segment", "\r\n", "on multiple lines", obj, "\r\n", "failed with error", error);
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -151,16 +134,10 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "Processing segment",
-                obj,
-                "failed with error",
-                error
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Processing segment", obj, "failed with error", error);
         });
 
-        test.concurrent.for(pairs)("when the text is undefined, do not log a %s entry", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("when the text is undefined, do not log a %s entry", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -173,7 +150,7 @@ describe("BrowserConsoleLogger", () => {
             expect(logMock).not.toHaveBeenCalled();
         });
 
-        test.concurrent.for(pairs)("when the object is undefined, do not log a %s entry", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("when the object is undefined, do not log a %s entry", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -186,7 +163,7 @@ describe("BrowserConsoleLogger", () => {
             expect(logMock).not.toHaveBeenCalled();
         });
 
-        test.concurrent.for(pairs)("when the error is undefined, do not log a %s entry", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("when the error is undefined, do not log a %s entry", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -209,7 +186,7 @@ describe("BrowserConsoleLogger", () => {
             ["critical", "error"]
         ] satisfies [keyof BrowserConsoleLogger, keyof typeof console][];
 
-        test.concurrent.for(pairs)("can apply styling to text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can apply styling to text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -219,15 +196,10 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "%cStyled text%c",
-                "color:red;font-weight:bold",
-                "%s"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cStyled text%c", "color:red;font-weight:bold", "%s");
         });
 
-        test.concurrent.for(pairs)("can handle multiple styled text segments with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can handle multiple styled text segments with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -238,17 +210,10 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "%cRed text%c %cBlue text%c",
-                "color:red",
-                "%s",
-                "color:blue",
-                "%s"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cRed text%c %cBlue text%c", "color:red", "%s", "color:blue", "%s");
         });
 
-        test.concurrent.for(pairs)("can mix styled and unstyled text segments with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can mix styled and unstyled text segments with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -260,15 +225,10 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "Normal text %cStyled text%c More normal text",
-                "color:green",
-                "%s"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Normal text %cStyled text%c More normal text", "color:green", "%s");
         });
 
-        test.concurrent.for(pairs)("can mix styled text segments and objects with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can mix styled text segments and objects with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -283,18 +243,10 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%c",
-                "color:green",
-                "%s",
-                obj,
-                error,
-                "More text"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%c", "color:green", "%s", obj, error, "More text");
         });
 
-        test.concurrent.for(pairs)("when there is a styled text segments after an object, the text segment is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("when there is a styled text segments after an object, the text segment is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -303,21 +255,14 @@ describe("BrowserConsoleLogger", () => {
             logger
                 .withText("Green text", { style: { color: "green" } })
                 .withObject(obj)
-                .withText("Red text", { style: { color :" red" } })
+                .withText("Red text", { style: { color: " red" } })
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%c",
-                "color:green",
-                "%s",
-                obj,
-                "Red text"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%c", "color:green", "%s", obj, "Red text");
         });
 
-        test.concurrent.for(pairs)("when there is styled text after an error, the text is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("when there is styled text after an error, the text is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -326,21 +271,14 @@ describe("BrowserConsoleLogger", () => {
             logger
                 .withText("Green text", { style: { color: "green" } })
                 .withError(error)
-                .withText("Red text", { style: { color :" red" } })
+                .withText("Red text", { style: { color: " red" } })
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%c",
-                "color:green",
-                "%s",
-                error,
-                "Red text"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%c", "color:green", "%s", error, "Red text");
         });
 
-        test.concurrent.for(pairs)("when there is styled text after a line change, the text is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("when there is styled text after a line change, the text is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -348,23 +286,16 @@ describe("BrowserConsoleLogger", () => {
             logger
                 .withText("Green text", { style: { color: "green" } })
                 .withLineChange()
-                .withText("Red text", { style: { color :" red" } })
+                .withText("Red text", { style: { color: " red" } })
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%c",
-                "color:green",
-                "%s",
-                "\r\n",
-                "Red text"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%c", "color:green", "%s", "\r\n", "Red text");
         });
     });
 
     describe("scope", () => {
-        test.concurrent("starting a scope always return a new instance", ({ expect }) => {
+        test("starting a scope always return a new instance", ({ expect }) => {
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
 
             const scope1 = logger.startScope("foo");
@@ -373,7 +304,7 @@ describe("BrowserConsoleLogger", () => {
             expect(scope1).not.toBe(scope2);
         });
 
-        test.concurrent("a scope inherit from the root logger log level", ({ expect }) => {
+        test("a scope inherit from the root logger log level", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.error });
@@ -385,7 +316,7 @@ describe("BrowserConsoleLogger", () => {
             expect(logMock).not.toHaveBeenCalled();
         });
 
-        test.concurrent("when a scope is started, the root logger can still write logs", ({ expect }) => {
+        test("when a scope is started, the root logger can still write logs", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -394,13 +325,12 @@ describe("BrowserConsoleLogger", () => {
             logger.startScope("foo");
             logger.information(logValue);
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(logValue);
+            expect(logMock).toHaveBeenCalledExactlyOnceWith(logValue);
         });
     });
 
     describe("line change", () => {
-        test.concurrent("can add a single line change", ({ expect }) => {
+        test("can add a single line change", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -411,15 +341,10 @@ describe("BrowserConsoleLogger", () => {
                 .withText("Second line")
                 .debug();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "First line",
-                "\r\n",
-                "Second line"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("First line", "\r\n", "Second line");
         });
 
-        test.concurrent("can add multiple line changes", ({ expect }) => {
+        test("can add multiple line changes", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -432,17 +357,10 @@ describe("BrowserConsoleLogger", () => {
                 .withText("Last line")
                 .debug();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "First line",
-                "\r\n",
-                "\r\n",
-                "\r\n",
-                "Last line"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("First line", "\r\n", "\r\n", "\r\n", "Last line");
         });
 
-        test.concurrent("can add multiple lines with text followed by an object", ({ expect }) => {
+        test("can add multiple lines with text followed by an object", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -461,22 +379,12 @@ describe("BrowserConsoleLogger", () => {
                 .withObject(obj3)
                 .debug();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "First line",
-                obj1,
-                "\r\n",
-                "Second line",
-                obj2,
-                "\r\n",
-                "Third line",
-                obj3
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("First line", obj1, "\r\n", "Second line", obj2, "\r\n", "Third line", obj3);
         });
     });
 
     describe("leading space", () => {
-        test.concurrent("can remove the leading space for 2 unstyled text segments", ({ expect }) => {
+        test("can remove the leading space for 2 unstyled text segments", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -486,11 +394,10 @@ describe("BrowserConsoleLogger", () => {
                 .withText("Second", { leadingSpace: false })
                 .debug();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith("FirstSecond");
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("FirstSecond");
         });
 
-        test.concurrent("can remove leading space for a styled text segment followed by an unstyled text segment", ({ expect }) => {
+        test("can remove leading space for a styled text segment followed by an unstyled text segment", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -500,15 +407,10 @@ describe("BrowserConsoleLogger", () => {
                 .withText("Second", { leadingSpace: false })
                 .debug();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%cSecond",
-                "color:green",
-                "%s"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%cSecond", "color:green", "%s");
         });
 
-        test.concurrent("can remove the leading space from multiple mixed text segments", ({ expect }) => {
+        test("can remove the leading space from multiple mixed text segments", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             const logger = new BrowserConsoleLogger({ logLevel: LogLevel.debug });
@@ -528,20 +430,7 @@ describe("BrowserConsoleLogger", () => {
                 .withText("Unstyled 5", { leadingSpace: false })
                 .debug();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%cUnstyled 1%cRed text%c%cPurple text%cUnstyled 2",
-                "color:green",
-                "%s",
-                "color:red",
-                "%s",
-                "color:purple",
-                "%s",
-                obj,
-                "Unstyled 3Unstyled 4",
-                "\r\n",
-                "Orange textUnstyled 5"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%cUnstyled 1%cRed text%c%cPurple text%cUnstyled 2", "color:green", "%s", "color:red", "%s", "color:purple", "%s", obj, "Unstyled 3Unstyled 4", "\r\n", "Orange textUnstyled 5");
         });
     });
 });
@@ -554,7 +443,7 @@ describe("BrowserConsoleLoggerScope", () => {
         ["error", "error", [true, true, true, true, false]],
         ["critical", "error", [true, true, true, true, true]]
     ] satisfies [keyof BrowserConsoleLogger, keyof typeof console, boolean[]][])("can write a \"%s\" log", (loggerFunction, consoleFunction, expectedResults) => {
-        test.concurrent.for([
+        test.for([
             ["debug", LogLevel.debug],
             ["information", LogLevel.information],
             ["warning", LogLevel.warning],
@@ -605,7 +494,7 @@ describe("BrowserConsoleLoggerScope", () => {
             ["critical", "error"]
         ] satisfies [keyof BrowserConsoleLoggerScope, keyof typeof console][];
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with text", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with text", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -627,13 +516,11 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Hello World");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith("Hello World");
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with object", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with object", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -656,16 +543,11 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("User:", obj);
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "User:",
-                obj
-            );
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with error", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with error", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -688,16 +570,11 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Error occurred:", error);
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "Error occurred:",
-                error
-            );
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with line changes", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with line changes", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -726,21 +603,11 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Processing segment", "\r\n", "on multiple lines", obj, "\r\n", "failed with error", error);
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "Processing segment",
-                "\r\n",
-                "on multiple lines",
-                obj,
-                "\r\n",
-                "failed with error",
-                error
-            );
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -766,18 +633,11 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Processing segment", obj, "failed with error", error);
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "Processing segment",
-                obj,
-                "failed with error",
-                error
-            );
         });
 
-        test.concurrent.for(pairs)("when the text is undefined, do not log a %s entry", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("when the text is undefined, do not log a %s entry", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
@@ -792,7 +652,7 @@ describe("BrowserConsoleLoggerScope", () => {
             expect(logMock).not.toHaveBeenCalled();
         });
 
-        test.concurrent.for(pairs)("when the object is undefined, do not log a %s entry", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("when the object is undefined, do not log a %s entry", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
@@ -807,7 +667,7 @@ describe("BrowserConsoleLoggerScope", () => {
             expect(logMock).not.toHaveBeenCalled();
         });
 
-        test.concurrent.for(pairs)("when the error is undefined, do not log a %s entry", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("when the error is undefined, do not log a %s entry", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const scope = new BrowserConsoleLoggerScope("foo", LogLevel.debug);
@@ -832,7 +692,7 @@ describe("BrowserConsoleLoggerScope", () => {
             ["critical", "error"]
         ] satisfies [keyof BrowserConsoleLoggerScope, keyof typeof console][];
 
-        test.concurrent.for(pairs)("can apply styling to text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can apply styling to text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -853,17 +713,11 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cStyled text%c", "color:red;font-weight:bold", "%s");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "%cStyled text%c",
-                "color:red;font-weight:bold",
-                "%s"
-            );
         });
 
-        test.concurrent.for(pairs)("can handle multiple styled segments with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can handle multiple styled segments with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -885,19 +739,11 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cRed text%c %cBlue text%c", "color:red", "%s", "color:blue", "%s");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "%cRed text%c %cBlue text%c",
-                "color:red",
-                "%s",
-                "color:blue",
-                "%s"
-            );
         });
 
-        test.concurrent.for(pairs)("can mix styled and unstyled text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can mix styled and unstyled text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -920,17 +766,11 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Normal text %cStyled text%c More normal text", "color:green", "%s");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "Normal text %cStyled text%c More normal text",
-                "color:green",
-                "%s"
-            );
         });
 
-        test.concurrent.for(pairs)("when there is a styled text segments after an object, the text segment is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("when there is a styled text segments after an object, the text segment is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -941,26 +781,18 @@ describe("BrowserConsoleLoggerScope", () => {
             scope
                 .withText("Green text", { style: { color: "green" } })
                 .withObject(obj)
-                .withText("Red text", { style: { color :" red" } })
+                .withText("Red text", { style: { color: " red" } })
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%c", "color:green", "%s", obj, "Red text");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%c",
-                "color:green",
-                "%s",
-                obj,
-                "Red text"
-            );
         });
 
-        test.concurrent.for(pairs)("when there is styled text after an error, the text is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("when there is styled text after an error, the text is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -971,26 +803,18 @@ describe("BrowserConsoleLoggerScope", () => {
             scope
                 .withText("Green text", { style: { color: "green" } })
                 .withError(error)
-                .withText("Red text", { style: { color :" red" } })
+                .withText("Red text", { style: { color: " red" } })
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%c", "color:green", "%s", error, "Red text");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%c",
-                "color:green",
-                "%s",
-                error,
-                "Red text"
-            );
         });
 
-        test.concurrent.for(pairs)("when there is styled text after a line change, the text is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("when there is styled text after a line change, the text is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -1000,28 +824,20 @@ describe("BrowserConsoleLoggerScope", () => {
             scope
                 .withText("Green text", { style: { color: "green" } })
                 .withLineChange()
-                .withText("Red text", { style: { color :" red" } })
+                .withText("Red text", { style: { color: " red" } })
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%c", "color:green", "%s", "\r\n", "Red text");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%c",
-                "color:green",
-                "%s",
-                "\r\n",
-                "Red text"
-            );
         });
     });
 
     describe("end", () => {
-        test.concurrent("can end scope without logs if no pending logs", ({ expect }) => {
+        test("can end scope without logs if no pending logs", ({ expect }) => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
 
@@ -1033,7 +849,7 @@ describe("BrowserConsoleLoggerScope", () => {
             expect(groupEndMock).not.toHaveBeenCalled();
         });
 
-        test.concurrent("can dismiss scope without logging", ({ expect }) => {
+        test("can dismiss scope without logging", ({ expect }) => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
@@ -1048,7 +864,7 @@ describe("BrowserConsoleLoggerScope", () => {
             expect(groupEndMock).not.toHaveBeenCalled();
         });
 
-        test.concurrent("can end scope with custom label style", ({ expect }) => {
+        test("can end scope with custom label style", ({ expect }) => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
@@ -1066,7 +882,7 @@ describe("BrowserConsoleLoggerScope", () => {
             expect(groupEndMock).toHaveBeenCalled();
         });
 
-        test.concurrent("can use initial label style if no end style provided", ({ expect }) => {
+        test("can use initial label style if no end style provided", ({ expect }) => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
@@ -1086,7 +902,7 @@ describe("BrowserConsoleLoggerScope", () => {
             expect(groupEndMock).toHaveBeenCalled();
         });
 
-        test.concurrent("cannot log again after scope has ended", ({ expect }) => {
+        test("cannot log again after scope has ended", ({ expect }) => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
 
@@ -1104,7 +920,7 @@ describe("BrowserConsoleLoggerScope", () => {
     });
 
     describe("line change", () => {
-        test.concurrent("can add a single line change", ({ expect }) => {
+        test("can add a single line change", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -1120,17 +936,11 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("First line", "\r\n", "Second line");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "First line",
-                "\r\n",
-                "Second line"
-            );
         });
 
-        test.concurrent("can add multiple line changes", ({ expect }) => {
+        test("can add multiple line changes", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -1148,19 +958,11 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("First line", "\r\n", "\r\n", "\r\n", "Last line");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "First line",
-                "\r\n",
-                "\r\n",
-                "\r\n",
-                "Last line"
-            );
         });
 
-        test.concurrent("can add multiple lines with text followed by an object", ({ expect }) => {
+        test("can add multiple lines with text followed by an object", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -1184,25 +986,13 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("First line", obj1, "\r\n", "Second line", obj2, "\r\n", "Third line", obj3);
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "First line",
-                obj1,
-                "\r\n",
-                "Second line",
-                obj2,
-                "\r\n",
-                "Third line",
-                obj3
-            );
         });
     });
 
-
     describe("leading space", () => {
-        test.concurrent("can remove the leading space for 2 unstyled text segments", ({ expect }) => {
+        test("can remove the leading space for 2 unstyled text segments", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -1217,13 +1007,11 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("FirstSecond");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith("FirstSecond");
         });
 
-        test.concurrent("can remove leading space for a styled text segment followed by an unstyled text segment", ({ expect }) => {
+        test("can remove leading space for a styled text segment followed by an unstyled text segment", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -1238,17 +1026,11 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%cSecond", "color:green", "%s");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%cSecond",
-                "color:green",
-                "%s"
-            );
         });
 
-        test.concurrent("can remove the leading space from multiple mixed text segments", ({ expect }) => {
+        test("can remove the leading space from multiple mixed text segments", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -1273,24 +1055,9 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%cUnstyled 1%cRed text%c%cPurple text%cUnstyled 2", "color:green", "%s", "color:red", "%s", "color:purple", "%s", obj, "Unstyled 3Unstyled 4", "\r\n", "Orange textUnstyled 5");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%cUnstyled 1%cRed text%c%cPurple text%cUnstyled 2",
-                "color:green",
-                "%s",
-                "color:red",
-                "%s",
-                "color:purple",
-                "%s",
-                obj,
-                "Unstyled 3Unstyled 4",
-                "\r\n",
-                "Orange textUnstyled 5"
-            );
         });
     });
 });
-
 

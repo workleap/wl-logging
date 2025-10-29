@@ -7,15 +7,19 @@ export class NoopLoggerScope implements LoggerScope {
     withText() {
         return this;
     }
+
     withError() {
         return this;
     }
+
     withObject() {
         return this;
     }
+
     withLineChange() {
         return this;
     }
+
     debug() {}
     information() {}
     warning() {}
@@ -31,18 +35,23 @@ export class NoopLogger implements RootLogger {
     getName() {
         return NoopLogger.name;
     }
+
     withText() {
         return this;
     }
+
     withError() {
         return this;
     }
+
     withObject() {
         return this;
     }
+
     withLineChange() {
         return this;
     }
+
     debug() {}
     information() {}
     warning() {}

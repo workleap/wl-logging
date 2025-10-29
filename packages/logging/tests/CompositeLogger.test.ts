@@ -1,10 +1,12 @@
+// Cannot use concurrent tests when mocking the global "console" object.
+
 import { afterEach, describe, test, vi } from "vitest";
 import { BrowserConsoleLogger, BrowserConsoleLoggerScope } from "../src/BrowserConsoleLogger.ts";
 import { CompositeLogger, CompositeLoggerScope } from "../src/CompositeLogger.ts";
 import { LogLevel } from "../src/Logger.ts";
 
 afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
 });
 
 describe("CompositeLogger", () => {
@@ -16,7 +18,7 @@ describe("CompositeLogger", () => {
         ["critical", "error", [true, true, true, true, true]]
     ] satisfies [keyof CompositeLogger, keyof typeof console, boolean[]][]
     )("can write a \"%s\" log", (loggerFunction, consoleFunction, expectedResults) => {
-        test.concurrent.for([
+        test.for([
             ["debug", LogLevel.debug],
             ["information", LogLevel.information],
             ["warning", LogLevel.warning],
@@ -54,7 +56,7 @@ describe("CompositeLogger", () => {
             ["critical", "error"]
         ] satisfies [keyof CompositeLogger, keyof typeof console][];
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with text", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with text", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel: LogLevel.debug }), new BrowserConsoleLogger({ logLevel: LogLevel.debug })]);
@@ -69,7 +71,7 @@ describe("CompositeLogger", () => {
             expect(logMock).toHaveBeenCalledWith("Hello World");
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with object", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with object", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel: LogLevel.debug }), new BrowserConsoleLogger({ logLevel: LogLevel.debug })]);
@@ -88,7 +90,7 @@ describe("CompositeLogger", () => {
             );
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with error", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with error", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel: LogLevel.debug }), new BrowserConsoleLogger({ logLevel: LogLevel.debug })]);
@@ -107,7 +109,7 @@ describe("CompositeLogger", () => {
             );
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with line changes", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with line changes", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel: LogLevel.debug }), new BrowserConsoleLogger({ logLevel: LogLevel.debug })]);
@@ -137,7 +139,7 @@ describe("CompositeLogger", () => {
             );
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel: LogLevel.debug }), new BrowserConsoleLogger({ logLevel: LogLevel.debug })]);
@@ -171,7 +173,7 @@ describe("CompositeLogger", () => {
             ["critical", "error"]
         ] satisfies [keyof CompositeLogger, keyof typeof console][];
 
-        test.concurrent.for(pairs)("can apply styling to text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can apply styling to text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel: LogLevel.debug }), new BrowserConsoleLogger({ logLevel: LogLevel.debug })]);
@@ -191,7 +193,7 @@ describe("CompositeLogger", () => {
     });
 
     describe("scope", () => {
-        test.concurrent("starting a scope always return a new instance", ({ expect }) => {
+        test("starting a scope always return a new instance", ({ expect }) => {
             const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel: LogLevel.debug }), new BrowserConsoleLogger({ logLevel: LogLevel.debug })]);
 
             const scope1 = logger.startScope("foo");
@@ -200,7 +202,7 @@ describe("CompositeLogger", () => {
             expect(scope1).not.toBe(scope2);
         });
 
-        test.concurrent("a scope inherit from the root logger log level", ({ expect }) => {
+        test("a scope inherit from the root logger log level", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel: LogLevel.error }), new BrowserConsoleLogger({ logLevel: LogLevel.error })]);
@@ -212,7 +214,7 @@ describe("CompositeLogger", () => {
             expect(logMock).not.toHaveBeenCalled();
         });
 
-        test.concurrent("when a scope is started, the root logger can still write logs", ({ expect }) => {
+        test("when a scope is started, the root logger can still write logs", ({ expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel: LogLevel.debug }), new BrowserConsoleLogger({ logLevel: LogLevel.debug })]);
@@ -235,7 +237,7 @@ describe("CompositeLoggerScope", () => {
         ["error", "error", [true, true, true, true, false]],
         ["critical", "error", [true, true, true, true, true]]
     ] satisfies [keyof CompositeLoggerScope, keyof typeof console, boolean[]][])("can write a \"%s\" log", (loggerFunction, consoleFunction, expectedResults) => {
-        test.concurrent.for([
+        test.for([
             ["debug", LogLevel.debug],
             ["information", LogLevel.information],
             ["warning", LogLevel.warning],
@@ -286,7 +288,7 @@ describe("CompositeLoggerScope", () => {
             ["critical", "error"]
         ] satisfies [keyof CompositeLoggerScope, keyof typeof console][];
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with text", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with text", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -308,7 +310,7 @@ describe("CompositeLoggerScope", () => {
             expect(logMock).toHaveBeenCalledWith("Hello World");
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with object", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with object", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -334,7 +336,7 @@ describe("CompositeLoggerScope", () => {
             );
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with error", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with error", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -360,7 +362,7 @@ describe("CompositeLoggerScope", () => {
             );
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with line changes", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with line changes", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -397,7 +399,7 @@ describe("CompositeLoggerScope", () => {
             );
         });
 
-        test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -438,7 +440,7 @@ describe("CompositeLoggerScope", () => {
             ["critical", "error"]
         ] satisfies [keyof CompositeLoggerScope, keyof typeof console][];
 
-        test.concurrent.for(pairs)("can apply styling to text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)("can apply styling to text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -461,7 +463,7 @@ describe("CompositeLoggerScope", () => {
     });
 
     describe("end", () => {
-        test.concurrent("can dismiss scopes without logging", ({ expect }) => {
+        test("can dismiss scopes without logging", ({ expect }) => {
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
@@ -477,5 +479,4 @@ describe("CompositeLoggerScope", () => {
         });
     });
 });
-
 
