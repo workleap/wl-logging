@@ -36,8 +36,7 @@ describe("BrowserConsoleLogger", () => {
             }
 
             if (expectedResult) {
-                expect(logMock).toHaveBeenCalledOnce();
-                expect(logMock).toHaveBeenCalledWith(logValue);
+                expect(logMock).toHaveBeenCalledExactlyOnceWith(logValue);
             } else {
                 expect(logMock).not.toHaveBeenCalled();
             }
@@ -64,8 +63,7 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith("Hello World");
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Hello World");
         });
 
         test.concurrent.for(pairs)("can build a \"%s\" log with object", ([loggerFunction, consoleFunction], { expect }) => {
@@ -80,11 +78,7 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "User:",
-                obj
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("User:", obj);
         });
 
         test.concurrent.for(pairs)("can build a \"%s\" log with error", ([loggerFunction, consoleFunction], { expect }) => {
@@ -99,11 +93,7 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "Error occurred:",
-                error
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Error occurred:", error);
         });
 
         test.concurrent.for(pairs)("can build a \"%s\" log with line changes", ([loggerFunction, consoleFunction], { expect }) => {
@@ -124,16 +114,7 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "Processing segment",
-                "\r\n",
-                "on multiple lines",
-                obj,
-                "\r\n",
-                "failed with error",
-                error
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Processing segment", "\r\n", "on multiple lines", obj, "\r\n", "failed with error", error);
         });
 
         test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
@@ -151,13 +132,7 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "Processing segment",
-                obj,
-                "failed with error",
-                error
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Processing segment", obj, "failed with error", error);
         });
 
         test.concurrent.for(pairs)("when the text is undefined, do not log a %s entry", ([loggerFunction, consoleFunction], { expect }) => {
@@ -219,12 +194,7 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "%cStyled text%c",
-                "color:red;font-weight:bold",
-                "%s"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cStyled text%c", "color:red;font-weight:bold", "%s");
         });
 
         test.concurrent.for(pairs)("can handle multiple styled text segments with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
@@ -238,14 +208,7 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "%cRed text%c %cBlue text%c",
-                "color:red",
-                "%s",
-                "color:blue",
-                "%s"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cRed text%c %cBlue text%c", "color:red", "%s", "color:blue", "%s");
         });
 
         test.concurrent.for(pairs)("can mix styled and unstyled text segments with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
@@ -260,12 +223,7 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "Normal text %cStyled text%c More normal text",
-                "color:green",
-                "%s"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Normal text %cStyled text%c More normal text", "color:green", "%s");
         });
 
         test.concurrent.for(pairs)("can mix styled text segments and objects with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
@@ -283,15 +241,7 @@ describe("BrowserConsoleLogger", () => {
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%c",
-                "color:green",
-                "%s",
-                obj,
-                error,
-                "More text"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%c", "color:green", "%s", obj, error, "More text");
         });
 
         test.concurrent.for(pairs)("when there is a styled text segments after an object, the text segment is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
@@ -303,18 +253,11 @@ describe("BrowserConsoleLogger", () => {
             logger
                 .withText("Green text", { style: { color: "green" } })
                 .withObject(obj)
-                .withText("Red text", { style: { color :" red" } })
+                .withText("Red text", { style: { color: " red" } })
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%c",
-                "color:green",
-                "%s",
-                obj,
-                "Red text"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%c", "color:green", "%s", obj, "Red text");
         });
 
         test.concurrent.for(pairs)("when there is styled text after an error, the text is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
@@ -326,18 +269,11 @@ describe("BrowserConsoleLogger", () => {
             logger
                 .withText("Green text", { style: { color: "green" } })
                 .withError(error)
-                .withText("Red text", { style: { color :" red" } })
+                .withText("Red text", { style: { color: " red" } })
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%c",
-                "color:green",
-                "%s",
-                error,
-                "Red text"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%c", "color:green", "%s", error, "Red text");
         });
 
         test.concurrent.for(pairs)("when there is styled text after a line change, the text is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
@@ -348,18 +284,11 @@ describe("BrowserConsoleLogger", () => {
             logger
                 .withText("Green text", { style: { color: "green" } })
                 .withLineChange()
-                .withText("Red text", { style: { color :" red" } })
+                .withText("Red text", { style: { color: " red" } })
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%c",
-                "color:green",
-                "%s",
-                "\r\n",
-                "Red text"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%c", "color:green", "%s", "\r\n", "Red text");
         });
     });
 
@@ -394,8 +323,7 @@ describe("BrowserConsoleLogger", () => {
             logger.startScope("foo");
             logger.information(logValue);
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(logValue);
+            expect(logMock).toHaveBeenCalledExactlyOnceWith(logValue);
         });
     });
 
@@ -411,12 +339,7 @@ describe("BrowserConsoleLogger", () => {
                 .withText("Second line")
                 .debug();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "First line",
-                "\r\n",
-                "Second line"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("First line", "\r\n", "Second line");
         });
 
         test.concurrent("can add multiple line changes", ({ expect }) => {
@@ -432,14 +355,7 @@ describe("BrowserConsoleLogger", () => {
                 .withText("Last line")
                 .debug();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "First line",
-                "\r\n",
-                "\r\n",
-                "\r\n",
-                "Last line"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("First line", "\r\n", "\r\n", "\r\n", "Last line");
         });
 
         test.concurrent("can add multiple lines with text followed by an object", ({ expect }) => {
@@ -461,17 +377,7 @@ describe("BrowserConsoleLogger", () => {
                 .withObject(obj3)
                 .debug();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "First line",
-                obj1,
-                "\r\n",
-                "Second line",
-                obj2,
-                "\r\n",
-                "Third line",
-                obj3
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("First line", obj1, "\r\n", "Second line", obj2, "\r\n", "Third line", obj3);
         });
     });
 
@@ -486,8 +392,7 @@ describe("BrowserConsoleLogger", () => {
                 .withText("Second", { leadingSpace: false })
                 .debug();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith("FirstSecond");
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("FirstSecond");
         });
 
         test.concurrent("can remove leading space for a styled text segment followed by an unstyled text segment", ({ expect }) => {
@@ -500,12 +405,7 @@ describe("BrowserConsoleLogger", () => {
                 .withText("Second", { leadingSpace: false })
                 .debug();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%cSecond",
-                "color:green",
-                "%s"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%cSecond", "color:green", "%s");
         });
 
         test.concurrent("can remove the leading space from multiple mixed text segments", ({ expect }) => {
@@ -528,20 +428,7 @@ describe("BrowserConsoleLogger", () => {
                 .withText("Unstyled 5", { leadingSpace: false })
                 .debug();
 
-            expect(logMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%cUnstyled 1%cRed text%c%cPurple text%cUnstyled 2",
-                "color:green",
-                "%s",
-                "color:red",
-                "%s",
-                "color:purple",
-                "%s",
-                obj,
-                "Unstyled 3Unstyled 4",
-                "\r\n",
-                "Orange textUnstyled 5"
-            );
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%cUnstyled 1%cRed text%c%cPurple text%cUnstyled 2", "color:green", "%s", "color:red", "%s", "color:purple", "%s", obj, "Unstyled 3Unstyled 4", "\r\n", "Orange textUnstyled 5");
         });
     });
 });
@@ -627,10 +514,8 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Hello World");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith("Hello World");
         });
 
         test.concurrent.for(pairs)("can build a \"%s\" log with object", ([loggerFunction, consoleFunction], { expect }) => {
@@ -656,13 +541,8 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("User:", obj);
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "User:",
-                obj
-            );
         });
 
         test.concurrent.for(pairs)("can build a \"%s\" log with error", ([loggerFunction, consoleFunction], { expect }) => {
@@ -688,13 +568,8 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Error occurred:", error);
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "Error occurred:",
-                error
-            );
         });
 
         test.concurrent.for(pairs)("can build a \"%s\" log with line changes", ([loggerFunction, consoleFunction], { expect }) => {
@@ -726,18 +601,8 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Processing segment", "\r\n", "on multiple lines", obj, "\r\n", "failed with error", error);
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "Processing segment",
-                "\r\n",
-                "on multiple lines",
-                obj,
-                "\r\n",
-                "failed with error",
-                error
-            );
         });
 
         test.concurrent.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
@@ -766,15 +631,8 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Processing segment", obj, "failed with error", error);
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "Processing segment",
-                obj,
-                "failed with error",
-                error
-            );
         });
 
         test.concurrent.for(pairs)("when the text is undefined, do not log a %s entry", ([loggerFunction, consoleFunction], { expect }) => {
@@ -853,14 +711,8 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cStyled text%c", "color:red;font-weight:bold", "%s");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "%cStyled text%c",
-                "color:red;font-weight:bold",
-                "%s"
-            );
         });
 
         test.concurrent.for(pairs)("can handle multiple styled segments with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
@@ -885,16 +737,8 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cRed text%c %cBlue text%c", "color:red", "%s", "color:blue", "%s");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "%cRed text%c %cBlue text%c",
-                "color:red",
-                "%s",
-                "color:blue",
-                "%s"
-            );
         });
 
         test.concurrent.for(pairs)("can mix styled and unstyled text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
@@ -920,14 +764,8 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("Normal text %cStyled text%c More normal text", "color:green", "%s");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "Normal text %cStyled text%c More normal text",
-                "color:green",
-                "%s"
-            );
         });
 
         test.concurrent.for(pairs)("when there is a styled text segments after an object, the text segment is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
@@ -941,23 +779,15 @@ describe("BrowserConsoleLoggerScope", () => {
             scope
                 .withText("Green text", { style: { color: "green" } })
                 .withObject(obj)
-                .withText("Red text", { style: { color :" red" } })
+                .withText("Red text", { style: { color: " red" } })
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%c", "color:green", "%s", obj, "Red text");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%c",
-                "color:green",
-                "%s",
-                obj,
-                "Red text"
-            );
         });
 
         test.concurrent.for(pairs)("when there is styled text after an error, the text is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
@@ -971,23 +801,15 @@ describe("BrowserConsoleLoggerScope", () => {
             scope
                 .withText("Green text", { style: { color: "green" } })
                 .withError(error)
-                .withText("Red text", { style: { color :" red" } })
+                .withText("Red text", { style: { color: " red" } })
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%c", "color:green", "%s", error, "Red text");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%c",
-                "color:green",
-                "%s",
-                error,
-                "Red text"
-            );
         });
 
         test.concurrent.for(pairs)("when there is styled text after a line change, the text is not styled with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
@@ -1000,23 +822,15 @@ describe("BrowserConsoleLoggerScope", () => {
             scope
                 .withText("Green text", { style: { color: "green" } })
                 .withLineChange()
-                .withText("Red text", { style: { color :" red" } })
+                .withText("Red text", { style: { color: " red" } })
                 // eslint-disable-next-line no-unexpected-multiline
                 [loggerFunction]();
 
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%c", "color:green", "%s", "\r\n", "Red text");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%c",
-                "color:green",
-                "%s",
-                "\r\n",
-                "Red text"
-            );
         });
     });
 
@@ -1120,14 +934,8 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("First line", "\r\n", "Second line");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "First line",
-                "\r\n",
-                "Second line"
-            );
         });
 
         test.concurrent("can add multiple line changes", ({ expect }) => {
@@ -1148,16 +956,8 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("First line", "\r\n", "\r\n", "\r\n", "Last line");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "First line",
-                "\r\n",
-                "\r\n",
-                "\r\n",
-                "Last line"
-            );
         });
 
         test.concurrent("can add multiple lines with text followed by an object", ({ expect }) => {
@@ -1184,22 +984,10 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("First line", obj1, "\r\n", "Second line", obj2, "\r\n", "Third line", obj3);
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "First line",
-                obj1,
-                "\r\n",
-                "Second line",
-                obj2,
-                "\r\n",
-                "Third line",
-                obj3
-            );
         });
     });
-
 
     describe("leading space", () => {
         test.concurrent("can remove the leading space for 2 unstyled text segments", ({ expect }) => {
@@ -1217,10 +1005,8 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("FirstSecond");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith("FirstSecond");
         });
 
         test.concurrent("can remove leading space for a styled text segment followed by an unstyled text segment", ({ expect }) => {
@@ -1238,14 +1024,8 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%cSecond", "color:green", "%s");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%cSecond",
-                "color:green",
-                "%s"
-            );
         });
 
         test.concurrent("can remove the leading space from multiple mixed text segments", ({ expect }) => {
@@ -1273,24 +1053,9 @@ describe("BrowserConsoleLoggerScope", () => {
             scope.end();
 
             expect(groupCollapsedMock).toHaveBeenCalledOnce();
-            expect(logMock).toHaveBeenCalledOnce();
+            expect(logMock).toHaveBeenCalledExactlyOnceWith("%cGreen text%cUnstyled 1%cRed text%c%cPurple text%cUnstyled 2", "color:green", "%s", "color:red", "%s", "color:purple", "%s", obj, "Unstyled 3Unstyled 4", "\r\n", "Orange textUnstyled 5");
             expect(groupEndMock).toHaveBeenCalledOnce();
-
-            expect(logMock).toHaveBeenCalledWith(
-                "%cGreen text%cUnstyled 1%cRed text%c%cPurple text%cUnstyled 2",
-                "color:green",
-                "%s",
-                "color:red",
-                "%s",
-                "color:purple",
-                "%s",
-                obj,
-                "Unstyled 3Unstyled 4",
-                "\r\n",
-                "Orange textUnstyled 5"
-            );
         });
     });
 });
-
 

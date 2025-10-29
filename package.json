@@ -1,7 +1,8 @@
 {
     "name": "workspace-root",
-    "version": "0.0.0",
     "author": "Workleap",
+    "version": "0.0.0",
+    "description": "Logging libraries for building web applications at Workleap.",
     "private": true,
     "type": "module",
     "license": "Apache-2.0",
@@ -14,7 +15,7 @@
         "dev-docs": "retype start",
         "build-pkg": "turbo run build --filter=./packages/*",
         "lint": "turbo run lint --continue",
-        "eslint": "eslint . --ignore-pattern packages --ignore-pattern samples --max-warnings=-0 --cache --cache-location node_modules/.cache/eslint",
+        "eslint": "eslint . --max-warnings=0 --cache --cache-location node_modules/.cache/eslint",
         "typecheck": "tsc",
         "syncpack": "syncpack lint",
         "test": "turbo run test --continue",
@@ -31,20 +32,23 @@
     },
     "devDependencies": {
         "@changesets/changelog-github": "0.5.1",
-        "@changesets/cli": "2.29.5",
-        "@typescript-eslint/parser": "8.39.0",
-        "@workleap/eslint-plugin": "3.5.0",
-        "@workleap/typescript-configs": "3.0.4",
-        "eslint": "8.57.1",
-        "pkg-pr-new": "0.0.54",
+        "@changesets/cli": "2.29.7",
+        "@eslint/js": "9.38.0",
+        "@types/node": "24.9.2",
+        "@typescript-eslint/parser": "8.46.2",
+        "@workleap/eslint-configs": "1.1.0",
+        "@workleap/typescript-configs": "3.0.7",
+        "eslint": "9.38.0",
+        "pkg-pr-new": "0.0.60",
         "prettier": "3.6.2",
         "retypeapp": "3.12.0-preview2",
         "syncpack": "13.0.4",
-        "turbo": "2.5.5",
-        "typescript": "5.9.2"
+        "turbo": "2.5.8",
+        "typescript": "5.9.3",
+        "typescript-eslint": "8.46.2"
     },
     "engines": {
         "node": ">=24.0.0"
     },
-    "packageManager": "pnpm@10.19.0"
+    "packageManager": "pnpm@10.20.0"
 }
