@@ -38,8 +38,10 @@ describe("BrowserConsoleLogger", () => {
             }
 
             if (expectedResult) {
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(logMock).toHaveBeenCalledExactlyOnceWith(logValue);
             } else {
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(logMock).not.toHaveBeenCalled();
             }
         });
@@ -474,12 +476,18 @@ describe("BrowserConsoleLoggerScope", () => {
             }
 
             if (expectedResult) {
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(logMock).toHaveBeenCalledOnce();
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(groupCollapsedMock).toHaveBeenCalledOnce();
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(groupEndMock).toHaveBeenCalledOnce();
             } else {
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(logMock).not.toHaveBeenCalled();
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(groupCollapsedMock).not.toHaveBeenCalled();
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(groupEndMock).not.toHaveBeenCalled();
             }
         });
