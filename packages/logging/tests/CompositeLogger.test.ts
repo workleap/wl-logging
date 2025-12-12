@@ -39,9 +39,12 @@ describe("CompositeLogger", () => {
             }
 
             if (expectedResult) {
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(logMock).toHaveBeenCalledTimes(2);
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(logMock).toHaveBeenCalledWith(logValue);
             } else {
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(logMock).not.toHaveBeenCalled();
             }
         });
@@ -268,12 +271,18 @@ describe("CompositeLoggerScope", () => {
             }
 
             if (expectedResult) {
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(logMock).toHaveBeenCalledTimes(2);
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(groupCollapsedMock).toHaveBeenCalledTimes(2);
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(groupEndMock).toHaveBeenCalledTimes(2);
             } else {
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(logMock).not.toHaveBeenCalled();
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(groupCollapsedMock).not.toHaveBeenCalled();
+                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(groupEndMock).not.toHaveBeenCalled();
             }
         });
