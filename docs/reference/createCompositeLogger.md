@@ -30,7 +30,7 @@ A `CompositeLogger` instance.
 
 ```ts !#4
 import { ConsoleLogger } from "@workleap/logging";
-import { LogRocketLogger } from "@workleap/logrocket";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = createCompositeLogger(false, [new ConsoleLogger(), new LogRocketLogger()]);
 ```
