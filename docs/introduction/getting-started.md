@@ -127,10 +127,10 @@ scope.end();
 
 ## LogRocket session replays
 
-By default, [LogRocket](https://logrocket.com/) session replays exclude console output. To send log entries to LogRocket, use the [LogRocketLogger](https://workleap.github.io/wl-telemetry/honeycomb/reference/logrocketlogger) class from the [@workleap/logrocket](https://www.npmjs.com/package/@workleap/logrocket):
+By default, [LogRocket](https://logrocket.com/) session replays exclude console output. To send log entries to LogRocket, use the [LogRocketLogger](https://workleap.github.io/wl-telemetry/honeycomb/reference/logrocketlogger) class from either the [@workleap/telemetry](https://www.npmjs.com/package/@workleap/telemetry) or [@workleap/logrocket](https://www.npmjs.com/package/@workleap/logrocket) package:
 
 ```ts !#3
-import { LogRocketLogger } from "@workleap/logrocket";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new LogRocketLogger();
 
@@ -143,7 +143,7 @@ You can forward the same log entry to multiple destinations by composing loggers
 
 ```ts !#4-7
 import { BrowserConsoleLogger, CompositeLogger } from "@workleap/logging";
-import { LogRocketLogger } from "@workleap/logrocket";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
     new BrowserConsoleLogger(),

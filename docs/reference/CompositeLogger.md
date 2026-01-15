@@ -31,7 +31,7 @@ Refer to the [RootLogger](./RootLogger.md) and [LoggerScope](./LoggerScope.md) d
 
 ```ts !#9
 import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
-import { LogRocketLogger } from "@workleap/logrocket";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
     new ConsoleLogger(),
@@ -45,7 +45,7 @@ logger.debug("Hello world!");
 
 ```ts !#9
 import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
-import { LogRocketLogger } from "@workleap/logrocket";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
     new ConsoleLogger(),
@@ -59,7 +59,7 @@ logger.information("Hello world!");
 
 ```ts !#9
 import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
-import { LogRocketLogger } from "@workleap/logrocket";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
     new ConsoleLogger(),
@@ -73,7 +73,7 @@ logger.warning("Hello world!");
 
 ```ts !#9
 import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
-import { LogRocketLogger } from "@workleap/logrocket";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
     new ConsoleLogger(),
@@ -87,7 +87,7 @@ logger.error("Hello world!");
 
 ```ts !#9
 import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
-import { LogRocketLogger } from "@workleap/logrocket";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
     new ConsoleLogger(),
@@ -103,7 +103,7 @@ Minimum severity entries to process is configured on an invidual logger basis.
 
 ```ts !#6,9
 import { CompositeLogger, ConsoleLogger, LogLevel } from "@workleap/logging";
-import { LogRocketLogger } from "@workleap/logrocket";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
     new ConsoleLogger({
@@ -124,7 +124,7 @@ Multiple segments can be chained to create a log entry that combines styled text
 
 ```ts !#9-14
 import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
-import { LogRocketLogger } from "@workleap/logrocket";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
     new ConsoleLogger(),
@@ -145,7 +145,7 @@ Not all loggers support styled log entries. When the underlying loggers do suppo
 
 ```ts !#11-14,17-20
 import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
-import { LogRocketLogger } from "@workleap/logrocket";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
     new ConsoleLogger(),
@@ -172,7 +172,7 @@ logger
 
 ```ts !#9
 import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
-import { LogRocketLogger } from "@workleap/logrocket";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
     new ConsoleLogger(),
@@ -216,7 +216,7 @@ A scope can be dismissed to prevent it's log entries from being outputted to the
 
 ```ts !#24
 import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
-import { LogRocketLogger } from "@workleap/logrocket";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
     new ConsoleLogger(),
@@ -247,7 +247,7 @@ A scope label can be styled when the scope is created.
 
 ```ts !#10-13
 import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
-import { LogRocketLogger } from "@workleap/logrocket";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
     new ConsoleLogger(),
@@ -271,7 +271,7 @@ A scope label can be styled when the scope it's ended. This is particularly usef
 
 ```ts !#14-17
 import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
-import { LogRocketLogger } from "@workleap/logrocket";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
     new ConsoleLogger(),
