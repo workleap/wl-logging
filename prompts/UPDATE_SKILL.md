@@ -3,7 +3,7 @@ Review the `workleap-logging` skill you created in the `./skills/workleap-loggin
 Validate that the skill can still answer the following questions:
 
 * What is `wl-logging` and what problems does it solve in Workleap applications?
-* What are the core concepts of `wl-logging` (loggers, handlers, log levels)?
+* What are the core concepts of `wl-logging` (loggers, log levels)?
 * How do you create a logger using the `wl-logging` API?
 * How do you configure log levels and control log verbosity?
 * How do you attach contextual information to logs?

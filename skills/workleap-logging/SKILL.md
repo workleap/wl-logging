@@ -61,7 +61,7 @@ const logger = new BrowserConsoleLogger({ logLevel: LogLevel.information });
 
 ```ts
 import { BrowserConsoleLogger, CompositeLogger } from "@workleap/logging";
-import { LogRocketLogger } from "@workleap/telemetry";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket"
 
 const logger = new CompositeLogger([
     new BrowserConsoleLogger(),
@@ -136,13 +136,42 @@ scope.end({
 
 ### createCompositeLogger
 
-Factory for creating CompositeLogger with standard Workleap logging API:
+Factory function to create a `CompositeLogger` instance from Workleap libraries standard logging API.
 
 ```ts
-import { createCompositeLogger, BrowserConsoleLogger } from "@workleap/logging";
+import { createCompositeLogger, ConsoleLogger } from "@workleap/logging";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket"
 
-const logger = createCompositeLogger(false, [new BrowserConsoleLogger()]);
-// First param: verbose (true = debug level, false = information level)
+const logger = createCompositeLogger(false, [new ConsoleLogger(), new LogRocketLogger()]);
+```
+
+**Parameters:**
+- `verbose`: Whether debug information should be logged. If no loggers are provided, creates with a `ConsoleLogger` by default.
+- `loggers`: Array of loggers to create the `CompositeLogger` with.
+
+## LogRocket Integration
+
+By default, LogRocket session replays exclude console output. To send log entries to LogRocket, use `LogRocketLogger` from `@workleap/telemetry` or `@workleap/logrocket`:
+
+```ts
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket"
+
+const logger = new LogRocketLogger();
+logger.debug("Application started!");
+```
+
+Use `CompositeLogger` to send logs to both browser console and LogRocket:
+
+```ts
+import { BrowserConsoleLogger, CompositeLogger } from "@workleap/logging";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket"
+
+const logger = new CompositeLogger([
+    new BrowserConsoleLogger(),
+    new LogRocketLogger()
+]);
+
+logger.debug("Application started!"); // Processed by both loggers
 ```
 
 ## Common Patterns
@@ -201,13 +230,11 @@ async function registerModule(moduleName: string) {
 
 ```ts
 import { BrowserConsoleLogger, CompositeLogger, LogLevel } from "@workleap/logging";
-import { LogRocketLogger } from "@workleap/telemetry";
+import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket"
 
-// Console: all logs in dev, errors+ in prod
-// LogRocket: always capture debug+ for session replay
 const logger = new CompositeLogger([
     new BrowserConsoleLogger({
-        logLevel: isDev ? LogLevel.debug : LogLevel.error
+        logLevel: LogLevel.error
     }),
     new LogRocketLogger({
         logLevel: LogLevel.debug
