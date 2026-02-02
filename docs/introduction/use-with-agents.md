@@ -7,14 +7,14 @@ toc:
 
 # Use with agents
 
-Information about this logging library can be shared with different agents using the [workleap-logging](https://skills.sh/workleap/wl-telemetry/workleap-telemetry) agent skill or the [Context7](https://context7.com/) MCP server.
+Information about this logging library can be shared with different agents using the [workleap-logging](https://skills.sh/workleap/wl-logging/workleap-logging) agent skill or the [Context7](https://context7.com/) MCP server.
 
 ## Install agent skill
 
 Open a terminal and install the `workleap-logging` agent skill by running the following command:
 
 ```bash
-npx skills add https://github.com/workleap/wl-logging/agent-skills --skill workleap-logging
+npx skills add https://github.com/workleap/wl-logging --skill workleap-logging
 ```
 
 !!!tip
@@ -85,7 +85,7 @@ Open the Extensions view in VS Code and locate the `context7` MCP server. Click 
 
 ### Claude Code
 
-To install Context7 with Claude Code, open a terminal and execute one of the following command:
+To install Context7 with Claude Code, open a terminal and execute one of the following commands:
 
 +++ Remote server connection
 ```bash
@@ -122,5 +122,5 @@ Alternatively, you can verify the connection from a terminal by executing the `c
 Once the MCP server is set up, ask the agent to use Context7 to perform tasks such as generating boilerplate code:
 
 ```
-I'm setting up telemetry in a new React + TypeScript application. Use context7 "/workleap/wl-logging" library to set up Workleap logging using the documented APIs and patterns, and write a simple log to the console with a logger.
+I'm setting up logging in a new React + TypeScript application. Use context7 "/workleap/wl-logging" library to set up Workleap logging using the documented APIs and patterns, and write a simple log to the console with a logger.
 ```

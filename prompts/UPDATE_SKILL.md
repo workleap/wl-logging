@@ -1,4 +1,4 @@
-Review the `workleap-logging` skill you created in the `./skills/workleap-logging` directory and make sure that all API definition and examples match the current documentation available in the `./docs` folder. Ignore any documentation related to updates. Do not make mistake.
+Review the `workleap-logging` skill you created in the `./agent-skills/workleap-logging` directory and make sure that all API definition and examples match the current documentation available in the `./docs` folder. Ignore any documentation related to updates. Do not make mistake.
 
 Validate that the skill can still answer the following questions:
 
