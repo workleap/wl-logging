@@ -1,11 +1,4 @@
 {
-    "$schema": "https://context7.com/schema/context7.json",
-    "projectTitle": "Workleap Logging",
-    "description": "Logging libraries for building web applications at Workleap.",
-    "folders": [
-        "docs"
-    ],
-    "excludeFolders": [
-        "docs/updating"
-    ]
+    "url": "https://context7.com/workleap/wl-logging",
+    "public_key": "pk_8QxhgW07sKCtS7dS26DFe"
 }
