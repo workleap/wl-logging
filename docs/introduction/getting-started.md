@@ -125,6 +125,20 @@ scope.
 scope.end();
 ```
 
+==- Scopes require a `RootLogger` instance
+Only a [RootLogger](../reference/RootLogger.md) instance can start a scope. If the logger is typed as a `Logger`, cast it to `RootLogger` before starting a scope.
+
+```ts !#7
+// Squide example:
+
+import { useLogger } from "@squide/firefly";
+import type { RootLogger } from "@workleap/logging";
+
+const logger = useLogger();
+(logger as RootLogger).startScope("User signup");
+```
+===
+
 ## LogRocket session replays
 
 By default, [LogRocket](https://logrocket.com/) session replays exclude console output. To send log entries to LogRocket, use the [LogRocketLogger](https://workleap.github.io/wl-telemetry/honeycomb/reference/logrocketlogger) class from either the [@workleap/telemetry](https://www.npmjs.com/package/@workleap/telemetry) or [@workleap/logrocket](https://www.npmjs.com/package/@workleap/logrocket) package:
