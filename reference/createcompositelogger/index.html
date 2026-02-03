@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="turbo-root" content="/wl-logging">
-    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="3.11.0.823319221266">
+    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="3.11.0.823461122561">
 
     <!-- See retype.com -->
     <meta name="generator" content="Retype 3.11.0">
@@ -32,12 +32,12 @@
     <script data-cfasync="false">(function(){var cl=document.documentElement.classList,ls=localStorage.getItem("retype_scheme"),hd=cl.contains("dark"),hl=cl.contains("light"),wm=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;if(ls==="dark"||(!ls&&wm&&!hd&&!hl)){cl.remove("light");cl.add("dark")}else if(ls==="light"||(!ls&&!wm&&!hd&&!hl)){cl.remove("dark");cl.add("light")}})();</script>
 
     <link href="../../static/favicon.png" rel="icon">
-    <link href="../../resources/css/retype.css?v=3.11.0.823319221266" rel="stylesheet">
+    <link href="../../resources/css/retype.css?v=3.11.0.823461122561" rel="stylesheet">
 
-    <script data-cfasync="false" src="../../resources/js/config.js?v=3.11.0.823319221266" data-turbo-eval="false" defer></script>
+    <script data-cfasync="false" src="../../resources/js/config.js?v=3.11.0.823461122561" data-turbo-eval="false" defer></script>
     <script data-cfasync="false" src="../../resources/js/retype.js?v=3.11.0" data-turbo-eval="false" defer></script>
-    <script id="lunr-js" data-cfasync="false" src="../../resources/js/lunr.js?v=3.11.0.823319221266" data-turbo-eval="false" defer></script>
-    <script id="prism-js" data-cfasync="false" src="../../resources/js/prism.js?v=3.11.0.823319221266" defer></script>
+    <script id="lunr-js" data-cfasync="false" src="../../resources/js/lunr.js?v=3.11.0.823461122561" data-turbo-eval="false" defer></script>
+    <script id="prism-js" data-cfasync="false" src="../../resources/js/prism.js?v=3.11.0.823461122561" defer></script>
 
     <link href="https://workleap.github.io/wl-idp-docs-hub/static/retype-customization.css" rel="stylesheet" />
 
@@ -319,7 +319,7 @@
     </h3>
 </doc-anchor-target>
 <ul>
-<li><code v-pre>verbose</code>: Indicates whether or not debug information should be logged. If no loggers are provided, the <code v-pre>CompositeLogger</code> instance will be created with a <code v-pre>ConsoleLogger</code> instance by default.</li>
+<li><code v-pre>verbose</code>: Indicates whether or not debug information should be logged. If no loggers are provided, the <code v-pre>CompositeLogger</code> instance will be created with a <code v-pre>BrowserConsoleLogger</code> instance by default.</li>
 <li><code v-pre>loggers</code>: Loggers to create the <code v-pre>CompositeLogger</code> with.</li>
 </ul>
 <doc-anchor-target id="returns">
@@ -336,10 +336,10 @@
     </h2>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-typescript" data-line="4"><code v-pre class="language-typescript">import { ConsoleLogger } from &quot;@workleap/logging&quot;;
+<pre translate="no" class="language-typescript" data-line="4"><code v-pre class="language-typescript">import { BrowserConsoleLogger, createCompositeLogger } from &quot;@workleap/logging&quot;;
 import { LogRocketLogger } from &quot;@workleap/telemetry&quot;; // or from &quot;@workleap/logrocket&quot;;
 
-const logger = createCompositeLogger(false, [new ConsoleLogger(), new LogRocketLogger()]);</code></pre>
+const logger = createCompositeLogger(false, [new BrowserConsoleLogger(), new LogRocketLogger()]);</code></pre>
 </doc-codeblock></div>
 
                                 
