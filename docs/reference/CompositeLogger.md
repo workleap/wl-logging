@@ -30,11 +30,11 @@ Refer to the [RootLogger](./RootLogger.md) and [LoggerScope](./LoggerScope.md) d
 ### Log a debug entry
 
 ```ts !#9
-import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger, CompositeLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
-    new ConsoleLogger(),
+    new BrowserConsoleLogger(),
     new LogRocketLogger()
 ]);
 
@@ -44,11 +44,11 @@ logger.debug("Hello world!");
 ### Log an information entry
 
 ```ts !#9
-import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger, CompositeLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
-    new ConsoleLogger(),
+    new BrowserConsoleLogger(),
     new LogRocketLogger()
 ]);
 
@@ -58,11 +58,11 @@ logger.information("Hello world!");
 ### Log a warning entry
 
 ```ts !#9
-import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger, CompositeLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
-    new ConsoleLogger(),
+    new BrowserConsoleLogger(),
     new LogRocketLogger()
 ]);
 
@@ -72,11 +72,11 @@ logger.warning("Hello world!");
 ### Log an error entry
 
 ```ts !#9
-import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger, CompositeLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
-    new ConsoleLogger(),
+    new BrowserConsoleLogger(),
     new LogRocketLogger()
 ]);
 
@@ -86,11 +86,11 @@ logger.error("Hello world!");
 ### Log a critical entry
 
 ```ts !#9
-import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger, CompositeLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
-    new ConsoleLogger(),
+    new BrowserConsoleLogger(),
     new LogRocketLogger()
 ]);
 
@@ -102,11 +102,11 @@ logger.critical("Hello world!");
 Minimum severity entries to process is configured on an invidual logger basis.
 
 ```ts !#6,9
-import { CompositeLogger, ConsoleLogger, LogLevel } from "@workleap/logging";
+import { BrowserConsoleLogger, CompositeLogger, LogLevel } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
-    new ConsoleLogger({
+    new BrowserConsoleLogger({
         logLevel: LogLevel.error
     }),
     new LogRocketLogger({
@@ -123,11 +123,11 @@ logger.debug("Hello world!");
 Multiple segments can be chained to create a log entry that combines styled text, errors, and objects. To process all segments and output the log to the console, complete the chain by calling any log method.
 
 ```ts !#9-14
-import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger, CompositeLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
-    new ConsoleLogger(),
+    new BrowserConsoleLogger(),
     new LogRocketLogger()
 ]);
 
@@ -144,11 +144,11 @@ logger
 Not all loggers support styled log entries. When the underlying loggers do support styling, those styles will be passed forwared to them.
 
 ```ts !#11-14,17-20
-import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger, CompositeLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
-    new ConsoleLogger(),
+    new BrowserConsoleLogger(),
     new LogRocketLogger()
 ]);
 
@@ -171,11 +171,11 @@ logger
 ### Use a logging scope
 
 ```ts !#9
-import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger, CompositeLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
-    new ConsoleLogger(),
+    new BrowserConsoleLogger(),
     new LogRocketLogger()
 ]);
 
@@ -215,11 +215,11 @@ scope.end();
 A scope can be dismissed to prevent it's log entries from being outputted to the console.
 
 ```ts !#24
-import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger, CompositeLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
-    new ConsoleLogger(),
+    new BrowserConsoleLogger(),
     new LogRocketLogger()
 ]);
 
@@ -246,11 +246,11 @@ scope.end({ dismiss: true });
 A scope label can be styled when the scope is created.
 
 ```ts !#10-13
-import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger, CompositeLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
-    new ConsoleLogger(),
+    new BrowserConsoleLogger(),
     new LogRocketLogger()
 ]);
 
@@ -270,11 +270,11 @@ scope.end();
 A scope label can be styled when the scope it's ended. This is particularly useful to style the label accordingly to the status of an operation or request.
 
 ```ts !#14-17
-import { CompositeLogger, ConsoleLogger } from "@workleap/logging";
+import { BrowserConsoleLogger, CompositeLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket";
 
 const logger = new CompositeLogger([
-    new ConsoleLogger(),
+    new BrowserConsoleLogger(),
     new LogRocketLogger();
 ]);
 

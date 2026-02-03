@@ -43,6 +43,17 @@ pnpm add @workleap/logging
 ### Scopes
 Group related log entries under a label. Useful for tracing operations or correlating events.
 
+**IMPORTANT:** Only a `RootLogger` instance can start a scope. If the logger is typed as a `Logger` (e.g., when using `useLogger()` from Squide), you must cast it to `RootLogger` before starting a scope:
+
+```ts
+// Squide example:
+import { useLogger } from "@squide/firefly";
+import type { RootLogger } from "@workleap/logging";
+
+const logger = useLogger();
+(logger as RootLogger).startScope("User signup");
+```
+
 ## API Reference
 
 ### BrowserConsoleLogger
@@ -75,7 +86,7 @@ const logger = new CompositeLogger([
 ```ts
 logger.debug("message");
 logger.information("message");
-logger.warning("message");
+logger.warning("message"); // or logger.warn("message")
 logger.error("message");
 logger.critical("message");
 ```
@@ -139,14 +150,14 @@ scope.end({
 Factory function to create a `CompositeLogger` instance from Workleap libraries standard logging API.
 
 ```ts
-import { createCompositeLogger, ConsoleLogger } from "@workleap/logging";
+import { createCompositeLogger, BrowserConsoleLogger } from "@workleap/logging";
 import { LogRocketLogger } from "@workleap/telemetry"; // or from "@workleap/logrocket"
 
-const logger = createCompositeLogger(false, [new ConsoleLogger(), new LogRocketLogger()]);
+const logger = createCompositeLogger(false, [new BrowserConsoleLogger(), new LogRocketLogger()]);
 ```
 
 **Parameters:**
-- `verbose`: Whether debug information should be logged. If no loggers are provided, creates with a `ConsoleLogger` by default.
+- `verbose`: Whether debug information should be logged. If no loggers are provided, creates with a `BrowserConsoleLogger` by default.
 - `loggers`: Array of loggers to create the `CompositeLogger` with.
 
 ## LogRocket Integration
@@ -265,3 +276,4 @@ When reviewing logging changes:
 3. **Using wrong log level**: Use `error` for failures, not `warning`
 4. **Logging sensitive data**: Never log passwords, tokens, or PII
 5. **Missing error context**: Always include `withObject()` for relevant data and `withError()` for exceptions
+6. **Calling startScope on a non-RootLogger**: Only `RootLogger` instances can start scopes. When using `useLogger()` from Squide, cast to `RootLogger` first: `(logger as RootLogger).startScope("Label")`
