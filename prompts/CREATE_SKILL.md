@@ -30,6 +30,7 @@ The generated skill should:
 * Provide clear, concise explanations and examples.
 * Be reliable for pull request reviews, developer support, and onboarding.
 * Minimize token usage by focusing only on relevant `wl-logging` concepts and APIs.
+* Not have a description exceeding a maximum length of 1024 characters.
 
 Relevant questions the skill should be able to answer:
 
