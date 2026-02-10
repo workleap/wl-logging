@@ -24,14 +24,14 @@
         "@rspack/core": "1.7.5",
         "@types/react": "19.2.13",
         "@types/react-dom": "19.2.3",
-        "@typescript-eslint/parser": "8.54.0",
-        "@workleap/browserslist-config": "2.1.6",
-        "@workleap/eslint-configs": "1.1.11",
-        "@workleap/rsbuild-configs": "3.2.1",
+        "@typescript-eslint/parser": "8.55.0",
+        "@workleap/browserslist-config": "2.1.7",
+        "@workleap/eslint-configs": "1.1.12",
+        "@workleap/rsbuild-configs": "3.2.2",
         "@workleap/typescript-configs": "3.0.7",
         "browserslist": "4.28.1",
         "eslint": "9.39.2",
         "typescript": "5.9.3",
-        "typescript-eslint": "8.54.0"
+        "typescript-eslint": "8.55.0"
     }
 }

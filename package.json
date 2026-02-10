@@ -35,8 +35,8 @@
         "@changesets/cli": "2.29.8",
         "@eslint/js": "9.39.2",
         "@types/node": "25.2.2",
-        "@typescript-eslint/parser": "8.54.0",
-        "@workleap/eslint-configs": "1.1.11",
+        "@typescript-eslint/parser": "8.55.0",
+        "@workleap/eslint-configs": "1.1.12",
         "@workleap/typescript-configs": "3.0.7",
         "eslint": "9.39.2",
         "pkg-pr-new": "0.0.63",
@@ -45,7 +45,7 @@
         "syncpack": "13.0.4",
         "turbo": "2.8.3",
         "typescript": "5.9.3",
-        "typescript-eslint": "8.54.0"
+        "typescript-eslint": "8.55.0"
     },
     "engines": {
         "node": ">=24.0.0"
