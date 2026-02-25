@@ -3,7 +3,7 @@
 ## Application Logger Setup
 
 ```ts
-import { BrowserConsoleLogger, CompositeLogger, LogLevel } from "@workleap/logging";
+import { BrowserConsoleLogger, LogLevel } from "@workleap/logging";
 
 const isDev = process.env.NODE_ENV === "development";
 
