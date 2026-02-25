@@ -10,7 +10,7 @@ description: |
   (4) Integrating @workleap/logging with LogRocket via CompositeLogger
   (5) Reviewing PRs or troubleshooting @workleap/logging usage
 metadata:
-  version: 1.1
+  version: 1.2
 ---
 
 # Workleap Logging (@workleap/logging)
