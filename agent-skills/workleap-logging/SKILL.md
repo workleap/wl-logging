@@ -77,7 +77,3 @@ For detailed documentation beyond the patterns above, consult:
 
 - **`references/api.md`** — Logger constructors, all methods (styled text, line breaks), scope API, createCompositeLogger, log level guidelines
 - **`references/patterns.md`** — Common patterns (app setup, error logging, scoping, multi-destination), LogRocket integration, PR review checklist
-
-## Maintenance Note
-
-Body budget: ~75 lines. API details and common patterns moved to references/ since they are single-function examples and straightforward procedural content. Core concepts, chained segments, and common mistakes retained as they are the primary use cases and non-obvious pitfalls. New content goes in the appropriate `references/` file — only add to the body if it is a critical pattern needed in nearly every conversation.
