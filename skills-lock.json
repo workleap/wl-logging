@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "skills": {
+        "agent-browser": {
+            "source": "vercel-labs/agent-browser",
+            "sourceType": "github",
+            "computedHash": "22c1bb2afb139e85aeaaa4e1435a40e3ebd44764a517ec225eec7489bd1910d0"
+        },
+        "git-commit": {
+            "source": "github/awesome-copilot",
+            "sourceType": "github",
+            "computedHash": "2607fc60629b82b257136dd2a7a373f0a4466c0b49df7746d845d59313c99b21"
+        },
+        "pnpm": {
+            "source": "antfu/skills",
+            "sourceType": "github",
+            "computedHash": "d473204df25defd08a7d47b55c6d124b41ebde440b774995952b65223d0d8d6f"
+        },
+        "vitest": {
+            "source": "antfu/skills",
+            "sourceType": "github",
+            "computedHash": "0efd9cf8c56aada060d418d009cfe621a7915d0c73a958fe611985bc0c2fa4b8"
+        },
+        "workleap-react-best-practices": {
+            "source": "workleap/wl-web-configs",
+            "sourceType": "github",
+            "computedHash": "f3849c705dd508216673f24efeff9ef25add517ed6a16743675ad53c09f3aba4"
+        },
+        "workleap-web-configs": {
+            "source": "workleap/wl-web-configs",
+            "sourceType": "github",
+            "computedHash": "52ca9da414b4136618c6d54cdea15167959e57e59bf6758fa5712fc2b10fdbca"
+        }
+    }
+}
