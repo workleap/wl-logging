@@ -7,6 +7,8 @@ The following documentation is only for the maintainers of this repository.
 - [Installation](#installation)
 - [Develop the packages](#develop-the-packages)
 - [Release the packages](#release-the-packages)
+- [Update the agent skill](#update-the-agent-skill)
+- [Available workflows](#workflows)
 - [Available commands](#commands)
 - [CI](#ci)
 - [Add a new package to the monorepo](#add-a-new-package-to-the-monorepo)
@@ -125,6 +127,35 @@ pnpm build
 ```
 
 By default, packages compilation output will be in their respective *dist* directory.
+
+## Update the agent skill
+
+By default, the [sync-agent-skill](.github/workflows/sync-agent-skill.yml) workflow updates the skill automatically. If changes are required, it opens a pull request with the appropriate modifications.
+
+If the workflow does not behave as expected, the simplest way to update an agent skill is to use an agent:
+
+1. Start your preferred agent.
+2. Copy the content of [UPDATE_SKILL.md](./user-prompts/UPDATE_SKILL.md) into the agent prompt.
+3. Commit the changes and merge the pull request.
+
+NOTE: Skills installed using [skills.sh](https://skills.sh/) are sourced directly from the repository files. Merging the pull request is therefore sufficient to update the installed skill.
+
+## Workflows
+
+The following workflows are available with GitHub:
+
+| Workflow | File | Trigger | Purpose |
+|----------|------|---------|---------|
+| CI | `.github/workflows/ci.yml` | Push to main, PRs | Build, lint, typecheck, test |
+| Changeset | `.github/workflows/changeset.yml` | Push to main | Version bumps and npm publish |
+| PR packages | `.github/workflows/pr-pkg.yml` | PRs | Publish preview packages |
+| Update dependencies | `.github/workflows/update-dependencies.yml` | Weekly (Tue 14:00 UTC) | Automated dependency updates |
+| Code review | `.github/workflows/code-review.yml` | PRs | Automated code review |
+| Claude | `.github/workflows/claude.yml` | @claude mentions | Interactive AI assistance |
+| Sync agent skill | `.github/workflows/sync-agent-skill.yml` | Push to main (docs/) | Sync logging skill with docs |
+| Retype | `.github/workflows/retype-action.yml` | Push to main, PRs | Build and deploy documentation site |
+| Audit monorepo | `.github/workflows/audit-monorepo.yml` | First day of month | Best practices audit |
+| Update agent docs | `.github/workflows/agent-docs.yml` | Push to main | Sync agent-docs/ with docs and code |
 
 ## Commands
 

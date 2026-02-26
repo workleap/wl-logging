@@ -14,7 +14,7 @@ Information about this logging library can be shared with different agents using
 Open a terminal and install the `workleap-logging` agent skill by running the following command:
 
 ```bash
-npx skills add https://github.com/workleap/wl-logging --skill workleap-logging
+pnpx skills add https://github.com/workleap/wl-logging --skill workleap-logging
 ```
 
 !!!tip
