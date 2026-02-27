@@ -84,13 +84,15 @@ All tests must pass. If a test fails, run the failing package's tests directly (
 
 ### Step 2c: Validate the "web" sample app
 
-Use `pnpx agent-browser` for all browser interactions in this step. Read the locally installed agent skill at `.agents/skills/agent-browser/` to learn the available commands. **Important**: the skill examples use bare `agent-browser` commands, but you MUST always prefix with `pnpx` (e.g., `agent-browser open <url>` becomes `pnpx agent-browser open <url>`). Running a build is NOT sufficient — you must start the dev server and validate in a real browser.
+Use `agent-browser` for all browser interactions in this step. It is installed as a workspace devDependency. Read the locally installed agent skill at `.agents/skills/agent-browser/` to learn the available commands. Running a build is NOT sufficient — you must start the dev server and validate in a real browser.
+
+**Important**: Use `agent-browser snapshot` (not `screenshot`) for content verification. Snapshots capture the accessibility tree as text — they are faster, more reliable, and produce structured output that is easy to assert against. Screenshots are pixel-based images and should NOT be used for validation.
 
 1. Start the dev server in the background using the shell `&` operator (do NOT use `run_in_background: true`): `pnpm dev-web > /tmp/web-dev.log 2>&1 &`
 2. The web app listens on port **8080**. Wait for it to be ready — do NOT use `sleep`, do NOT write polling loops, do NOT parse the log file for a URL. Instead, immediately run: `curl --retry 30 --retry-delay 5 --retry-connrefused --silent --output /dev/null http://localhost:8080`
 3. Navigate to `http://localhost:8080` and verify it loads correctly
-4. Use `pnpx agent-browser snapshot` to verify the page rendered content — it should contain the headings "Console Logger" and "Composite Logger", along with buttons for logging operations (e.g., "Text", "Debug", "Information", "Warning", "Error", "Critical")
-5. Use `pnpx agent-browser console` to check for console errors (ignore warnings and known noise)
+4. Use `agent-browser snapshot` to verify the page rendered content — it should contain the headings "Console Logger" and "Composite Logger", along with buttons for logging operations (e.g., "Text", "Debug", "Information", "Warning", "Error", "Critical")
+5. Use `agent-browser console` to check for console errors (ignore warnings and known noise)
 6. Stop the dev server process when done: `kill $(lsof -t -i:8080) 2>/dev/null || true; fuser -k 8080/tcp 2>/dev/null || true`
 
 ## Step 3: Success
