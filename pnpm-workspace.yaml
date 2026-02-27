@@ -7,6 +7,7 @@ packages:
 #   - '@workleap*'
 
 onlyBuiltDependencies:
+  - agent-browser
   - core-js
   - esbuild
   - protobufjs
