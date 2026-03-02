@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="turbo-root" content="/wl-logging">
-    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="4.0.1.825532213073">
+    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="4.1.0.825786512466">
 
     <!-- See retype.com -->
-    <meta name="generator" content="Retype 4.0.1">
+    <meta name="generator" content="Retype 4.1.0">
 
     <!-- Primary Meta Tags -->
     <title>Getting started</title>
@@ -29,12 +29,12 @@
     <script data-cfasync="false">(function(){var cl=document.documentElement.classList,ls=localStorage.getItem("retype_scheme"),hd=cl.contains("dark"),hl=cl.contains("light"),wm=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;if(ls==="dark"||(!ls&&wm&&!hd&&!hl)){cl.remove("light");cl.add("dark")}else if(ls==="light"||(!ls&&!wm&&!hd&&!hl)){cl.remove("dark");cl.add("light")}})();</script>
 
     <link id="retype-favicon" rel="icon" href="../../static/favicon.png" />
-    <link href="../../resources/css/retype.css?v=4.0.1.825532213073" rel="stylesheet">
+    <link href="../../resources/css/retype.css?v=4.1.0.825786512466" rel="stylesheet">
 
-    <script data-cfasync="false" src="../../resources/js/config.js?v=4.0.1.825532213073" data-turbo-eval="false" defer></script>
-    <script data-cfasync="false" src="../../resources/js/retype.js?v=4.0.1" data-turbo-eval="false" defer></script>
-    <script id="lunr-js" data-cfasync="false" src="../../resources/js/lunr.js?v=4.0.1.825532213073" data-turbo-eval="false" defer></script>
-    <script id="prism-js" data-cfasync="false" src="../../resources/js/prism.js?v=4.0.1.825532213073" defer></script>
+    <script data-cfasync="false" src="../../resources/js/config.js?v=4.1.0.825786512466" data-turbo-eval="false" defer></script>
+    <script data-cfasync="false" src="../../resources/js/retype.js?v=4.1.0" data-turbo-eval="false" defer></script>
+    <script id="lunr-js" data-cfasync="false" src="../../resources/js/lunr.js?v=4.1.0.825786512466" data-turbo-eval="false" defer></script>
+    <script id="prism-js" data-cfasync="false" src="../../resources/js/prism.js?v=4.1.0.825786512466" defer></script>
 
     <link href="https://workleap.github.io/wl-idp-docs-hub/static/retype-customization.css" rel="stylesheet" />
 
@@ -281,7 +281,7 @@
     </h2>
 </doc-anchor-target>
 <p>First, open a terminal at the root of the application and install the following package:</p>
-<div class="codeblock-wrapper"><doc-codeblock>
+<div id="install-the-package-code-1" class="codeblock-wrapper"><doc-codeblock>
 <pre translate="no" class="language-bash"><code v-pre class="language-bash">pnpm add @workleap/logging</code></pre>
 </doc-codeblock></div>
 <doc-anchor-target id="write-console-logs">
@@ -291,7 +291,7 @@
     </h2>
 </doc-anchor-target>
 <p>A logger can output log entries with different levels: <code translate="no" v-pre>debug</code>, <code translate="no" v-pre>information</code>, <code translate="no" v-pre>warning</code>, <code translate="no" v-pre>error</code>, <code translate="no" v-pre>critical</code>. This allows to <doc-anchor-trigger to="#filter-log-entries">filter log entries</doc-anchor-trigger> according to a minimum severity:</p>
-<div class="codeblock-wrapper"><doc-codeblock>
+<div id="write-console-logs-code-1" class="codeblock-wrapper"><doc-codeblock>
 <pre translate="no" class="language-typescript" data-line="5-9"><code v-pre class="language-typescript">import { BrowserConsoleLogger } from &quot;@workleap/logging&quot;;
 
 const logger = new BrowserConsoleLogger();
@@ -309,7 +309,7 @@ logger.critical(&quot;Application failed to start.&quot;);</code></pre>
     </h3>
 </doc-anchor-target>
 <p>The simplest form is logging plain text directly at the desired level:</p>
-<div class="codeblock-wrapper"><doc-codeblock>
+<div id="basic-text-logs-code-1" class="codeblock-wrapper"><doc-codeblock>
 <pre translate="no" class="language-typescript" data-line="5"><code v-pre class="language-typescript">import { BrowserConsoleLogger } from &quot;@workleap/logging&quot;;
 
 const logger = new BrowserConsoleLogger();
@@ -323,7 +323,7 @@ logger.debug(&quot;Application started!&quot;);</code></pre>
     </h3>
 </doc-anchor-target>
 <p>Segments can be chained to build richer log entries that include text, errors and objects:</p>
-<div class="codeblock-wrapper"><doc-codeblock>
+<div id="complex-logs-code-1" class="codeblock-wrapper"><doc-codeblock>
 <pre translate="no" class="language-typescript" data-line="5-9"><code v-pre class="language-typescript">import { BrowserConsoleLogger } from &quot;@workleap/logging&quot;;
 
 const logger = new BrowserConsoleLogger();
@@ -341,7 +341,7 @@ logger
     </h3>
 </doc-anchor-target>
 <p>When using a logger that supports styling, individual text segments can be styled:</p>
-<div class="codeblock-wrapper"><doc-codeblock>
+<div id="styled-logs-code-1" class="codeblock-wrapper"><doc-codeblock>
 <pre translate="no" class="language-typescript" data-line="7-10,14-16"><code v-pre class="language-typescript">import { BrowserConsoleLogger } from &quot;@workleap/logging&quot;;
 
 const logger = new BrowserConsoleLogger();
@@ -383,7 +383,7 @@ logger
     </h3>
 </doc-anchor-target>
 <p>A log entry can span multiple lines by adding line breaks:</p>
-<div class="codeblock-wrapper"><doc-codeblock>
+<div id="line-change-code-1" class="codeblock-wrapper"><doc-codeblock>
 <pre translate="no" class="language-typescript" data-line="7"><code v-pre class="language-typescript">import { BrowserConsoleLogger } from &quot;@workleap/logging&quot;;
 
 const logger = new BrowserConsoleLogger();
@@ -401,7 +401,7 @@ logger
     </h2>
 </doc-anchor-target>
 <p>Scopes group related log entries under a shared label or context. This is useful for tracing operations, request or correlating events:</p>
-<div class="codeblock-wrapper"><doc-codeblock>
+<div id="create-a-logging-scope-code-1" class="codeblock-wrapper"><doc-codeblock>
 <pre translate="no" class="language-typescript" data-line="4"><code v-pre class="language-typescript">import { BrowserConsoleLogger } from &quot;@workleap/logging&quot;;
 
 const logger = new BrowserConsoleLogger();
@@ -437,7 +437,7 @@ const logger = useLogger();
     </h2>
 </doc-anchor-target>
 <p>By default, <a href="https://logrocket.com/" class="outbound" target="_blank">LogRocket</a> session replays exclude console output. To send log entries to LogRocket, use the <a href="https://workleap.github.io/wl-telemetry/honeycomb/reference/logrocketlogger" class="outbound" target="_blank">LogRocketLogger</a> class from either the <a href="https://www.npmjs.com/package/@workleap/telemetry" class="outbound" target="_blank">@workleap/telemetry</a> or <a href="https://www.npmjs.com/package/@workleap/logrocket" class="outbound" target="_blank">@workleap/logrocket</a> package:</p>
-<div class="codeblock-wrapper"><doc-codeblock>
+<div id="logrocket-session-replays-code-1" class="codeblock-wrapper"><doc-codeblock>
 <pre translate="no" class="language-typescript" data-line="3"><code v-pre class="language-typescript">import { LogRocketLogger } from &quot;@workleap/telemetry&quot;; // or from &quot;@workleap/logrocket&quot;;
 
 const logger = new LogRocketLogger();
@@ -451,7 +451,7 @@ logger.debug(&quot;Application started!&quot;);</code></pre>
     </h2>
 </doc-anchor-target>
 <p>You can forward the same log entry to multiple destinations by composing loggers:</p>
-<div class="codeblock-wrapper"><doc-codeblock>
+<div id="compose-loggers-code-1" class="codeblock-wrapper"><doc-codeblock>
 <pre translate="no" class="language-typescript" data-line="4-7"><code v-pre class="language-typescript">import { BrowserConsoleLogger, CompositeLogger } from &quot;@workleap/logging&quot;;
 import { LogRocketLogger } from &quot;@workleap/telemetry&quot;; // or from &quot;@workleap/logrocket&quot;;
 
@@ -470,7 +470,7 @@ logger.debug(&quot;Application started!&quot;);</code></pre>
     </h2>
 </doc-anchor-target>
 <p>A minimum severity of entries to process can be configured as an option. Messages with a lower severity than the configured level will then be ignored.</p>
-<div class="codeblock-wrapper"><doc-codeblock>
+<div id="filter-log-entries-code-1" class="codeblock-wrapper"><doc-codeblock>
 <pre translate="no" class="language-typescript" data-line="4"><code v-pre class="language-typescript">import { BrowserConsoleLogger, LogLevel } from &quot;@workleap/logging&quot;;
 
 const logger = new BrowserConsoleLogger({
