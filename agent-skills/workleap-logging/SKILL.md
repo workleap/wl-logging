@@ -12,7 +12,7 @@ description: |
 
   This skill also applies when the user discusses frontend logging, console logging, or structured logging in a Workleap context without naming the package directly.
 metadata:
-  version: 1.2
+  version: 1.3
 ---
 
 # Workleap Logging (@workleap/logging)
