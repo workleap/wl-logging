@@ -32,7 +32,7 @@ pnpm add @workleap/logging
 ### Loggers
 - **BrowserConsoleLogger**: Outputs to browser console with styling support
 - **CompositeLogger**: Forwards logs to multiple underlying loggers
-- **createCompositeLogger(verbose, loggers)**: Factory function that creates a `CompositeLogger`. If no loggers are provided, defaults to a `BrowserConsoleLogger`. See `references/api.md` for details.
+- **createCompositeLogger(verbose, loggers)**: Factory function that creates a `CompositeLogger`. When `verbose` is `true` and no loggers are provided, it adds a `BrowserConsoleLogger`; otherwise it uses only the loggers you pass (an empty list produces no output). See `references/api.md` for details.
 
 ### Log Levels (lowest to highest severity)
 1. `debug` - Detailed diagnostic info for development

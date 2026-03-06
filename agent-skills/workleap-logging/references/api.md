@@ -28,7 +28,7 @@ const logger = new CompositeLogger([
 
 ## createCompositeLogger
 
-Factory function that creates a `CompositeLogger`. When no loggers are provided, defaults to a `BrowserConsoleLogger`.
+Factory function that creates a `CompositeLogger`. When `verbose` is `true` and no loggers are provided, a default `BrowserConsoleLogger` is added. Otherwise, only the loggers you pass are used, an empty list results in no output.
 
 ```ts
 import { createCompositeLogger, BrowserConsoleLogger } from "@workleap/logging";
@@ -38,8 +38,8 @@ const logger = createCompositeLogger(false, [new BrowserConsoleLogger(), new Log
 ```
 
 **Parameters:**
-- `verbose`: Whether debug information should be logged.
-- `loggers`: Array of loggers to create the `CompositeLogger` with.
+- `verbose`: When `true` and no loggers are provided, a default `BrowserConsoleLogger` is added. Does not affect behavior when loggers are explicitly passed.
+- `loggers`: Array of loggers to create the `CompositeLogger` with. If empty and `verbose` is `false`, the resulting logger produces no output.
 
 ## Logger Methods
 
