@@ -1,5 +1,5 @@
 diff --git a/dist/types.d.ts b/dist/types.d.ts
-index dacd6d98ce3769f0d154fc64fe60133d19b20204..fd34d3fe2c309264be4ed062c7be973738530574 100644
+index 356d909fb0698179ad5eabaf7e6c6d3cebe915e1..7c6c93c4cd8364f63cdd23e51b36b952ba470917 100644
 --- a/dist/types.d.ts
 +++ b/dist/types.d.ts
 @@ -6,7 +6,7 @@ declare let LogRocket: LR.LogRocket;
