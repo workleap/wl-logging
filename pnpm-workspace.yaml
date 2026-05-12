@@ -8,8 +8,4 @@ minimumReleaseAgeExclude:
 
 allowBuilds:
   agent-browser: true
-  core-js: true
-  edgedriver: true
   esbuild: true
-  geckodriver: true
-  protobufjs: true
