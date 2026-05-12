@@ -27,11 +27,11 @@ importers:
         specifier: 7.0.0-dev.20260512.1
         version: 7.0.0-dev.20260512.1
       '@workleap/eslint-configs':
-        specifier: 2.0.2
-        version: 2.0.2(@eslint/js@9.39.2)(@types/estree@1.0.9)(@typescript-eslint/eslint-plugin@8.59.3(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0))(jsonc-eslint-parser@3.1.0)(storybook@10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(typescript-eslint@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(typescript@6.0.3)(vitest@4.1.6(@types/node@25.7.0)(vite@8.0.12(@types/node@25.7.0)(esbuild@0.27.7)(jiti@2.7.0)))
+        specifier: 2.0.3
+        version: 2.0.3(@eslint/js@9.39.2)(@types/estree@1.0.9)(@typescript-eslint/eslint-plugin@8.59.3(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0))(jsonc-eslint-parser@3.1.0)(storybook@10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(typescript-eslint@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(typescript@6.0.3)(vitest@4.1.6(@types/node@25.7.0)(vite@8.0.12(@types/node@25.7.0)(esbuild@0.27.7)(jiti@2.7.0)))
       '@workleap/typescript-configs':
-        specifier: 4.0.0
-        version: 4.0.0(typescript@6.0.3)
+        specifier: 4.0.2
+        version: 4.0.2(typescript@6.0.3)
       agent-browser:
         specifier: 0.27.0
         version: 0.27.0
@@ -81,14 +81,14 @@ importers:
         specifier: 7.0.0-dev.20260512.1
         version: 7.0.0-dev.20260512.1
       '@workleap/eslint-configs':
-        specifier: 2.0.2
-        version: 2.0.2(@eslint/js@9.39.2)(@types/estree@1.0.9)(@typescript-eslint/eslint-plugin@8.59.3(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0))(jsonc-eslint-parser@3.1.0)(storybook@10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(typescript-eslint@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(typescript@6.0.3)(vitest@4.1.6(@types/node@25.7.0)(vite@8.0.12(@types/node@25.7.0)(esbuild@0.27.7)(jiti@2.7.0)))
+        specifier: 2.0.3
+        version: 2.0.3(@eslint/js@9.39.2)(@types/estree@1.0.9)(@typescript-eslint/eslint-plugin@8.59.3(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0))(jsonc-eslint-parser@3.1.0)(storybook@10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(typescript-eslint@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(typescript@6.0.3)(vitest@4.1.6(@types/node@25.7.0)(vite@8.0.12(@types/node@25.7.0)(esbuild@0.27.7)(jiti@2.7.0)))
       '@workleap/rslib-configs':
-        specifier: 1.1.12
-        version: 1.1.12(@rsbuild/core@2.0.5)(@rslib/core@0.21.4(@typescript/native-preview@7.0.0-dev.20260512.1)(typescript@6.0.3))(typescript@6.0.3)
+        specifier: 1.2.0
+        version: 1.2.0(@rsbuild/core@2.0.5)(@rslib/core@0.21.4(@typescript/native-preview@7.0.0-dev.20260512.1)(typescript@6.0.3))(@rspack/core@2.0.3(@swc/helpers@0.5.21))(typescript@6.0.3)
       '@workleap/typescript-configs':
-        specifier: 4.0.0
-        version: 4.0.0(typescript@6.0.3)
+        specifier: 4.0.2
+        version: 4.0.2(typescript@6.0.3)
       eslint:
         specifier: 9.39.2
         version: 9.39.2(jiti@2.7.0)
@@ -139,14 +139,14 @@ importers:
         specifier: 2.1.8
         version: 2.1.8
       '@workleap/eslint-configs':
-        specifier: 2.0.2
-        version: 2.0.2(@eslint/js@9.39.2)(@types/estree@1.0.9)(@typescript-eslint/eslint-plugin@8.59.3(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0))(jsonc-eslint-parser@3.1.0)(storybook@10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(typescript-eslint@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(typescript@6.0.3)(vitest@4.1.6(@types/node@25.7.0)(vite@8.0.12(@types/node@25.7.0)(esbuild@0.27.7)(jiti@2.7.0)))
+        specifier: 2.0.3
+        version: 2.0.3(@eslint/js@9.39.2)(@types/estree@1.0.9)(@typescript-eslint/eslint-plugin@8.59.3(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0))(jsonc-eslint-parser@3.1.0)(storybook@10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(typescript-eslint@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(typescript@6.0.3)(vitest@4.1.6(@types/node@25.7.0)(vite@8.0.12(@types/node@25.7.0)(esbuild@0.27.7)(jiti@2.7.0)))
       '@workleap/rsbuild-configs':
-        specifier: 3.2.7
-        version: 3.2.7(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rsbuild/core@2.0.5)(@rspack/core@2.0.3(@swc/helpers@0.5.21))(typescript@6.0.3)
-      '@workleap/typescript-configs':
         specifier: 4.0.0
-        version: 4.0.0(typescript@6.0.3)
+        version: 4.0.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rsbuild/core@2.0.5)(@rspack/core@2.0.3(@swc/helpers@0.5.21))(typescript@6.0.3)
+      '@workleap/typescript-configs':
+        specifier: 4.0.2
+        version: 4.0.2(typescript@6.0.3)
       browserslist:
         specifier: 4.28.2
         version: 4.28.2
@@ -859,18 +859,18 @@ packages:
       '@rsbuild/core':
         optional: true
 
-  '@rsbuild/plugin-react@1.4.6':
-    resolution: {integrity: sha512-LAT6xHlEyZKA0VjF/ph5d50iyG+WSmBx+7g98HNZUwb94VeeTMZFB8qVptTkbIRMss3BNKOXmHOu71Lhsh9oEw==}
+  '@rsbuild/plugin-react@2.0.0':
+    resolution: {integrity: sha512-/1gzt39EGUSFEqB83g46QoOwsgv172HI18i6au1b6lgIaX4sv9stuX4ijdHbHCp8PqYEq+MyQ99jIQMO6I+etg==}
     peerDependencies:
-      '@rsbuild/core': ^1.0.0 || ^2.0.0-0
+      '@rsbuild/core': ^2.0.0-0
     peerDependenciesMeta:
       '@rsbuild/core':
         optional: true
 
-  '@rsbuild/plugin-svgr@1.3.1':
-    resolution: {integrity: sha512-HQupp4ubDgoPg0VHva68BZKNEb2GM/bZfQP/Pit2tV7vu/SnOO8MZFdiFbjyK/VXCdQktIMbkNREG7xDgpo/ww==}
+  '@rsbuild/plugin-svgr@2.0.2':
+    resolution: {integrity: sha512-RoTgyF60iKYpI+Os7/qKGn7cS5eZm8On2mqxN77Bo/l7pCLtKeiXa2p1YgLY1hohLCOJqSAysU7044nE0QfjLQ==}
     peerDependencies:
-      '@rsbuild/core': ^1.0.0 || ^2.0.0-0
+      '@rsbuild/core': ^2.0.0-0
     peerDependenciesMeta:
       '@rsbuild/core':
         optional: true
@@ -956,13 +956,13 @@ packages:
       '@swc/helpers':
         optional: true
 
-  '@rspack/plugin-react-refresh@1.6.2':
-    resolution: {integrity: sha512-k+/VrfTNgo+KirjI6V+8CWRj6y+DH9jOUWv8JorYY4vKf/9xfnZ8xHzuB4iqCwTtoZl9YnxOaOuoyjJipc2tiQ==}
+  '@rspack/plugin-react-refresh@2.0.0':
+    resolution: {integrity: sha512-Cf6CxBStNDJbiXMc/GmsvG1G8PRlUpa0MSfWsMTI+e8npzuTN/p8nwLs3shriBZOLciqgkSZpBtPTd10BLpj1g==}
     peerDependencies:
+      '@rspack/core': ^2.0.0-0
       react-refresh: '>=0.10.0 <1.0.0'
-      webpack-hot-middleware: 2.x
     peerDependenciesMeta:
-      webpack-hot-middleware:
+      '@rspack/core':
         optional: true
 
   '@rtsao/scc@1.1.0':
@@ -1314,15 +1314,15 @@ packages:
   '@workleap/browserslist-config@2.1.8':
     resolution: {integrity: sha512-p0TL+zx9LFr+D5xQvWrSA2yOkA20SmNJoqjTOKVfNlc7ecT8G3UaDvqmh4sCvYhIb5OxxE0awBjOdjoS+OK65w==}
 
-  '@workleap/eslint-configs@2.0.2':
-    resolution: {integrity: sha512-U+WkALkiASoSNxb+DWXhNun3gjqHKcU5Js/nmSQyzz3z1q85m+XoQb7Fx/kPyXAjDwnNdktPjmrt67G1Xte0jg==}
+  '@workleap/eslint-configs@2.0.3':
+    resolution: {integrity: sha512-j6UgtnX/OOLPtWi1nrIApDeIbvemw8mG3xSnU/10Yhfm1tw2Z4nc5IdVG2ebZ9SzGeFumCW65eLRfXpgdV6CXw==}
     peerDependencies:
       '@eslint/js': ^9.39.2
-      '@typescript-eslint/parser': ^8.58.0
+      '@typescript-eslint/parser': ^8.59.3
       eslint: ^9.39.2
-      storybook: ^10.3.4
-      typescript: ^6.0.2
-      typescript-eslint: ^8.58.0
+      storybook: ^10.3.6
+      typescript: ^6.0.3
+      typescript-eslint: ^8.59.3
     peerDependenciesMeta:
       '@typescript-eslint/parser':
         optional: true
@@ -1333,21 +1333,21 @@ packages:
       typescript-eslint:
         optional: true
 
-  '@workleap/rsbuild-configs@3.2.7':
-    resolution: {integrity: sha512-odFjdKmMbLh8W1XjtaDVHglg4vXzpnT1htUbwkJna5Vh6EKY+F0GnUNJl8xa+f1DYakfLgy8zTUvz2cxrg6rAQ==}
+  '@workleap/rsbuild-configs@4.0.0':
+    resolution: {integrity: sha512-HRFoWpetlsP2QKYo0sHwsI/mO4oD5DXEcdRcEKwFwmcAYpQ3YPDoHhRHVzfu2AnG3byACge4CWIRxqaIL1ZXEw==}
     peerDependencies:
-      '@rsbuild/core': ^1.7.5
-      '@rspack/core': ^1.7.11
+      '@rsbuild/core': ^2.0.5
+      '@rspack/core': ^2.0.3
 
-  '@workleap/rslib-configs@1.1.12':
-    resolution: {integrity: sha512-qcYaCfzx7NW5WJySlcwHwgufFyaxgWJrRIdxnoQBdTzw8aUc1xypaOEs895+clb8HwdQr0HoHCKQtLVvI87vKQ==}
+  '@workleap/rslib-configs@1.2.0':
+    resolution: {integrity: sha512-L6FzUIkjlaiju8BKn3bNEgJfOpKshpVd8IlSAJJ+9Vx8/G2+5BmZ9d+NRmNtVo9Ph3qFNVbia0vpnHTfg/X2sw==}
     peerDependencies:
-      '@rslib/core': ^0.20.3
+      '@rslib/core': ^0.21.4
 
-  '@workleap/typescript-configs@4.0.0':
-    resolution: {integrity: sha512-6fke8//mlUW1y/cN/OiCmL5/Lxa7EMNVmn9UcagUS/ASheZHIpmQ+VYK/xfxz21XYNlviEorUES+fFJ+dEZcVQ==}
+  '@workleap/typescript-configs@4.0.2':
+    resolution: {integrity: sha512-lx5O7z/a6RrhPkSXW+Y5ScNJtyrxJqRbX8groA34j9c0hYNjtAQe92Ai/pbCyrpDo64TViIA2ywodk8X6d1oRA==}
     peerDependencies:
-      typescript: ^6.0.2
+      typescript: ^6.0.3
 
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
@@ -1772,9 +1772,6 @@ packages:
 
   error-ex@1.3.4:
     resolution: {integrity: sha512-sqQamAnR14VgCr1A618A3sGrygcpK+HEbenA/HiEAkkUwcZIIB/tgWqHFxWgOyDh4nB4JCRimh79dR5Ywc9MDQ==}
-
-  error-stack-parser@2.1.4:
-    resolution: {integrity: sha512-Sk5V6wVazPhq5MhpO+AUxJn5x7XSXGl1R93Vn7i+zS15KDVxQijejNCrz8340/2bgLBjR9GtEG8ZVKONDjcqGQ==}
 
   es-abstract@1.24.2:
     resolution: {integrity: sha512-2FpH9Q5i2RRwyEP1AylXe6nYLR5OhaJTZwmlcP0dL/+JCbgg7yyEo/sEK6HeGZRf3dFpWwThaRHVApXSkW3xeg==}
@@ -3079,9 +3076,6 @@ packages:
   stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
 
-  stackframe@1.3.4:
-    resolution: {integrity: sha512-oeVtt7eWQS+Na6F//S4kJ2K2VbRlS9D43mAlMyVpVWovy9o+jfgH8O9agzANzaiLjclA0oYzUXEM4PurhSUChw==}
-
   std-env@4.1.0:
     resolution: {integrity: sha512-Rq7ybcX2RuC55r9oaPVEW7/xu3tj8u4GeBYHBWCychFtzMIr86A7e3PPEBPT37sHStKX3+TiX/Fr/ACmJLVlLQ==}
 
@@ -4159,18 +4153,18 @@ snapshots:
       - '@emnapi/core'
       - '@emnapi/runtime'
 
-  '@rsbuild/plugin-react@1.4.6(@rsbuild/core@2.0.5)':
+  '@rsbuild/plugin-react@2.0.0(@rsbuild/core@2.0.5)(@rspack/core@2.0.3(@swc/helpers@0.5.21))':
     dependencies:
-      '@rspack/plugin-react-refresh': 1.6.2(react-refresh@0.18.0)
+      '@rspack/plugin-react-refresh': 2.0.0(@rspack/core@2.0.3(@swc/helpers@0.5.21))(react-refresh@0.18.0)
       react-refresh: 0.18.0
     optionalDependencies:
       '@rsbuild/core': 2.0.5
     transitivePeerDependencies:
-      - webpack-hot-middleware
+      - '@rspack/core'
 
-  '@rsbuild/plugin-svgr@1.3.1(@rsbuild/core@2.0.5)(typescript@6.0.3)':
+  '@rsbuild/plugin-svgr@2.0.2(@rsbuild/core@2.0.5)(@rspack/core@2.0.3(@swc/helpers@0.5.21))(typescript@6.0.3)':
     dependencies:
-      '@rsbuild/plugin-react': 1.4.6(@rsbuild/core@2.0.5)
+      '@rsbuild/plugin-react': 2.0.0(@rsbuild/core@2.0.5)(@rspack/core@2.0.3(@swc/helpers@0.5.21))
       '@svgr/core': 8.1.0(typescript@6.0.3)
       '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@6.0.3))
       '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0(typescript@6.0.3))(typescript@6.0.3)
@@ -4179,9 +4173,9 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 2.0.5
     transitivePeerDependencies:
+      - '@rspack/core'
       - supports-color
       - typescript
-      - webpack-hot-middleware
 
   '@rslib/core@0.21.4(@typescript/native-preview@7.0.0-dev.20260512.1)(typescript@6.0.3)':
     dependencies:
@@ -4247,10 +4241,11 @@ snapshots:
     optionalDependencies:
       '@swc/helpers': 0.5.21
 
-  '@rspack/plugin-react-refresh@1.6.2(react-refresh@0.18.0)':
+  '@rspack/plugin-react-refresh@2.0.0(@rspack/core@2.0.3(@swc/helpers@0.5.21))(react-refresh@0.18.0)':
     dependencies:
-      error-stack-parser: 2.1.4
       react-refresh: 0.18.0
+    optionalDependencies:
+      '@rspack/core': 2.0.3(@swc/helpers@0.5.21)
 
   '@rtsao/scc@1.1.0': {}
 
@@ -4635,7 +4630,7 @@ snapshots:
 
   '@workleap/browserslist-config@2.1.8': {}
 
-  '@workleap/eslint-configs@2.0.2(@eslint/js@9.39.2)(@types/estree@1.0.9)(@typescript-eslint/eslint-plugin@8.59.3(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0))(jsonc-eslint-parser@3.1.0)(storybook@10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(typescript-eslint@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(typescript@6.0.3)(vitest@4.1.6(@types/node@25.7.0)(vite@8.0.12(@types/node@25.7.0)(esbuild@0.27.7)(jiti@2.7.0)))':
+  '@workleap/eslint-configs@2.0.3(@eslint/js@9.39.2)(@types/estree@1.0.9)(@typescript-eslint/eslint-plugin@8.59.3(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.2(jiti@2.7.0))(jsonc-eslint-parser@3.1.0)(storybook@10.3.6(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(typescript-eslint@8.59.3(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3))(typescript@6.0.3)(vitest@4.1.6(@types/node@25.7.0)(vite@8.0.12(@types/node@25.7.0)(esbuild@0.27.7)(jiti@2.7.0)))':
     dependencies:
       '@eslint/js': 9.39.2
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.2(jiti@2.7.0))
@@ -4668,33 +4663,32 @@ snapshots:
       - supports-color
       - vitest
 
-  '@workleap/rsbuild-configs@3.2.7(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rsbuild/core@2.0.5)(@rspack/core@2.0.3(@swc/helpers@0.5.21))(typescript@6.0.3)':
+  '@workleap/rsbuild-configs@4.0.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rsbuild/core@2.0.5)(@rspack/core@2.0.3(@swc/helpers@0.5.21))(typescript@6.0.3)':
     dependencies:
       '@rsbuild/core': 2.0.5
       '@rsbuild/plugin-basic-ssl': 1.2.2(@rsbuild/core@2.0.5)
       '@rsbuild/plugin-image-compress': 1.3.3(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rsbuild/core@2.0.5)
-      '@rsbuild/plugin-react': 1.4.6(@rsbuild/core@2.0.5)
-      '@rsbuild/plugin-svgr': 1.3.1(@rsbuild/core@2.0.5)(typescript@6.0.3)
+      '@rsbuild/plugin-react': 2.0.0(@rsbuild/core@2.0.5)(@rspack/core@2.0.3(@swc/helpers@0.5.21))
+      '@rsbuild/plugin-svgr': 2.0.2(@rsbuild/core@2.0.5)(@rspack/core@2.0.3(@swc/helpers@0.5.21))(typescript@6.0.3)
       '@rspack/core': 2.0.3(@swc/helpers@0.5.21)
     transitivePeerDependencies:
       - '@emnapi/core'
       - '@emnapi/runtime'
       - supports-color
       - typescript
-      - webpack-hot-middleware
 
-  '@workleap/rslib-configs@1.1.12(@rsbuild/core@2.0.5)(@rslib/core@0.21.4(@typescript/native-preview@7.0.0-dev.20260512.1)(typescript@6.0.3))(typescript@6.0.3)':
+  '@workleap/rslib-configs@1.2.0(@rsbuild/core@2.0.5)(@rslib/core@0.21.4(@typescript/native-preview@7.0.0-dev.20260512.1)(typescript@6.0.3))(@rspack/core@2.0.3(@swc/helpers@0.5.21))(typescript@6.0.3)':
     dependencies:
-      '@rsbuild/plugin-react': 1.4.6(@rsbuild/core@2.0.5)
-      '@rsbuild/plugin-svgr': 1.3.1(@rsbuild/core@2.0.5)(typescript@6.0.3)
+      '@rsbuild/plugin-react': 2.0.0(@rsbuild/core@2.0.5)(@rspack/core@2.0.3(@swc/helpers@0.5.21))
+      '@rsbuild/plugin-svgr': 2.0.2(@rsbuild/core@2.0.5)(@rspack/core@2.0.3(@swc/helpers@0.5.21))(typescript@6.0.3)
       '@rslib/core': 0.21.4(@typescript/native-preview@7.0.0-dev.20260512.1)(typescript@6.0.3)
     transitivePeerDependencies:
       - '@rsbuild/core'
+      - '@rspack/core'
       - supports-color
       - typescript
-      - webpack-hot-middleware
 
-  '@workleap/typescript-configs@4.0.0(typescript@6.0.3)':
+  '@workleap/typescript-configs@4.0.2(typescript@6.0.3)':
     dependencies:
       typescript: 6.0.3
 
@@ -5117,10 +5111,6 @@ snapshots:
   error-ex@1.3.4:
     dependencies:
       is-arrayish: 0.2.1
-
-  error-stack-parser@2.1.4:
-    dependencies:
-      stackframe: 1.3.4
 
   es-abstract@1.24.2:
     dependencies:
@@ -6572,8 +6562,6 @@ snapshots:
   sprintf-js@1.0.3: {}
 
   stackback@0.0.2: {}
-
-  stackframe@1.3.4: {}
 
   std-env@4.1.0: {}
 
