@@ -1,5 +1,11 @@
 # @workleap/logging
 
+## 1.3.8
+
+### Patch Changes
+
+- [#83](https://github.com/workleap/wl-logging/pull/83) [`ce35d5e`](https://github.com/workleap/wl-logging/commit/ce35d5e71df6420e9bb3fd5eb57ed4837ef57cc3) Thanks [@patricklafrance](https://github.com/patricklafrance)! - Updated dependencies.
+
 ## 1.3.7
 
 ### Patch Changes
