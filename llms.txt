@@ -1,0 +1,17 @@
+﻿
+- [Reference](https://workleap.github.io/wl-logging/reference/index.md): BrowserConsoleLogger
+- [About](https://workleap.github.io/wl-logging/about.md): To ask a question or propose an idea, feel free to start a new discussion on Github. If you found a bug, please open an issue on Github.
+- [Samples](https://workleap.github.io/wl-logging/samples.md): Web sample
+
+## Introduction
+
+- [Getting started](https://workleap.github.io/wl-logging/introduction/getting-started.md): First, open a terminal at the root of the application and install the following package:
+- [Use with agents](https://workleap.github.io/wl-logging/introduction/use-with-agents.md): Information about this logging library can be shared with different agents using the workleap-logging agent skill.
+
+## Reference
+
+- [BrowserConsoleLogger](https://workleap.github.io/wl-logging/reference/browserconsolelogger.md): A logger outputting messages to a browser console.
+- [CompositeLogger](https://workleap.github.io/wl-logging/reference/compositelogger.md): A logger implementation that delegates log entries to multiple underlying loggers. It implements the standard RootLogger and LoggerScope interfaces so it
+- [RootLogger](https://workleap.github.io/wl-logging/reference/rootlogger.md): Defines the interface for logger implementations.
+- [LoggerScope](https://workleap.github.io/wl-logging/reference/loggerscope.md): Defines the interface for logger scope implementations.
+- [createCompositeLogger](https://workleap.github.io/wl-logging/reference/createcompositelogger.md): A factory function to create a CompositeLogger instance from Workleap libraries standard logging API.
