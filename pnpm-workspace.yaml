@@ -2,10 +2,10 @@ packages:
   - packages/*
   - samples/*
 
-onlyBuiltDependencies:
-  - agent-browser
-  - core-js
-  - edgedriver
-  - esbuild
-  - geckodriver
-  - protobufjs
+minimumReleaseAgeExclude:
+  - '@workleap/*'
+  - '@typescript/native-preview*'
+
+allowBuilds:
+  agent-browser: true
+  esbuild: true

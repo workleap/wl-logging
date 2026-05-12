@@ -42,16 +42,18 @@
         "@workleap/typescript-configs": "4.0.0",
         "agent-browser": "0.27.0",
         "eslint": "9.39.2",
+        "jiti": "2.7.0",
         "pkg-pr-new": "0.0.71",
         "prettier": "3.8.3",
         "retypeapp": "4.5.3",
         "syncpack": "15.1.2",
         "turbo": "2.9.12",
+        "typescript": "6.0.3",
         "typescript-eslint": "8.59.3"
     },
     "engines": {
         "node": ">=24.0.0",
-        "pnpm": ">=10"
+        "pnpm": ">=11"
     },
-    "packageManager": "pnpm@10.30.1"
+    "packageManager": "pnpm@11.0.8"
 }
