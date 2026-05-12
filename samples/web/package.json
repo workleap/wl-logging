@@ -26,9 +26,9 @@
         "@typescript-eslint/parser": "8.59.3",
         "@typescript/native-preview": "7.0.0-dev.20260512.1",
         "@workleap/browserslist-config": "2.1.8",
-        "@workleap/eslint-configs": "2.0.2",
-        "@workleap/rsbuild-configs": "3.2.7",
-        "@workleap/typescript-configs": "4.0.0",
+        "@workleap/eslint-configs": "2.0.3",
+        "@workleap/rsbuild-configs": "4.0.0",
+        "@workleap/typescript-configs": "4.0.2",
         "browserslist": "4.28.2",
         "eslint": "9.39.2",
         "typescript-eslint": "8.59.3"
