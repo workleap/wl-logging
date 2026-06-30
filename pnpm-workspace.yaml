@@ -8,4 +8,5 @@ minimumReleaseAgeExclude:
 
 allowBuilds:
   agent-browser: true
+  core-js: false
   esbuild: true
