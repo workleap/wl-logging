@@ -1,13 +1,18 @@
 /**
  * @see {@link https://workleap.github.io/wl-logging}
  */
-export enum LogLevel {
-    debug = 0,
-    information = 1,
-    warning = 2,
-    error = 3,
-    critical = 4
-}
+export const LogLevel = {
+    debug: 0,
+    information: 1,
+    warning: 2,
+    error: 3,
+    critical: 4
+} as const;
+
+/**
+ * @see {@link https://workleap.github.io/wl-logging}
+ */
+export type LogLevel = typeof LogLevel[keyof typeof LogLevel];
 
 /**
  * @see {@link https://workleap.github.io/wl-logging}
