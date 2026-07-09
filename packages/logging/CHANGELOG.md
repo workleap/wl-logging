@@ -1,5 +1,16 @@
 # @workleap/logging
 
+## 2.0.0
+
+### Major Changes
+
+- [#93](https://github.com/workleap/wl-logging/pull/93) [`3d8d7ad`](https://github.com/workleap/wl-logging/commit/3d8d7ad0cabef3930dc9708b52040346e9823232) Thanks [@patricklafrance](https://github.com/patricklafrance)! - Updated dependencies to their latest versions.
+
+  **Breaking change:** to satisfy `erasableSyntaxOnly` (enabled by `@workleap/typescript-configs` 5.0.0), `LogLevel` is now an erasable `as const` object plus a `0 | 1 | 2 | 3 | 4` union type instead of a numeric `enum`. Runtime forward values and the common `LogLevel.debug` usage are unchanged, but two enum-only behaviors are gone:
+
+  - Reverse mapping is no longer available (`LogLevel[0]` no longer returns `"debug"`).
+  - The type is narrower: a value typed `number` is no longer assignable to `LogLevel` — only `0 | 1 | 2 | 3 | 4` are accepted.
+
 ## 1.3.8
 
 ### Patch Changes
