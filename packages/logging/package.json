@@ -43,7 +43,7 @@
         "@workleap/rslib-configs": "1.2.1",
         "@workleap/typescript-configs": "5.0.0",
         "eslint": "9.39.2",
-        "typescript-eslint": "8.63.0",
+        "typescript-eslint": "8.64.0",
         "vitest": "4.1.10"
     },
     "sideEffects": false

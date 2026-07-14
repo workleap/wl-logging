@@ -29,8 +29,8 @@
         "@workleap/eslint-configs": "2.0.4",
         "@workleap/rsbuild-configs": "4.1.1",
         "@workleap/typescript-configs": "5.0.0",
-        "browserslist": "4.28.5",
+        "browserslist": "4.28.6",
         "eslint": "9.39.2",
-        "typescript-eslint": "8.63.0"
+        "typescript-eslint": "8.64.0"
     }
 }
