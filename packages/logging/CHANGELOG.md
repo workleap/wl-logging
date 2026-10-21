@@ -1,5 +1,11 @@
 # @workleap/logging
 
+## 2.0.1
+
+### Patch Changes
+
+- [#121](https://github.com/workleap/wl-logging/pull/121) [`c355d7d`](https://github.com/workleap/wl-logging/commit/c355d7d73a420269e6a60be5f18e4e3d60008fb5) Thanks [@patricklafrance](https://github.com/patricklafrance)! - Updated dependencies to their latest versions. Migrated the build to `@rslib/core` 1.x and `@workleap/rslib-configs` 2.x, which fixes the published type declarations to import `./*.js` instead of `./*.ts`.
+
 ## 2.0.0
 
 ### Major Changes
