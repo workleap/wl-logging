@@ -71,7 +71,7 @@ git-commit                     | UPDATE  | no gate
 
 Run the matching command from the table for each `UPDATE` row, sequentially — the skill installer mutates a shared store and `skills-lock.json`.
 
-A pull fails -> restore that skill before the next one, so no half-written files get committed: `git checkout -- <its existing paths> skills-lock.json`, then `git clean -fd <its paths>`.
+A pull fails -> restore that skill before the next one, so no half-written files get committed. Before each pull, Read `skills-lock.json` and keep its contents; on failure, Write that copy back — never `git checkout` it, which would also drop the lock entries of skills already updated in this run. Then `git checkout -- <its existing paths>` and `git clean -fd <its paths>`.
 
 After each pull, grep the skill's new `SKILL.md` frontmatter for `model:`. An upstream-added override switches the conversation model mid-turn for whatever invokes the skill — flag it in the report; never strip it yourself.
 
