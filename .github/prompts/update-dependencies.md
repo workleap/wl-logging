@@ -28,7 +28,7 @@ Then, check if any `package.json` files were modified:
 git diff --name-only -- '**/package.json' ':!node_modules'
 ```
 
-If the output is empty, there are no dependency updates. Skip Step 2 and go to Step 3 — agent skills may still need updating.
+If the output is empty, there are no dependency updates. Discard any lockfile or other side effects of the update command (`git checkout -- . && git clean -fd`) so unvalidated transitive bumps never reach the PR, skip Step 2, and go to Step 3 — agent skills may still need updating.
 
 Otherwise, install the updated dependencies:
 
