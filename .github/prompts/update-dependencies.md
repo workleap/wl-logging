@@ -1,11 +1,11 @@
 # Update Dependencies
 
-You are an automated agent responsible for updating the dependencies of this monorepo and validating that everything still works correctly.
+You are an automated agent responsible for updating the dependencies and installed agent skills of this monorepo and validating that everything still works correctly.
 
 ## Constraints
 
 - You have a maximum of **10 attempts** to pass all validation steps. If you exhaust all attempts, go to Step 4 (Failure).
-- You MUST execute every validation step (2a, 2b, 2c) in order. Do NOT skip any step.
+- When dependencies changed, you MUST execute every validation step (2a, 2b, 2c) in order. Do NOT skip any step.
 - Do NOT create new source files as part of a dependency update. Only modify existing files when migrating to a newer API.
 - Do NOT read `AGENTS.md` or `agent-docs/`.
 - **Avoid rabbit holes**: If you spend more than 3 attempts or 10 tool calls investigating a single issue without progress, stop. Revert the problematic package to its previous version, open an issue, and move on.
@@ -20,13 +20,15 @@ Update all dependencies to their latest versions:
 pnpm update-outdated-deps
 ```
 
+If the command fails, go to Step 4 (Failure).
+
 Then, check if any `package.json` files were modified:
 
 ```bash
 git diff --name-only -- '**/package.json' ':!node_modules'
 ```
 
-If the output is empty, there are no dependency updates. STOP immediately. You are done.
+If the output is empty, there are no dependency updates. Discard any lockfile or other side effects of the update command (`git checkout -- . && git clean -fd`) so unvalidated transitive bumps never reach the PR, skip Step 2, and go to Step 3 — agent skills may still need updating.
 
 Otherwise, install the updated dependencies:
 
@@ -97,9 +99,29 @@ Use `agent-browser` for all browser interactions in this step. It is installed a
 
 ## Step 3: Success
 
-All validations passed.
+All validations passed, or Step 2 was skipped because no dependency changed.
 
-### 3a: Create a changeset (if needed)
+### 3a: Update agent skills
+
+Runs after validation so the skills' version gate reads the final `package.json` versions, including any package reverted in Step 2.
+
+Run the `_update-skills` skill in a subagent (`Agent` tool) — not inline, so the skill's `model:` frontmatter doesn't switch your own model for the rest of the run. Brief the subagent to:
+
+- Invoke the skill via the `Skill` tool; never read-and-inline its SKILL.md. End its final message with the skill's report.
+- Never prompt — it runs headless.
+- Use Glob, Grep, and Read for file inspection — `ls`, `cat`, and `grep` aren't allowed shell commands.
+
+Keep the report for the PR body. If the skill stops or a pull fails, record it and continue — skills never block the dependency update.
+
+Then, check whether anything changed at all:
+
+```bash
+git status --porcelain
+```
+
+If the output is empty, there are no updates. STOP immediately. You are done.
+
+### 3b: Create a changeset (if needed)
 
 Only include `@workleap/*` packages whose `dependencies` or `peerDependencies` have actually changed. Do NOT include packages where only `devDependencies` changed — devDependency-only changes do not affect the published package. If no `@workleap/*` packages qualify (i.e., every change is devDependency-only), skip this step entirely — do NOT create a changeset file.
 
@@ -115,7 +137,7 @@ Example format:
 Updated dependencies to their latest versions.
 ```
 
-### 3b: Commit and create pull request
+### 3c: Commit and create pull request
 
 Close any existing open dependency-update PRs before creating a new one:
 
@@ -137,6 +159,12 @@ Before writing the summary, run `git diff main -- '**/package.json'` to see the 
 6. Highlight any peerDependency range narrowing with "(range narrowed — may break consumers)" — these affect consumers.
 7. Do NOT mention transitive dependencies (pnpm-lock.yaml only).
 
+If no `package.json` changed, write "No dependency updates." instead.
+
+#### How to write the Agent skills section
+
+From the `_update-skills` report: list the skills whose files actually changed, the skipped skills with their lagging package (installed → latest), any skill whose pulled `SKILL.md` declares `model:` frontmatter, and any stop or pull failure. If nothing changed and nothing failed, write "No skill updates."
+
 #### PR body template
 
 ```markdown
@@ -144,11 +172,17 @@ Before writing the summary, run `git diff main -- '**/package.json'` to see the 
 
 <list the updated dependencies here, following the rules above>
 
+## Agent skills
+
+<follow the Agent skills rules above>
+
 ## Validation checklist
 - [x] Step 2a: Linting
 - [x] Step 2b: Tests
 - [x] Step 2c: Web sample app
 ```
+
+When Step 2 was skipped (no dependency changes), replace the checklist with "Skipped — no dependency changes."
 
 #### Create the PR
 

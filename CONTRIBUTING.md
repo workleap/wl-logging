@@ -149,13 +149,11 @@ The following workflows are available with GitHub:
 | CI | `.github/workflows/ci.yml` | Push to main, PRs | Build, lint, typecheck, test |
 | Changeset | `.github/workflows/changeset.yml` | Push to main | Version bumps and npm publish |
 | PR packages | `.github/workflows/pr-pkg.yml` | PRs | Publish preview packages |
-| Update dependencies | `.github/workflows/update-dependencies.yml` | Weekly (Tue 14:00 UTC) | Automated dependency updates |
+| Update dependencies | `.github/workflows/update-dependencies.yml` | Weekly (Tue 14:00 UTC) | Automated dependency and agent skill updates |
 | Code review | `.github/workflows/code-review.yml` | PRs | Automated code review |
 | Claude | `.github/workflows/claude.yml` | @claude mentions | Interactive AI assistance |
 | Sync agent skill | `.github/workflows/sync-agent-skill.yml` | Push to main (docs/) | Sync logging skill with docs |
 | Retype | `.github/workflows/retype-action.yml` | Push to main, PRs | Build and deploy documentation site |
-| Audit monorepo | `.github/workflows/audit-monorepo.yml` | First day of month | Best practices audit |
-| Update agent docs | `.github/workflows/agent-docs.yml` | Push to main | Sync agent-docs/ with docs and code |
 
 ## Commands
 
@@ -240,6 +238,8 @@ Updated outdated dependencies to their latest version. For more information, vie
 ```bash
 pnpm update-outdated-deps
 ```
+
+With Claude Code, run `/update-third-parties` instead to update the npm dependencies and the installed agent skills together.
 
 ## CI
 
