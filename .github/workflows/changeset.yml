@@ -5,6 +5,8 @@ name: Changesets
 on:
   push:
     branches: ["main"]
+  # Allows a manual run when a push to main skipped the workflow, e.g. because of a skip-ci marker in the commit message.
+  workflow_dispatch:
 env:
   CI: true
 
