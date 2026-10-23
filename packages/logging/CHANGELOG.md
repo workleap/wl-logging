@@ -1,5 +1,11 @@
 # @workleap/logging
 
+## 2.1.0
+
+### Minor Changes
+
+- [#124](https://github.com/workleap/wl-logging/pull/124) [`22d243f`](https://github.com/workleap/wl-logging/commit/22d243f90c808afd8032da40c41c776b875b6d57) Thanks [@patricklafrance](https://github.com/patricklafrance)! - The package now ships the `workleap-logging` agent skill. With pnpm 12.11 or later, approve the package's skills with `pnpm approve` to link the skill into your agent skill directories.
+
 ## 2.0.1
 
 ### Patch Changes
