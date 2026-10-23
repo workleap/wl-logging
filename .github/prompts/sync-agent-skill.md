@@ -10,7 +10,7 @@ When updating the skill:
 - You MAY create new `references/*.md` files when new content does not fit any existing reference file.
 - Do NOT embed metadata in skill files.
 - Do NOT add "Sources:" lines to skill files.
-- Do NOT create or modify any files outside `packages/logging/skills/workleap-logging/`, except the changeset file created in Step 4b.
+- Do NOT create or modify any files outside `agent-skills/workleap-logging/`, except the changeset file created in Step 4b.
 - Do NOT use TodoWrite, TaskCreate, or any task tracking tools.
 - Do NOT read `AGENTS.md` or `agent-docs/`.
 - Never update a versioned skill. You can identify a versioned skill with its folder name pattern, e.g. `workleap-logging-v*`.
@@ -47,15 +47,15 @@ If a doc does not match any row above, use your best judgment to route it to the
 
 ## Step 1: Update skill
 
-Review the existing `workleap-logging` skill in `./packages/logging/skills/workleap-logging/` and make sure that all API definitions and examples match the current documentation available in `./docs`. Use the routing table above to target your comparisons. Ignore any docs listed in the "Excluded docs" section.
+Review the existing `workleap-logging` skill in `./agent-skills/workleap-logging/` and make sure that all API definitions and examples match the current documentation available in `./docs`. Use the routing table above to target your comparisons. Ignore any docs listed in the "Excluded docs" section.
 
 ## Step 2: Check for changes
 
 After updating the skill, check whether any files were actually modified:
 
 ```bash
-git diff --name-only HEAD -- packages/logging/skills/workleap-logging/
-git ls-files --others --exclude-standard -- packages/logging/skills/workleap-logging/
+git diff --name-only HEAD -- agent-skills/workleap-logging/
+git ls-files --others --exclude-standard -- agent-skills/workleap-logging/
 ```
 
 If both commands produce empty output (no changes at all), STOP immediately. Print "No skill changes needed — skill is already in sync." You are done.
@@ -70,7 +70,7 @@ Use the following prompt for the subagent:
 >
 > ## Part A — Coverage
 >
-> Read all files in `./packages/logging/skills/workleap-logging/`. Using ONLY those files, determine whether the skill can adequately answer each question below. For each, respond PASS or FAIL with a brief explanation.
+> Read all files in `./agent-skills/workleap-logging/`. Using ONLY those files, determine whether the skill can adequately answer each question below. For each, respond PASS or FAIL with a brief explanation.
 >
 > 1. What is @workleap/logging and what problems does it solve?
 > 2. How do you install @workleap/logging?
@@ -110,7 +110,7 @@ If any coverage question is marked FAIL or accuracy discrepancies are found, go 
 
 ### 4a: Increment version
 
-Read the `metadata.version` field in the YAML frontmatter of `packages/logging/skills/workleap-logging/SKILL.md`. Increment the **minor** part of the version (e.g., `1.0` → `1.1`, `5.3` → `5.4`). Update the file with the new version.
+Read the `metadata.version` field in the YAML frontmatter of `agent-skills/workleap-logging/SKILL.md`. Increment the **minor** part of the version (e.g., `1.0` → `1.1`, `5.3` → `5.4`). Update the file with the new version.
 
 ### 4b: Add a changeset
 
@@ -129,7 +129,7 @@ Updated the `workleap-logging` agent skill: <one-sentence summary>.
 ```bash
 BRANCH_NAME="agent/skill-sync-$(date -u +%Y%m%d-%H%M%S)-$(git rev-parse --short HEAD)"
 git checkout -b "$BRANCH_NAME"
-git add packages/logging/skills/workleap-logging/ .changeset/
+git add agent-skills/workleap-logging/ .changeset/
 git commit -m "chore(skill): sync workleap-logging skill with docs [skip ci]"
 git push origin "$BRANCH_NAME"
 ```

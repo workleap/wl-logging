@@ -130,9 +130,9 @@ By default, packages compilation output will be in their respective *dist* direc
 
 ## Update the agent skill
 
-The `workleap-logging` agent skill is located in the [packages/logging/skills/workleap-logging](./packages/logging/skills/workleap-logging) directory and is distributed through two channels:
+The `workleap-logging` agent skill is located in the [agent-skills/workleap-logging](./agent-skills/workleap-logging) directory and is distributed through two channels:
 
-- **npm**: the skill is published with the `@workleap/logging` package and linked by pnpm (`>=12.11`) into the consumer's agent skill directories once approved.
+- **npm**: the skill is copied into the `@workleap/logging` package at pack time by the `prepack` script ([agent-skill.mjs](./packages/logging/scripts/agent-skill.mjs)), and linked by pnpm (`>=12.11`) into the consumer's agent skill directories once approved. The copy is removed by the `postpack` script and is ignored by git.
 - **skills.sh**: the skill is installed from the repository files. The [.claude-plugin/marketplace.json](./.claude-plugin/marketplace.json) file exists so the `skills.sh` CLI can find the skill from the repository root; keep its path in sync if the skill is moved.
 
 By default, the [sync-agent-skill](.github/workflows/sync-agent-skill.yml) workflow updates the skill automatically. If changes are required, it opens a pull request with the appropriate modifications.

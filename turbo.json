@@ -23,7 +23,7 @@
         },
         "eslint": {
             "dependsOn": ["transit"],
-            "inputs": ["$TURBO_DEFAULT$", "!README.md", "!skills/**"],
+            "inputs": ["$TURBO_DEFAULT$", "!README.md"],
             "outputs": ["node_modules/.cache/eslint"]
         },
         "//#typecheck": {

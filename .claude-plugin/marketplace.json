@@ -7,9 +7,9 @@
         {
             "name": "workleap-logging",
             "description": "Agent skill for @workleap/logging.",
-            "source": "./packages/logging",
+            "source": "./agent-skills",
             "strict": false,
-            "skills": ["./skills/workleap-logging"]
+            "skills": ["./workleap-logging"]
         }
     ]
 }

@@ -1,4 +1,4 @@
-Review the `workleap-logging` skill in the `./packages/logging/skills/workleap-logging` directory and make sure that all API definition and examples match the current documentation available in the `./docs` folder. Ignore any documentation related to updates. Do not make mistake.
+Review the `workleap-logging` skill in the `./agent-skills/workleap-logging` directory and make sure that all API definition and examples match the current documentation available in the `./docs` folder. Ignore any documentation related to updates. Do not make mistake.
 
 Never update a versioned skill. You can identify a versioned skill with its folder name pattern, e.g. `workleap-logging-v*`.
 

@@ -15,7 +15,7 @@ Re-pull every `pnpx skills add` installed skill in this repo, but only when the 
 
 Installed skills live in `.agents/skills/` and are tracked in `skills-lock.json`; the rows marked `.claude` also have a copy in `.claude/skills/`. The `-a` flags reproduce that layout — `codex` targets `.agents/skills/`, `claude-code` adds the `.claude/skills/` copy. Never omit `-a` or `--copy`: the defaults symlink into `.claude/skills/` and change the layout.
 
-`packages/logging/skills/workleap-logging` is this repo's own published skill, not an install — it's out of scope.
+`agent-skills/workleap-logging` is this repo's own published skill, not an install — it's out of scope.
 
 Only `workleap-*` skills use `--full-depth`. The CLI version is pinned because the `-a` / `--copy` layout was verified on it — re-verify before bumping.
 
