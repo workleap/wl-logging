@@ -146,7 +146,7 @@ If the workflow does not behave as expected, the simplest way to update an agent
 
 NOTE: Skills installed using [skills.sh](https://skills.sh/) are sourced directly from the repository files, so merging the pull request is sufficient to update them. Skills linked by pnpm are updated when a new version of `@workleap/logging` is published, which is why **every skill change requires a changeset**.
 
-NOTE: The internal skills in `.claude/skills/_update-*` must keep `metadata.internal: true` in their frontmatter. Otherwise, the `skills.sh` CLI lists them as public skills of this repository.
+NOTE: The rules for local skills and skill discovery are documented in [CLAUDE.md](./CLAUDE.md#agent-skills) and checked by the [skill-discovery](.github/workflows/skill-discovery.yml) workflow.
 
 ## Workflows
 
@@ -161,6 +161,7 @@ The following workflows are available with GitHub:
 | Code review | `.github/workflows/code-review.yml` | PRs | Automated code review |
 | Claude | `.github/workflows/claude.yml` | @claude mentions | Interactive AI assistance |
 | Sync agent skill | `.github/workflows/sync-agent-skill.yml` | Push to main (docs/) | Sync logging skill with docs |
+| Skill discovery | `.github/workflows/skill-discovery.yml` | Push to main, PRs (skill paths) | Check that skills.sh discovers only the logging skill |
 | Retype | `.github/workflows/retype-action.yml` | Push to main, PRs | Build and deploy documentation site |
 
 ## Commands
