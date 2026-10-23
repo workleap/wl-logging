@@ -17,6 +17,9 @@ on:
     branches: ["main"]
     paths: *paths
 
+permissions:
+  contents: read
+
 concurrency:
   group: skill-discovery-${{ github.ref }}
   cancel-in-progress: true
