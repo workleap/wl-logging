@@ -1,0 +1,57 @@
+name: Skill discovery
+
+# Checks that skills.sh discovers only the workleap-logging skill in this repository.
+# Discovery breaks silently, for example when a local skill in .claude/skills/ is not marked internal.
+
+on:
+  push:
+    branches: ["main"]
+    paths: &paths
+      - "agent-skills/**"
+      - ".agents/skills/**"
+      - ".claude/skills/**"
+      - ".claude-plugin/**"
+      - "skills-lock.json"
+      - ".github/workflows/skill-discovery.yml"
+  pull_request:
+    branches: ["main"]
+    paths: *paths
+
+permissions:
+  contents: read
+
+concurrency:
+  group: skill-discovery-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  skill-discovery:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+            node-version: ">=24.0.0"
+            check-latest: true
+
+      - name: List discovered skills
+        env:
+          DISABLE_TELEMETRY: "1"
+          NO_COLOR: "1"
+        # The skills CLI version is pinned to the one used by the _update-skills skill. --list has no machine-readable
+        # output, so the skill names are parsed from the listing (one "│    <name>" line per skill).
+        run: |
+            output=$(npx -y skills@1.7.4 add . --list 2>&1 | sed -E 's/\x1B\[[0-9;?]*[A-Za-z]//g')
+            names=$(grep -E '^│ {4}[^ ]' <<<"$output" | sed -E 's/^│ +//; s/ +$//' | sort)
+
+            if [ "$names" != "workleap-logging" ]; then
+                echo "::error::Expected skills.sh to discover only \"workleap-logging\", found: $(echo $names)"
+                echo "$output"
+                exit 1
+            fi
+
+            echo "skills.sh discovers: $names"

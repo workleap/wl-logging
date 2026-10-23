@@ -4,6 +4,8 @@ description: Update the repo's third-party sources — npm dependencies and agen
 disable-model-invocation: true
 model: sonnet
 effort: medium
+metadata:
+  internal: true
 ---
 
 # Update third parties

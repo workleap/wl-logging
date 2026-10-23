@@ -130,15 +130,23 @@ By default, packages compilation output will be in their respective *dist* direc
 
 ## Update the agent skill
 
+The `workleap-logging` agent skill is located in the [agent-skills/workleap-logging](./agent-skills/workleap-logging) directory and is distributed through two channels:
+
+- **npm**: the skill is copied into the `@workleap/logging` package at pack time by the `prepack` script ([agent-skill.mjs](./packages/logging/scripts/agent-skill.mjs)), and linked by pnpm (`>=12.11`) into the consumer's agent skill directories once approved. The copy is removed by the `postpack` script and is ignored by git.
+- **skills.sh**: the skill is installed from the repository files. The [.claude-plugin/marketplace.json](./.claude-plugin/marketplace.json) file exists so the `skills.sh` CLI can find the skill from the repository root; keep its path in sync if the skill is moved.
+
 By default, the [sync-agent-skill](.github/workflows/sync-agent-skill.yml) workflow updates the skill automatically. If changes are required, it opens a pull request with the appropriate modifications.
 
 If the workflow does not behave as expected, the simplest way to update an agent skill is to use an agent:
 
 1. Start your preferred agent.
 2. Copy the content of [UPDATE_SKILL.md](./user-prompts/UPDATE_SKILL.md) into the agent prompt.
-3. Commit the changes and merge the pull request.
+3. Add a `patch` changeset for `@workleap/logging`.
+4. Commit the changes and merge the pull request.
 
-NOTE: Skills installed using [skills.sh](https://skills.sh/) are sourced directly from the repository files. Merging the pull request is therefore sufficient to update the installed skill.
+NOTE: Skills installed using [skills.sh](https://skills.sh/) are sourced directly from the repository files, so merging the pull request is sufficient to update them. Skills linked by pnpm are updated when a new version of `@workleap/logging` is published, which is why **every skill change requires a changeset**.
+
+NOTE: The rules for local skills and skill discovery are documented in [CLAUDE.md](./CLAUDE.md#agent-skills) and checked by the [skill-discovery](.github/workflows/skill-discovery.yml) workflow.
 
 ## Workflows
 
@@ -153,6 +161,7 @@ The following workflows are available with GitHub:
 | Code review | `.github/workflows/code-review.yml` | PRs | Automated code review |
 | Claude | `.github/workflows/claude.yml` | @claude mentions | Interactive AI assistance |
 | Sync agent skill | `.github/workflows/sync-agent-skill.yml` | Push to main (docs/) | Sync logging skill with docs |
+| Skill discovery | `.github/workflows/skill-discovery.yml` | Push to main, PRs (skill paths) | Check that skills.sh discovers only the logging skill |
 | Retype | `.github/workflows/retype-action.yml` | Push to main, PRs | Build and deploy documentation site |
 
 ## Commands
