@@ -166,7 +166,7 @@ The following workflows are available with GitHub:
 
 ## Commands
 
-From the project root, you have access to many commands the main ones are:
+From the project root, you have access to many commands. The main ones are:
 
 ### dev-web
 
