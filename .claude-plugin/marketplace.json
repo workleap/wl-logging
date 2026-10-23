@@ -1,0 +1,15 @@
+{
+    "name": "wl-logging",
+    "owner": {
+        "name": "Workleap"
+    },
+    "plugins": [
+        {
+            "name": "workleap-logging",
+            "description": "Agent skill for @workleap/logging.",
+            "source": "./packages/logging",
+            "strict": false,
+            "skills": ["./skills/workleap-logging"]
+        }
+    ]
+}

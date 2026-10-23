@@ -130,15 +130,23 @@ By default, packages compilation output will be in their respective *dist* direc
 
 ## Update the agent skill
 
+The `workleap-logging` agent skill is located in the [packages/logging/skills/workleap-logging](./packages/logging/skills/workleap-logging) directory and is distributed through two channels:
+
+- **npm**: the skill is published with the `@workleap/logging` package and linked by pnpm (`>=12.11`) into the consumer's agent skill directories once approved.
+- **skills.sh**: the skill is installed from the repository files. The [.claude-plugin/marketplace.json](./.claude-plugin/marketplace.json) file exists so the `skills.sh` CLI can find the skill from the repository root; keep its path in sync if the skill is moved.
+
 By default, the [sync-agent-skill](.github/workflows/sync-agent-skill.yml) workflow updates the skill automatically. If changes are required, it opens a pull request with the appropriate modifications.
 
 If the workflow does not behave as expected, the simplest way to update an agent skill is to use an agent:
 
 1. Start your preferred agent.
 2. Copy the content of [UPDATE_SKILL.md](./user-prompts/UPDATE_SKILL.md) into the agent prompt.
-3. Commit the changes and merge the pull request.
+3. Add a `patch` changeset for `@workleap/logging`.
+4. Commit the changes and merge the pull request.
 
-NOTE: Skills installed using [skills.sh](https://skills.sh/) are sourced directly from the repository files. Merging the pull request is therefore sufficient to update the installed skill.
+NOTE: Skills installed using [skills.sh](https://skills.sh/) are sourced directly from the repository files, so merging the pull request is sufficient to update them. Skills linked by pnpm are updated when a new version of `@workleap/logging` is published, which is why **every skill change requires a changeset**.
+
+NOTE: The internal skills in `.claude/skills/_update-*` must keep `metadata.internal: true` in their frontmatter. Otherwise, the `skills.sh` CLI lists them as public skills of this repository.
 
 ## Workflows
 
