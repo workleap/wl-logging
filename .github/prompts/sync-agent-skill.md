@@ -130,7 +130,7 @@ Updated the `workleap-logging` agent skill: <one-sentence summary>.
 BRANCH_NAME="agent/skill-sync-$(date -u +%Y%m%d-%H%M%S)-$(git rev-parse --short HEAD)"
 git checkout -b "$BRANCH_NAME"
 git add agent-skills/workleap-logging/ .changeset/
-git commit -m "chore(skill): sync workleap-logging skill with docs [skip ci]"
+git commit -m "chore(skill): sync workleap-logging skill with docs"
 git push origin "$BRANCH_NAME"
 ```
 
