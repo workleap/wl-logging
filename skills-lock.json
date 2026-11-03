@@ -4,12 +4,14 @@
     "agent-browser": {
       "source": "vercel-labs/agent-browser",
       "sourceType": "github",
-      "computedHash": "22c1bb2afb139e85aeaaa4e1435a40e3ebd44764a517ec225eec7489bd1910d0"
+      "skillPath": "skills/agent-browser/SKILL.md",
+      "computedHash": "60a9cbe5af176150582c019e16e5d3703a41bb02d88438e881349876120d7944"
     },
     "git-commit": {
       "source": "github/awesome-copilot",
       "sourceType": "github",
-      "computedHash": "2607fc60629b82b257136dd2a7a373f0a4466c0b49df7746d845d59313c99b21"
+      "skillPath": "skills/git-commit/SKILL.md",
+      "computedHash": "78b6a33700091345cd449f9e3642ddd611b479b341efc9d6c750f7e04d15216a"
     },
     "pnpm": {
       "source": "antfu/skills",
@@ -19,7 +21,8 @@
     "turborepo": {
       "source": "vercel/turborepo",
       "sourceType": "github",
-      "computedHash": "05f8c9c6a5e8574cc64981eb77041a3b25d16ead0985d384b6e20d3556ddbd88"
+      "skillPath": "skills/turborepo/SKILL.md",
+      "computedHash": "9681d8dfeb5e6cdff767f1bcaba5d7ac55732a9d6c02ee120f44229f8ec25e7e"
     },
     "vitest": {
       "source": "antfu/skills",
@@ -29,12 +32,14 @@
     "workleap-react-best-practices": {
       "source": "workleap/wl-web-configs",
       "sourceType": "github",
-      "computedHash": "f3849c705dd508216673f24efeff9ef25add517ed6a16743675ad53c09f3aba4"
+      "skillPath": "agent-skills/workleap-react-best-practices/SKILL.md",
+      "computedHash": "9f42af7a0842f7174c9357e688b12fc02516bbd9f440f87496a195ab78cab536"
     },
     "workleap-web-configs": {
       "source": "workleap/wl-web-configs",
       "sourceType": "github",
-      "computedHash": "52ca9da414b4136618c6d54cdea15167959e57e59bf6758fa5712fc2b10fdbca"
+      "skillPath": "agent-skills/workleap-web-configs/SKILL.md",
+      "computedHash": "f4bd47e298ccd2d20ebcf3e950fddcbc7fb46fbc65c0f47f043d0d7c118ae7ad"
     }
   }
 }
