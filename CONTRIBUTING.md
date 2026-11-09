@@ -256,7 +256,11 @@ Updated outdated dependencies to their latest version. For more information, vie
 pnpm update-outdated-deps
 ```
 
-With Claude Code, run `/update-third-parties` instead to update the npm dependencies and the installed agent skills together.
+With Claude Code, run `/update-third-parties` instead to update the npm dependencies, the installed agent skills, and the GitHub Actions together (or any subset).
+
+### GitHub Actions
+
+[Renovate](./renovate.json) updates the GitHub Actions used by the workflows on a schedule. To bump them on demand, run `/update-github-actions` with Claude Code (or select GitHub Actions in `/update-third-parties`).
 
 ## CI
 
@@ -264,7 +268,7 @@ We use [GitHub Actions](https://docs.github.com/en/actions) for this repository.
 
 You can find the configuration is in the `.github/workflows` folder and the build results are available [here](https://github.com/workleap/wl-web-configs/actions).
 
-We currently have 2 builds configured:
+The main builds are described below; see [Workflows](#workflows) for the full list.
 
 ### Changesets
 
