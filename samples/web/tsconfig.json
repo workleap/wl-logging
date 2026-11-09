@@ -2,7 +2,7 @@
     "extends": "@workleap/typescript-configs/web-application.json",
     "compilerOptions": {
         "incremental": true,
-        "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+        "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
     },
     "exclude": ["dist", "node_modules"]
 }

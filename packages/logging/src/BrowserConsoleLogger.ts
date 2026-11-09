@@ -13,9 +13,7 @@ function convertCssInlineStyleToConsoleStyle(cssInlineStyle: Partial<CSSStyleDec
 }
 
 function appendText(currentText: string, newText: string, options: { leadingSpace?: boolean } = {}) {
-    const {
-        leadingSpace = true
-    } = options;
+    const { leadingSpace = true } = options;
 
     if (currentText.length > 0) {
         return `${currentText}${leadingSpace ? " " : ""}${newText}`;
@@ -47,9 +45,7 @@ function analyzeSegments(segments: Segment[]) {
  *   and non-text segments are appended as-is.
  */
 function formatSegments(segments: Segment[]) {
-    const {
-        includeStyleOptions
-    } = analyzeSegments(segments);
+    const { includeStyleOptions } = analyzeSegments(segments);
 
     const logs: unknown[] = [];
 
@@ -98,8 +94,8 @@ function formatSegments(segments: Segment[]) {
 
         // If the last segment is text, the text buffer hasn't been flushed.
         flushText();
-    // This rendering:
-    // - concatenate text segments when possible to match the "leading space" option.
+        // This rendering:
+        // - concatenate text segments when possible to match the "leading space" option.
     } else {
         let textBuffer = "";
 
@@ -318,10 +314,7 @@ export class BrowserConsoleLoggerScope implements LoggerScope {
      * @see {@link https://workleap.github.io/wl-logging}
      */
     end(options: LoggerScopeEndOptions = {}) {
-        const {
-            labelStyle,
-            dismiss = false
-        } = options;
+        const { labelStyle, dismiss = false } = options;
 
         if (!this.#hasEnded) {
             this.#hasEnded = true;
@@ -358,9 +351,7 @@ export class BrowserConsoleLogger implements RootLogger {
      * @see {@link https://workleap.github.io/wl-logging}
      */
     constructor(options: LoggerOptions = {}) {
-        const {
-            logLevel = LogLevel.debug
-        } = options;
+        const { logLevel = LogLevel.debug } = options;
 
         this.#logLevel = logLevel;
     }
