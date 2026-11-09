@@ -2,12 +2,6 @@ packages:
   - packages/*
   - samples/*
 
-minimumReleaseAge: 10080 # 7 days, in minutes
-
-minimumReleaseAgeExclude:
-  - '@workleap/*'
-  - '@typescript/native-preview*'
-
 allowBuilds:
   agent-browser: true
   core-js: false

@@ -47,6 +47,36 @@ You'll find four samples:
 
 This project uses PNPM workspace, therefore, you must [install PNPM](https://pnpm.io/installation):
 
+### Setup the GitHub package firewall
+
+The npm dependencies are installed through the `gsoft` enterprise GitHub package firewall (configured in the repository [.npmrc](./.npmrc) file). Only members of the `gsoft` GitHub enterprise can install the dependencies.
+
+The firewall requires a GitHub token. First, sign in with the [GitHub CLI](https://cli.github.com/) and authorize the `gsoft` SSO if prompted:
+
+```bash
+gh auth login
+```
+
+Then, add the token to your **user-level** `.npmrc` file (`~/.npmrc`):
+
+```powershell
+# PowerShell
+Add-Content -Encoding ascii "$HOME\.npmrc" "//package-firewall.githubapp.com/npm/enterprises/gsoft/:_authToken=$(gh auth token)"
+```
+
+```bash
+# bash / zsh
+echo "//package-firewall.githubapp.com/npm/enterprises/gsoft/:_authToken=$(gh auth token)" >> ~/.npmrc
+```
+
+> [!IMPORTANT]
+> Never add the token to the repository `.npmrc` file: it would be committed, and pnpm ignores auth tokens set in a repository `.npmrc` file anyway.
+
+> [!NOTE]
+> If an install fails with a `401` error from `package-firewall.githubapp.com`, the token is missing or expired. After running `gh auth login` again, replace the `_authToken` line in `~/.npmrc` with a new token.
+
+### Install the dependencies
+
 To install the project, open a terminal at the root of the workspace and execute the following command:
 
 ```bash
