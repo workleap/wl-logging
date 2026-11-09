@@ -30,7 +30,7 @@ Headless (CI) or briefed by a caller not to prompt -> skip this step; treat it a
 pnpm list-outdated-deps
 ```
 
-Report the outdated packages and any peer-version mismatches before changing anything. `eslint`, `@eslint/js`, and `typescript` are excluded by the scripts on purpose — never bump them by hand.
+Report the outdated packages and any peer-version mismatches before changing anything. `typescript` is excluded by the scripts on purpose — never bump it by hand.
 
 ## 3. Update the dependencies
 

@@ -194,10 +194,18 @@ pnpm build-pkg
 
 ### lint
 
-Lint the packages files.
+Lint the packages files: [oxlint](https://oxc.rs/docs/guide/usage/linter), [oxfmt](https://oxc.rs/docs/guide/usage/formatter) check, typecheck and syncpack.
 
 ```bash
 pnpm lint
+```
+
+### oxfmt
+
+Format the repository files with [oxfmt](https://oxc.rs/docs/guide/usage/formatter). For VS Code, install the recommended [oxc extension](https://marketplace.visualstudio.com/items?itemName=oxc.oxc-vscode) to format and fix on save.
+
+```bash
+pnpm oxfmt
 ```
 
 ### test

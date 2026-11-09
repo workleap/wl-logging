@@ -22,9 +22,8 @@ export class CompositeLoggerScope implements LoggerScope {
             this.#scopes.forEach(x => {
                 try {
                     x.withText(text, options);
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                } catch (error: unknown) {
-                // Do nothing...
+                } catch {
+                    // Do nothing...
                 }
             });
         }
@@ -40,9 +39,8 @@ export class CompositeLoggerScope implements LoggerScope {
             this.#scopes.forEach(x => {
                 try {
                     x.withError(error, options);
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                } catch (_error: unknown) {
-                // Do nothing...
+                } catch {
+                    // Do nothing...
                 }
             });
         }
@@ -58,9 +56,8 @@ export class CompositeLoggerScope implements LoggerScope {
             this.#scopes.forEach(x => {
                 try {
                     x.withObject(obj, options);
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                } catch (error: unknown) {
-                // Do nothing...
+                } catch {
+                    // Do nothing...
                 }
             });
         }
@@ -72,8 +69,7 @@ export class CompositeLoggerScope implements LoggerScope {
         this.#scopes.forEach(x => {
             try {
                 x.withLineChange();
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+            } catch {
                 // Do nothing...
             }
         });
@@ -89,8 +85,7 @@ export class CompositeLoggerScope implements LoggerScope {
         this.#scopes.forEach(x => {
             try {
                 x.debug(log, options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+            } catch {
                 // Do nothing...
             }
         });
@@ -104,8 +99,7 @@ export class CompositeLoggerScope implements LoggerScope {
         this.#scopes.forEach(x => {
             try {
                 x.information(log, options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+            } catch {
                 // Do nothing...
             }
         });
@@ -119,8 +113,7 @@ export class CompositeLoggerScope implements LoggerScope {
         this.#scopes.forEach(x => {
             try {
                 x.warning(log, options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+            } catch {
                 // Do nothing...
             }
         });
@@ -134,8 +127,7 @@ export class CompositeLoggerScope implements LoggerScope {
         this.#scopes.forEach(x => {
             try {
                 x.error(log, options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+            } catch {
                 // Do nothing...
             }
         });
@@ -149,8 +141,7 @@ export class CompositeLoggerScope implements LoggerScope {
         this.#scopes.forEach(x => {
             try {
                 x.critical(log, options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+            } catch {
                 // Do nothing...
             }
         });
@@ -163,8 +154,7 @@ export class CompositeLoggerScope implements LoggerScope {
         this.#scopes.forEach(x => {
             try {
                 x.end(options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+            } catch {
                 // Do nothing...
             }
         });
@@ -200,9 +190,8 @@ export class CompositeLogger implements RootLogger {
             this.#loggers.forEach(x => {
                 try {
                     x.withText(text, options);
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                } catch (error: unknown) {
-                // Do nothing...
+                } catch {
+                    // Do nothing...
                 }
             });
         }
@@ -218,9 +207,8 @@ export class CompositeLogger implements RootLogger {
             this.#loggers.forEach(x => {
                 try {
                     x.withError(error, options);
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                } catch (_error: unknown) {
-                // Do nothing...
+                } catch {
+                    // Do nothing...
                 }
             });
         }
@@ -236,9 +224,8 @@ export class CompositeLogger implements RootLogger {
             this.#loggers.forEach(x => {
                 try {
                     x.withObject(obj, options);
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                } catch (error: unknown) {
-                // Do nothing...
+                } catch {
+                    // Do nothing...
                 }
             });
         }
@@ -250,8 +237,7 @@ export class CompositeLogger implements RootLogger {
         this.#loggers.forEach(x => {
             try {
                 x.withLineChange();
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+            } catch {
                 // Do nothing...
             }
         });
@@ -267,8 +253,7 @@ export class CompositeLogger implements RootLogger {
         this.#loggers.forEach(x => {
             try {
                 x.debug(log, options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+            } catch {
                 // Do nothing...
             }
         });
@@ -282,8 +267,7 @@ export class CompositeLogger implements RootLogger {
         this.#loggers.forEach(x => {
             try {
                 x.information(log, options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+            } catch {
                 // Do nothing...
             }
         });
@@ -297,8 +281,7 @@ export class CompositeLogger implements RootLogger {
         this.#loggers.forEach(x => {
             try {
                 x.warning(log, options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+            } catch {
                 // Do nothing...
             }
         });
@@ -312,8 +295,7 @@ export class CompositeLogger implements RootLogger {
         this.#loggers.forEach(x => {
             try {
                 x.error(log, options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+            } catch {
                 // Do nothing...
             }
         });
@@ -327,8 +309,7 @@ export class CompositeLogger implements RootLogger {
         this.#loggers.forEach(x => {
             try {
                 x.critical(log, options);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error: unknown) {
+            } catch {
                 // Do nothing...
             }
         });

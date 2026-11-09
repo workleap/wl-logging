@@ -16,15 +16,14 @@ describe("CompositeLogger", () => {
         ["warning", "warn", [true, true, true, false, false]],
         ["error", "error", [true, true, true, true, false]],
         ["critical", "error", [true, true, true, true, true]]
-    ] satisfies [keyof CompositeLogger, keyof typeof console, boolean[]][]
-    )("can write a \"%s\" log", (loggerFunction, consoleFunction, expectedResults) => {
+    ] satisfies [keyof CompositeLogger, keyof typeof console, boolean[]][])('can write a "%s" log', (loggerFunction, consoleFunction, expectedResults) => {
         test.for([
             ["debug", LogLevel.debug],
             ["information", LogLevel.information],
             ["warning", LogLevel.warning],
             ["error", LogLevel.error],
             ["critical", LogLevel.critical]
-        ] satisfies [keyof CompositeLogger, LogLevel][])("when the log level is \"%s\"", ([, logLevel], { expect }) => {
+        ] satisfies [keyof CompositeLogger, LogLevel][])('when the log level is "%s"', ([, logLevel], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel }), new BrowserConsoleLogger({ logLevel })]);
@@ -39,12 +38,9 @@ describe("CompositeLogger", () => {
             }
 
             if (expectedResult) {
-                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(logMock).toHaveBeenCalledTimes(2);
-                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(logMock).toHaveBeenCalledWith(logValue);
             } else {
-                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(logMock).not.toHaveBeenCalled();
             }
         });
@@ -59,111 +55,65 @@ describe("CompositeLogger", () => {
             ["critical", "error"]
         ] satisfies [keyof CompositeLogger, keyof typeof console][];
 
-        test.for(pairs)("can build a \"%s\" log with text", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)('can build a "%s" log with text', ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel: LogLevel.debug }), new BrowserConsoleLogger({ logLevel: LogLevel.debug })]);
 
-            logger
-                .withText("Hello")
-                .withText("World")
-                // eslint-disable-next-line no-unexpected-multiline
-                [loggerFunction]();
+            logger.withText("Hello").withText("World")[loggerFunction]();
 
             expect(logMock).toHaveBeenCalledTimes(2);
             expect(logMock).toHaveBeenCalledWith("Hello World");
         });
 
-        test.for(pairs)("can build a \"%s\" log with object", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)('can build a "%s" log with object', ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel: LogLevel.debug }), new BrowserConsoleLogger({ logLevel: LogLevel.debug })]);
             const obj = { name: "John", age: 30 };
 
-            logger
-                .withText("User:")
-                .withObject(obj)
-                // eslint-disable-next-line no-unexpected-multiline
-                [loggerFunction]();
+            logger.withText("User:").withObject(obj)[loggerFunction]();
 
             expect(logMock).toHaveBeenCalledTimes(2);
-            expect(logMock).toHaveBeenCalledWith(
-                "User:",
-                obj
-            );
+            expect(logMock).toHaveBeenCalledWith("User:", obj);
         });
 
-        test.for(pairs)("can build a \"%s\" log with error", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)('can build a "%s" log with error', ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel: LogLevel.debug }), new BrowserConsoleLogger({ logLevel: LogLevel.debug })]);
             const error = new Error("Test error");
 
-            logger
-                .withText("Error occurred:")
-                .withError(error)
-                // eslint-disable-next-line no-unexpected-multiline
-                [loggerFunction]();
+            logger.withText("Error occurred:").withError(error)[loggerFunction]();
 
             expect(logMock).toHaveBeenCalledTimes(2);
-            expect(logMock).toHaveBeenCalledWith(
-                "Error occurred:",
-                error
-            );
+            expect(logMock).toHaveBeenCalledWith("Error occurred:", error);
         });
 
-        test.for(pairs)("can build a \"%s\" log with line changes", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)('can build a "%s" log with line changes', ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel: LogLevel.debug }), new BrowserConsoleLogger({ logLevel: LogLevel.debug })]);
             const obj = { name: "John", age: 30 };
             const error = new Error("Test error");
 
-            logger
-                .withText("Processing segment")
-                .withLineChange()
-                .withText("on multiple lines")
-                .withObject(obj)
-                .withLineChange()
-                .withText("failed with error")
-                .withError(error)
-                // eslint-disable-next-line no-unexpected-multiline
-                [loggerFunction]();
+            logger.withText("Processing segment").withLineChange().withText("on multiple lines").withObject(obj).withLineChange().withText("failed with error").withError(error)[loggerFunction]();
 
             expect(logMock).toHaveBeenCalledTimes(2);
-            expect(logMock).toHaveBeenCalledWith(
-                "Processing segment",
-                "\r\n",
-                "on multiple lines",
-                obj,
-                "\r\n",
-                "failed with error",
-                error
-            );
+            expect(logMock).toHaveBeenCalledWith("Processing segment", "\r\n", "on multiple lines", obj, "\r\n", "failed with error", error);
         });
 
-        test.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)('can build a "%s" log with mixed segments', ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel: LogLevel.debug }), new BrowserConsoleLogger({ logLevel: LogLevel.debug })]);
             const obj = { id: 1 };
             const error = new Error("Test error");
 
-            logger
-                .withText("Processing segment")
-                .withObject(obj)
-                .withText("failed with error")
-                .withError(error)
-                // eslint-disable-next-line no-unexpected-multiline
-                [loggerFunction]();
+            logger.withText("Processing segment").withObject(obj).withText("failed with error").withError(error)[loggerFunction]();
 
             expect(logMock).toHaveBeenCalledTimes(2);
-            expect(logMock).toHaveBeenCalledWith(
-                "Processing segment",
-                obj,
-                "failed with error",
-                error
-            );
+            expect(logMock).toHaveBeenCalledWith("Processing segment", obj, "failed with error", error);
         });
     });
 
@@ -176,22 +126,15 @@ describe("CompositeLogger", () => {
             ["critical", "error"]
         ] satisfies [keyof CompositeLogger, keyof typeof console][];
 
-        test.for(pairs)("can apply styling to text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)('can apply styling to text with a "%s" log', ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
 
             const logger = new CompositeLogger([new BrowserConsoleLogger({ logLevel: LogLevel.debug }), new BrowserConsoleLogger({ logLevel: LogLevel.debug })]);
 
-            logger
-                .withText("Styled text", { style: { color: "red", fontWeight: "bold" } })
-                // eslint-disable-next-line no-unexpected-multiline
-                [loggerFunction]();
+            logger.withText("Styled text", { style: { color: "red", fontWeight: "bold" } })[loggerFunction]();
 
             expect(logMock).toHaveBeenCalledTimes(2);
-            expect(logMock).toHaveBeenCalledWith(
-                "%cStyled text%c",
-                "color:red;font-weight:bold",
-                "%s"
-            );
+            expect(logMock).toHaveBeenCalledWith("%cStyled text%c", "color:red;font-weight:bold", "%s");
         });
     });
 
@@ -239,14 +182,14 @@ describe("CompositeLoggerScope", () => {
         ["warning", "warn", [true, true, true, false, false]],
         ["error", "error", [true, true, true, true, false]],
         ["critical", "error", [true, true, true, true, true]]
-    ] satisfies [keyof CompositeLoggerScope, keyof typeof console, boolean[]][])("can write a \"%s\" log", (loggerFunction, consoleFunction, expectedResults) => {
+    ] satisfies [keyof CompositeLoggerScope, keyof typeof console, boolean[]][])('can write a "%s" log', (loggerFunction, consoleFunction, expectedResults) => {
         test.for([
             ["debug", LogLevel.debug],
             ["information", LogLevel.information],
             ["warning", LogLevel.warning],
             ["error", LogLevel.error],
             ["critical", LogLevel.critical]
-        ] satisfies [keyof CompositeLoggerScope, LogLevel][])("when the log level is \"%s\"", ([, logLevel], { expect }) => {
+        ] satisfies [keyof CompositeLoggerScope, LogLevel][])('when the log level is "%s"', ([, logLevel], { expect }) => {
             const logMock = vi.spyOn(console, "log").mockImplementation(() => {});
 
             // This code is a bit stupid, it's only to mute the console if the console function is not "log" (which
@@ -271,18 +214,12 @@ describe("CompositeLoggerScope", () => {
             }
 
             if (expectedResult) {
-                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(logMock).toHaveBeenCalledTimes(2);
-                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(groupCollapsedMock).toHaveBeenCalledTimes(2);
-                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(groupEndMock).toHaveBeenCalledTimes(2);
             } else {
-                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(logMock).not.toHaveBeenCalled();
-                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(groupCollapsedMock).not.toHaveBeenCalled();
-                // eslint-disable-next-line vitest/no-conditional-expect
                 expect(groupEndMock).not.toHaveBeenCalled();
             }
         });
@@ -297,18 +234,14 @@ describe("CompositeLoggerScope", () => {
             ["critical", "error"]
         ] satisfies [keyof CompositeLoggerScope, keyof typeof console][];
 
-        test.for(pairs)("can build a \"%s\" log with text", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)('can build a "%s" log with text', ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
 
             const scope = new CompositeLoggerScope([new BrowserConsoleLoggerScope("foo", LogLevel.debug), new BrowserConsoleLoggerScope("foo", LogLevel.debug)]);
 
-            scope
-                .withText("Hello")
-                .withText("World")
-                // eslint-disable-next-line no-unexpected-multiline
-                [loggerFunction]();
+            scope.withText("Hello").withText("World")[loggerFunction]();
 
             scope.end();
 
@@ -319,7 +252,7 @@ describe("CompositeLoggerScope", () => {
             expect(logMock).toHaveBeenCalledWith("Hello World");
         });
 
-        test.for(pairs)("can build a \"%s\" log with object", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)('can build a "%s" log with object', ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -327,11 +260,7 @@ describe("CompositeLoggerScope", () => {
             const scope = new CompositeLoggerScope([new BrowserConsoleLoggerScope("foo", LogLevel.debug), new BrowserConsoleLoggerScope("foo", LogLevel.debug)]);
             const obj = { name: "John", age: 30 };
 
-            scope
-                .withText("User:")
-                .withObject(obj)
-                // eslint-disable-next-line no-unexpected-multiline
-                [loggerFunction]();
+            scope.withText("User:").withObject(obj)[loggerFunction]();
 
             scope.end();
 
@@ -339,13 +268,10 @@ describe("CompositeLoggerScope", () => {
             expect(logMock).toHaveBeenCalledTimes(2);
             expect(groupEndMock).toHaveBeenCalledTimes(2);
 
-            expect(logMock).toHaveBeenCalledWith(
-                "User:",
-                obj
-            );
+            expect(logMock).toHaveBeenCalledWith("User:", obj);
         });
 
-        test.for(pairs)("can build a \"%s\" log with error", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)('can build a "%s" log with error', ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -353,11 +279,7 @@ describe("CompositeLoggerScope", () => {
             const scope = new CompositeLoggerScope([new BrowserConsoleLoggerScope("foo", LogLevel.debug), new BrowserConsoleLoggerScope("foo", LogLevel.debug)]);
             const error = new Error("Test error");
 
-            scope
-                .withText("Error occurred:")
-                .withError(error)
-                // eslint-disable-next-line no-unexpected-multiline
-                [loggerFunction]();
+            scope.withText("Error occurred:").withError(error)[loggerFunction]();
 
             scope.end();
 
@@ -365,13 +287,10 @@ describe("CompositeLoggerScope", () => {
             expect(logMock).toHaveBeenCalledTimes(2);
             expect(groupEndMock).toHaveBeenCalledTimes(2);
 
-            expect(logMock).toHaveBeenCalledWith(
-                "Error occurred:",
-                error
-            );
+            expect(logMock).toHaveBeenCalledWith("Error occurred:", error);
         });
 
-        test.for(pairs)("can build a \"%s\" log with line changes", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)('can build a "%s" log with line changes', ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -380,16 +299,7 @@ describe("CompositeLoggerScope", () => {
             const obj = { name: "John", age: 30 };
             const error = new Error("Test error");
 
-            scope
-                .withText("Processing segment")
-                .withLineChange()
-                .withText("on multiple lines")
-                .withObject(obj)
-                .withLineChange()
-                .withText("failed with error")
-                .withError(error)
-                // eslint-disable-next-line no-unexpected-multiline
-                [loggerFunction]();
+            scope.withText("Processing segment").withLineChange().withText("on multiple lines").withObject(obj).withLineChange().withText("failed with error").withError(error)[loggerFunction]();
 
             scope.end();
 
@@ -397,18 +307,10 @@ describe("CompositeLoggerScope", () => {
             expect(logMock).toHaveBeenCalledTimes(2);
             expect(groupEndMock).toHaveBeenCalledTimes(2);
 
-            expect(logMock).toHaveBeenCalledWith(
-                "Processing segment",
-                "\r\n",
-                "on multiple lines",
-                obj,
-                "\r\n",
-                "failed with error",
-                error
-            );
+            expect(logMock).toHaveBeenCalledWith("Processing segment", "\r\n", "on multiple lines", obj, "\r\n", "failed with error", error);
         });
 
-        test.for(pairs)("can build a \"%s\" log with mixed segments", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)('can build a "%s" log with mixed segments', ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -417,13 +319,7 @@ describe("CompositeLoggerScope", () => {
             const obj = { id: 1 };
             const error = new Error("Test error");
 
-            scope
-                .withText("Processing segment")
-                .withObject(obj)
-                .withText("failed with error")
-                .withError(error)
-                // eslint-disable-next-line no-unexpected-multiline
-                [loggerFunction]();
+            scope.withText("Processing segment").withObject(obj).withText("failed with error").withError(error)[loggerFunction]();
 
             scope.end();
 
@@ -431,12 +327,7 @@ describe("CompositeLoggerScope", () => {
             expect(logMock).toHaveBeenCalledTimes(2);
             expect(groupEndMock).toHaveBeenCalledTimes(2);
 
-            expect(logMock).toHaveBeenCalledWith(
-                "Processing segment",
-                obj,
-                "failed with error",
-                error
-            );
+            expect(logMock).toHaveBeenCalledWith("Processing segment", obj, "failed with error", error);
         });
     });
 
@@ -449,7 +340,7 @@ describe("CompositeLoggerScope", () => {
             ["critical", "error"]
         ] satisfies [keyof CompositeLoggerScope, keyof typeof console][];
 
-        test.for(pairs)("can apply styling to text with a \"%s\" log", ([loggerFunction, consoleFunction], { expect }) => {
+        test.for(pairs)('can apply styling to text with a "%s" log', ([loggerFunction, consoleFunction], { expect }) => {
             const logMock = vi.spyOn(console, consoleFunction).mockImplementation(() => {});
             const groupCollapsedMock = vi.spyOn(console, "groupCollapsed").mockImplementation(() => {});
             const groupEndMock = vi.spyOn(console, "groupEnd").mockImplementation(() => {});
@@ -463,11 +354,7 @@ describe("CompositeLoggerScope", () => {
             expect(logMock).toHaveBeenCalledTimes(2);
             expect(groupEndMock).toHaveBeenCalledTimes(2);
 
-            expect(logMock).toHaveBeenCalledWith(
-                "%cStyled text%c",
-                "color:red;font-weight:bold",
-                "%s"
-            );
+            expect(logMock).toHaveBeenCalledWith("%cStyled text%c", "color:red;font-weight:bold", "%s");
         });
     });
 
@@ -488,4 +375,3 @@ describe("CompositeLoggerScope", () => {
         });
     });
 });
-
