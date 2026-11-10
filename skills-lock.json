@@ -1,40 +1,35 @@
 {
   "version": 1,
   "skills": {
-    "agent-browser": {
-      "source": "vercel-labs/agent-browser",
-      "sourceType": "github",
-      "computedHash": "22c1bb2afb139e85aeaaa4e1435a40e3ebd44764a517ec225eec7489bd1910d0"
-    },
     "git-commit": {
       "source": "github/awesome-copilot",
       "sourceType": "github",
-      "computedHash": "2607fc60629b82b257136dd2a7a373f0a4466c0b49df7746d845d59313c99b21"
+      "skillPath": "skills/git-commit/SKILL.md",
+      "computedHash": "8f5a47c99951ec09853abf3231c76f48caac5d6b84ea912dd4997e6996885c0b"
     },
     "pnpm": {
       "source": "antfu/skills",
       "sourceType": "github",
-      "computedHash": "d473204df25defd08a7d47b55c6d124b41ebde440b774995952b65223d0d8d6f"
+      "skillPath": "skills/pnpm/SKILL.md",
+      "computedHash": "be0763bac8890e99e0eebbecedd90ebad6c3baf1ee5ab002f902da99834791c6"
     },
     "turborepo": {
       "source": "vercel/turborepo",
       "sourceType": "github",
-      "computedHash": "05f8c9c6a5e8574cc64981eb77041a3b25d16ead0985d384b6e20d3556ddbd88"
+      "skillPath": "skills/turborepo/SKILL.md",
+      "computedHash": "9681d8dfeb5e6cdff767f1bcaba5d7ac55732a9d6c02ee120f44229f8ec25e7e"
     },
     "vitest": {
       "source": "antfu/skills",
       "sourceType": "github",
-      "computedHash": "0efd9cf8c56aada060d418d009cfe621a7915d0c73a958fe611985bc0c2fa4b8"
+      "skillPath": "skills/vitest/SKILL.md",
+      "computedHash": "b26b7f8d10e860e944e0334c003207771707c4906514cb96c971faae13fba875"
     },
     "workleap-react-best-practices": {
       "source": "workleap/wl-web-configs",
       "sourceType": "github",
-      "computedHash": "f3849c705dd508216673f24efeff9ef25add517ed6a16743675ad53c09f3aba4"
-    },
-    "workleap-web-configs": {
-      "source": "workleap/wl-web-configs",
-      "sourceType": "github",
-      "computedHash": "52ca9da414b4136618c6d54cdea15167959e57e59bf6758fa5712fc2b10fdbca"
+      "skillPath": "agent-skills/workleap-react-best-practices/SKILL.md",
+      "computedHash": "9f42af7a0842f7174c9357e688b12fc02516bbd9f440f87496a195ab78cab536"
     }
   }
 }

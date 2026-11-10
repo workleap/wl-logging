@@ -2,8 +2,8 @@ import { defineConfig } from "oxfmt";
 
 // Adapted from workleap/wl-app's oxfmt.config.ts.
 export default defineConfig({
-    // Prose and YAML are left alone: reflowing them is churn. `.claude/` and `.agents/` hold vendored skills.
-    ignorePatterns: ["**/*.md", "**/*.yml", "**/*.yaml", ".claude/", ".agents/", "agent-skills/", "skills-lock.json"],
+    // Prose and YAML are left alone: reflowing them is churn. `.claude/` holds vendored skills.
+    ignorePatterns: ["**/*.md", "**/*.yml", "**/*.yaml", ".claude/", "agent-skills/", "skills-lock.json"],
     printWidth: 300,
     tabWidth: 4,
     singleQuote: false,

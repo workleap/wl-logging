@@ -86,7 +86,7 @@ All tests must pass. If a test fails, run the failing package's tests directly (
 
 ### Step 2c: Validate the "web" sample app
 
-Use `agent-browser` for all browser interactions in this step. It is installed as a workspace devDependency. Read the locally installed agent skill at `.agents/skills/agent-browser/` to learn the available commands. Running a build is NOT sufficient — you must start the dev server and validate in a real browser.
+Use `agent-browser` for all browser interactions in this step. It is installed as a workspace devDependency. Read the locally installed agent skill at `.claude/skills/agent-browser/` (linked there by `pnpm install`) to learn the available commands. Running a build is NOT sufficient — you must start the dev server and validate in a real browser.
 
 **Important**: Use `agent-browser snapshot` (not `screenshot`) for content verification. Snapshots capture the accessibility tree as text — they are faster, more reliable, and produce structured output that is easy to assert against. Screenshots are pixel-based images and should NOT be used for validation.
 

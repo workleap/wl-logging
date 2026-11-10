@@ -18,7 +18,7 @@ You are an automated code reviewer for this repository. Analyze the PR diff for 
 
 ## Agent skills
 
-When performing code reviews, load and use agent skills from `.agents/skills/`. Apply the skill mapping defined in [agent-skills.md](../../agent-docs/docs/references/agent-skills.md) (both "By file type" and "By import" tables) to the changed lines in the PR diff.
+When performing code reviews, load the agent skills in `.claude/skills/` whose description matches the changed files or their imports, and apply them to the changed lines in the PR diff. Skip the `_`-prefixed skills: they are repository maintenance workflows, not review guidance. The skills that dependencies ship through pnpm (listed in `.claude/skills/.gitignore`) are not installed in this job, so they are not available here.
 
 ## Issues reporting
 

@@ -13,21 +13,21 @@ Re-pull every `pnpx skills add` installed skill in this repo, but only when the 
 
 ## Skills
 
-Installed skills live in `.agents/skills/` and are tracked in `skills-lock.json`; the rows marked `.claude` also have a copy in `.claude/skills/`. The `-a` flags reproduce that layout — `codex` targets `.agents/skills/`, `claude-code` adds the `.claude/skills/` copy. Never omit `-a` or `--copy`: the defaults symlink into `.claude/skills/` and change the layout.
+Installed skills live in `.claude/skills/` only and are tracked in `skills-lock.json`. Never omit `-a claude-code` or `--copy`: without them the CLI writes a canonical copy to `.agents/skills/` and symlinks it into `.claude/skills/`.
+
+Skills that a dependency ships for pnpm (approved under `permissions` in `pnpm-workspace.yaml`, such as `agent-browser` and the `workleap-*-config(s)` skills) are linked into `.claude/skills/` by `pnpm install` and listed in the `# pnpm` block of `.claude/skills/.gitignore`. They are out of scope: never install them with the skills CLI.
 
 `agent-skills/workleap-logging` is this repo's own published skill, not an install — it's out of scope.
 
 Only `workleap-*` skills use `--full-depth`. The CLI version is pinned because the `-a` / `--copy` layout was verified on it — re-verify before bumping.
 
-| Skill | Copies | Package gate (grep all `package.json`) | Update command |
-|---|---|---|---|
-| `agent-browser` | `.agents` | `agent-browser` | `pnpx skills@1.7.4 add https://github.com/vercel-labs/agent-browser --skill agent-browser -a codex --copy -y` |
-| `git-commit` | `.agents` | — | `pnpx skills@1.7.4 add https://github.com/github/awesome-copilot --skill git-commit -a codex --copy -y` |
-| `pnpm` | `.agents` | root `packageManager` field (`pnpm@<version>`) — `update-outdated-deps` never bumps it, so this skips until pnpm is upgraded by hand | `pnpx skills@1.7.4 add https://github.com/antfu/skills --skill pnpm -a codex --copy -y` |
-| `turborepo` | `.agents` | `turbo` | `pnpx skills@1.7.4 add https://github.com/vercel/turborepo --skill turborepo -a codex --copy -y` |
-| `vitest` | `.agents`, `.claude` | `vitest` | `pnpx skills@1.7.4 add https://github.com/antfu/skills --skill vitest -a codex claude-code --copy -y` |
-| `workleap-react-best-practices` | `.agents` | — | `pnpx skills@1.7.4 add https://github.com/workleap/wl-web-configs --skill workleap-react-best-practices -a codex --full-depth --copy -y` |
-| `workleap-web-configs` | `.agents`, `.claude` | every `@workleap/*-config` / `@workleap/*-configs` present (discover via grep, don't hard-code) | `pnpx skills@1.7.4 add https://github.com/workleap/wl-web-configs --skill workleap-web-configs -a codex claude-code --full-depth --copy -y` |
+| Skill | Package gate (grep all `package.json`) | Update command |
+|---|---|---|
+| `git-commit` | — | `pnpx skills@1.7.4 add https://github.com/github/awesome-copilot --skill git-commit -a claude-code --copy -y` |
+| `pnpm` | root `packageManager` field (`pnpm@<version>`) — `update-outdated-deps` never bumps it, so this skips until pnpm is upgraded by hand | `pnpx skills@1.7.4 add https://github.com/antfu/skills --skill pnpm -a claude-code --copy -y` |
+| `turborepo` | `turbo` | `pnpx skills@1.7.4 add https://github.com/vercel/turborepo --skill turborepo -a claude-code --copy -y` |
+| `vitest` | `vitest` | `pnpx skills@1.7.4 add https://github.com/antfu/skills --skill vitest -a claude-code --copy -y` |
+| `workleap-react-best-practices` | — | `pnpx skills@1.7.4 add https://github.com/workleap/wl-web-configs --skill workleap-react-best-practices -a claude-code --full-depth --copy -y` |
 
 ## Process
 
@@ -35,8 +35,9 @@ Only `workleap-*` skills use `--full-depth`. The CLI version is pinned because t
 
 Collect three sets and compare them to the table:
 
-- `skills-lock.json` keys and `.agents/skills/` folders -> must both equal the `Skill` column.
-- `.claude/skills/` folders, minus `_`-prefixed ones (project-local skills, not installs) -> must equal the rows whose `Copies` include `.claude`.
+- `skills-lock.json` keys -> must equal the `Skill` column.
+- `.claude/skills/` folders, minus `_`-prefixed ones (project-local skills, not installs) and the ones listed in the `# pnpm` block of `.claude/skills/.gitignore` (package skills) -> must equal the `Skill` column.
+- `.agents/skills/` -> must not exist.
 
 On any mismatch -> **stop**. Print each offender:
 
@@ -64,7 +65,7 @@ Print before running anything. Use `UPDATE` or `SKIP` (gated package lagging).
 ```
 skill                          | status  | details
 turborepo                      | UPDATE  | turbo 2.11.9 vs latest 2.11.12 (minor matches)
-workleap-web-configs           | SKIP    | @workleap/rsbuild-configs lagging: 5.0.0 vs latest 5.1.0
+vitest                         | SKIP    | vitest lagging: 5.0.5 vs latest 5.1.0
 git-commit                     | UPDATE  | no gate
 ...
 ```
@@ -79,7 +80,7 @@ After each pull, grep the skill's new `SKILL.md` frontmatter for `model:`. An up
 
 ### 6. Report
 
-- Skills updated (count + list) — note which ones actually changed files (`git status --short .agents .claude skills-lock.json`)
+- Skills updated (count + list) — note which ones actually changed files (`git status --short .claude skills-lock.json`)
 - Skills skipped (with the lagging package: installed vs latest)
 - Skills whose pulled `SKILL.md` declares `model:` frontmatter
 - Any `pnpx skills add` failures (full error)
