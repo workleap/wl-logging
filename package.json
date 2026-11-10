@@ -24,9 +24,9 @@
         "changeset": "changeset",
         "publish-pkg": "changeset publish",
         "publish-pr-pkg": "pkg-pr-new publish ./packages/* --packageManager=pnpm --pnpm",
-        "clean": "pnpm -r --parallel --include-workspace-root exec pnpm dlx rimraf dist .turbo .rslib node_modules/.cache",
+        "clean": "pnpm -r --parallel --include-workspace-root exec node -e \"for (const path of ['dist', '.turbo', '.rslib', 'node_modules/.cache']) require('node:fs').rmSync(path, { recursive: true, force: true })\"",
         "reset": "pnpm clean && pnpm reset:modules",
-        "reset:modules": "pnpm -r --parallel --include-workspace-root exec pnpm dlx rimraf node_modules pnpm-lock.yaml",
+        "reset:modules": "pnpm pm clean --lockfile --yes",
         "list-outdated-deps": "pnpm outdated -r --format list",
         "update-outdated-deps": "pnpm run --sequential \"/^update-outdated-deps:.*/\"",
         "update-outdated-deps:update-version": "pnpm update -r --latest",
@@ -50,7 +50,7 @@
     },
     "engines": {
         "node": ">=26.0.0",
-        "pnpm": ">=12"
+        "pnpm": ">=12.18.0"
     },
     "packageManager": "pnpm@12.18.0+sha512.9d7882d5dc82147ecfc4e062aa34834e0ad0296710a1837a1115ae012127d36b7109e321ac1598a1dd0a65597681b1e99917e12ed0d749eae91187943363beb3"
 }

@@ -91,6 +91,14 @@ The output should include a line like `//package-firewall.githubapp.com/npm/ente
 > [!NOTE]
 > If an install fails with a `401` error from `package-firewall.githubapp.com`, the token is missing, expired, or not authorized for your Workleap organizations. Check the organization access of the GitHub CLI app at https://github.com/settings/applications, then run `gh auth login` again and replace the `_authToken` line in `~/.npmrc` with a new token.
 
+#### Keep the installs on the firewall
+
+The firewall serves the npm package metadata, but the tarball URLs in that metadata still point to `registry.npmjs.org`. On its own, pnpm would download new packages from npmjs and write those URLs into `pnpm-lock.yaml`, so every later install would also download them from npmjs, bypassing the firewall. The [.pnpmfile.cjs](./.pnpmfile.cjs) file prevents both: it downloads the npmjs tarballs from the firewall instead, and removes their URLs from the lockfile.
+
+- Never run pnpm with `--ignore-pnpmfile`, and run one-off CLIs with `npx` rather than `pnpm dlx` or `pnpx`: both skip the pnpmfile. npm downloads through the firewall on its own.
+- The [CI](./.github/workflows/ci.yml) workflow fails if `pnpm-lock.yaml` contains a tarball URL. Run `pnpm install` to remove it and commit the lockfile.
+- The lockfile records a checksum of `.pnpmfile.cjs`. After editing or deleting the file, run `pnpm install` and commit the lockfile with the change, otherwise frozen installs fail with `ERR_PNPM_LOCKFILE_CONFIG_MISMATCH`. Branches opened before the change must merge `main` and run `pnpm install`.
+
 ### Install the dependencies
 
 To install the project, open a terminal at the root of the workspace and execute the following command:

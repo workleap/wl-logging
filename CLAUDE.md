@@ -2,6 +2,11 @@
 
 `@workleap/logging` — logging utilities for Workleap web applications. See [CONTRIBUTING.md](./CONTRIBUTING.md) for commands and workflows.
 
+## Package firewall
+
+- npm dependencies install through the GitHub package firewall configured in `.npmrc`. Never remove `.pnpmfile.cjs`: it keeps the downloads, and the tarball URLs in `pnpm-lock.yaml`, off `registry.npmjs.org`. After editing it, run `pnpm install` and commit the lockfile (it records the file's checksum).
+- Never use `--ignore-pnpmfile`, `pnpm dlx` or `pnpx`, which skip the pnpmfile; run one-off CLIs with `npx`.
+
 ## Agent skills
 
 - `agent-skills/workleap-logging/` is the only source of the published skill. Consumers install it from GitHub with `skills.sh`, and `@workleap/logging` ships it for pnpm: the package's `prepack` script copies it to `packages/logging/skills/`, which is gitignored and removed by `postpack`. Never commit a copy, since `skills.sh` could then discover two `workleap-logging` skills.
