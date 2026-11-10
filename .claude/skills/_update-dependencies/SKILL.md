@@ -30,7 +30,7 @@ Headless (CI) or briefed by a caller not to prompt -> skip this step; treat it a
 pnpm list-outdated-deps
 ```
 
-Report the outdated packages and any peer-version mismatches before changing anything. `typescript` is excluded by the scripts on purpose — never bump it by hand.
+Report the outdated packages and any peer-version mismatches before changing anything.
 
 ## 3. Update the dependencies
 
