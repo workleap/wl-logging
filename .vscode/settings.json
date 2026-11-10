@@ -22,7 +22,6 @@
 
     // Languages
     "js/ts.preferences.useAliasesForRenames": false,
-    "js/ts.tsdk.path": "node_modules\\typescript\\lib",
 
     "css.validate": false,
 
