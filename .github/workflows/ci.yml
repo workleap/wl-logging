@@ -40,11 +40,18 @@ jobs:
             cache-dependency-path: pnpm-lock.yaml
 
       - name: Authenticate to the GitHub package firewall
-        # The repository .npmrc routes installs through the firewall, but pnpm ignores auth tokens
-        # set in a repository .npmrc, so the job token is written to the user-level ~/.npmrc.
+        # The repository .npmrc routes installs through the firewall. The job token is written to the
+        # user-level ~/.npmrc because pnpm doesn't expand environment variables in a repository .npmrc.
         env:
           FIREWALL_TOKEN: ${{ github.token }}
         run: echo "//package-firewall.githubapp.com/npm/enterprises/gsoft/:_authToken=${FIREWALL_TOKEN}" >> ~/.npmrc
+
+      - name: Check that the lockfile downloads through the package firewall
+        run: |
+            if grep -q "tarball: https://registry.npmjs.org/" pnpm-lock.yaml; then
+                echo "::error file=pnpm-lock.yaml::pnpm-lock.yaml contains registry.npmjs.org tarball URLs, which bypass the GitHub package firewall. Run \"pnpm strip-lockfile-tarballs\" and commit the result."
+                exit 1
+            fi
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

@@ -45,7 +45,7 @@ You'll find four samples:
 
 ## Installation
 
-This project uses PNPM workspace, therefore, you must [install PNPM](https://pnpm.io/installation):
+This project uses PNPM workspace, therefore, you must [install PNPM](https://pnpm.io/installation).
 
 ### Setup the GitHub package firewall
 
@@ -59,16 +59,16 @@ gh auth login
 
 On the browser authorization page, under **Organization access**, click **Authorize** next to your Workleap organizations (e.g. `workleap`). `gsoft` is the enterprise slug, so it won't be listed. If there's no **Authorize** button, the GitHub CLI is already authorized.
 
-Then, add the token to your **user-level** `.npmrc` file (`~/.npmrc`):
+Then, add the token to your **user-level** `.npmrc` file (`~/.npmrc`). The commands start with a newline in case the file doesn't end with one:
 
 ```powershell
 # PowerShell
-Add-Content -Encoding ascii "$HOME\.npmrc" "//package-firewall.githubapp.com/npm/enterprises/gsoft/:_authToken=$(gh auth token)"
+Add-Content -Encoding ascii "$HOME\.npmrc" "`n//package-firewall.githubapp.com/npm/enterprises/gsoft/:_authToken=$(gh auth token)"
 ```
 
 ```bash
 # bash / zsh
-echo "//package-firewall.githubapp.com/npm/enterprises/gsoft/:_authToken=$(gh auth token)" >> ~/.npmrc
+printf '\n//package-firewall.githubapp.com/npm/enterprises/gsoft/:_authToken=%s\n' "$(gh auth token)" >> ~/.npmrc
 ```
 
 Finally, verify that the token was added to your `~/.npmrc` file:
@@ -83,10 +83,10 @@ Get-Content "$HOME\.npmrc"
 cat ~/.npmrc
 ```
 
-The output should include a line like `//package-firewall.githubapp.com/npm/enterprises/gsoft/:_authToken=gho_...`, and only one such line. If there's more than one, delete the older ones.
+The output should include a line like `//package-firewall.githubapp.com/npm/enterprises/gsoft/:_authToken=gho_...` (the token prefix depends on how you signed in with the GitHub CLI), and only one such line. If there's more than one, delete the older ones.
 
 > [!IMPORTANT]
-> Never add the token to the repository `.npmrc` file: it would be committed, and pnpm ignores auth tokens set in a repository `.npmrc` file anyway.
+> Never add the token to the repository `.npmrc` file: it would be committed to a public repository. pnpm doesn't expand environment variables (like `${GITHUB_TOKEN}`) in a repository `.npmrc` file either, which is why the token goes in the user-level `~/.npmrc` file.
 
 > [!NOTE]
 > If an install fails with a `401` error from `package-firewall.githubapp.com`, the token is missing, expired, or not authorized for your Workleap organizations. Check the organization access of the GitHub CLI app at https://github.com/settings/applications, then run `gh auth login` again and replace the `_authToken` line in `~/.npmrc` with a new token.
@@ -300,6 +300,14 @@ Updated outdated dependencies to their latest version. For more information, vie
 
 ```bash
 pnpm update-outdated-deps
+```
+
+### strip-lockfile-tarballs
+
+When pnpm resolves packages through the GitHub package firewall, it writes `registry.npmjs.org` tarball URLs into `pnpm-lock.yaml`, and installs then download those packages directly from npm instead of through the firewall. Run this command after any command that changes `pnpm-lock.yaml` (`pnpm add`, `pnpm update`, `pnpm update-outdated-deps`, `pnpm reset` followed by `pnpm install`, etc.) to remove them. CI fails if `pnpm-lock.yaml` contains any.
+
+```bash
+pnpm strip-lockfile-tarballs
 ```
 
 With Claude Code, run `/update-third-parties` instead to update the npm dependencies, the installed agent skills, and the GitHub Actions together (or any subset).
