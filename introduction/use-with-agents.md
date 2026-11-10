@@ -24,7 +24,7 @@ For more information, refer to pnpm [agent skills](https://pnpm.io/agent-skills)
 If the skill was previously installed with `skills.sh`, remove it to avoid having it installed twice:
 
 ```bash
-pnpx skills remove workleap-logging
+pnpm dlx skills@latest remove workleap-logging
 ```
 !!!
 
@@ -33,13 +33,15 @@ pnpx skills remove workleap-logging
 If your project doesn't use pnpm, or uses a version older than `pnpm@12.11`, open a terminal and install the `workleap-logging` agent skill by running the following command:
 
 ```bash
-pnpx skills add https://github.com/workleap/wl-logging --skill workleap-logging
+pnpm dlx skills@latest add https://github.com/workleap/wl-logging --skill workleap-logging
 ```
+
+The command pins `skills@latest` so that pnpm downloads a version of the CLI that your registry serves. A bare `skills` can ask for a newer release that a registry such as a package firewall still holds back, and the install then fails.
 
 If the CLI doesn't find the skill, add the `--full-depth` option:
 
 ```bash
-pnpx skills add https://github.com/workleap/wl-logging --skill workleap-logging --full-depth
+pnpm dlx skills@latest add https://github.com/workleap/wl-logging --skill workleap-logging --full-depth
 ```
 
 !!!tip
