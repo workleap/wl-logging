@@ -45,7 +45,7 @@
         "pkg-pr-new": "0.0.91",
         "retypeapp": "4.6.0",
         "syncpack": "15.3.3",
-        "turbo": "2.11.9",
+        "turbo": "2.11.10",
         "typescript": "7.0.2"
     },
     "engines": {
