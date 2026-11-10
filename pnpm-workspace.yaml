@@ -31,3 +31,9 @@ permissions:
     skills: true
   agent-browser:
     skills: true
+
+# Link approved package skills into .claude/skills only, even when another .<agent>/skills dir exists
+# (pnpm's default links into every existing one).
+skills:
+  dirs:
+    - .claude/skills

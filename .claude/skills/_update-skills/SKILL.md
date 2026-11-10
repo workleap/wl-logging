@@ -13,7 +13,7 @@ Re-pull every `pnpx skills add` installed skill in this repo, but only when the 
 
 ## Skills
 
-Installed skills live in `.claude/skills/` only and are tracked in `skills-lock.json`. Never omit `-a claude-code` or `--copy`: without them the CLI writes a canonical copy to `.agents/skills/` and symlinks it into `.claude/skills/`. pnpm would then also link package skills into `.agents/skills/`.
+Installed skills live in `.claude/skills/` only and are tracked in `skills-lock.json`. Never omit `-a claude-code` or `--copy`: without them the CLI writes a canonical copy to `.agents/skills/` and symlinks it into `.claude/skills/`.
 
 Skills that a dependency ships for pnpm (approved under `permissions` in `pnpm-workspace.yaml`, such as `agent-browser` and the `workleap-*-config(s)` skills) are linked into `.claude/skills/` by `pnpm install` and listed in the `# pnpm` block of `.claude/skills/.gitignore`. They are out of scope: never install them with the skills CLI.
 
