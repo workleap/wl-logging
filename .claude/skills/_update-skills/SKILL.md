@@ -9,7 +9,7 @@ metadata:
 
 # Update Skills
 
-Re-pull every `npx skills add` installed skill in this repo, but only when the matching package in `package.json` is on the latest `major.minor`. Print the eligibility table before running anything; on lag, skip + warn (never auto-bump deps).
+Re-pull every `pnpx skills add` installed skill in this repo, but only when the matching package in `package.json` is on the latest `major.minor`. Print the eligibility table before running anything; on lag, skip + warn (never auto-bump deps).
 
 ## Skills
 
@@ -17,17 +17,17 @@ Installed skills live in `.agents/skills/` and are tracked in `skills-lock.json`
 
 `agent-skills/workleap-logging` is this repo's own published skill, not an install — it's out of scope.
 
-Only `workleap-*` skills use `--full-depth`. The CLI version is pinned because the `-a` / `--copy` layout was verified on it — re-verify before bumping. Run it with `npx`, never `pnpx`: `pnpm dlx` ignores `.pnpmfile.cjs` and downloads from registry.npmjs.org, bypassing the GitHub package firewall, while npm downloads through the firewall configured in `.npmrc`.
+Only `workleap-*` skills use `--full-depth`. The CLI version is pinned because the `-a` / `--copy` layout was verified on it — re-verify before bumping.
 
 | Skill | Copies | Package gate (grep all `package.json`) | Update command |
 |---|---|---|---|
-| `agent-browser` | `.agents` | `agent-browser` | `npx -y skills@1.7.4 add https://github.com/vercel-labs/agent-browser --skill agent-browser -a codex --copy -y` |
-| `git-commit` | `.agents` | — | `npx -y skills@1.7.4 add https://github.com/github/awesome-copilot --skill git-commit -a codex --copy -y` |
-| `pnpm` | `.agents` | root `packageManager` field (`pnpm@<version>`) — `update-outdated-deps` never bumps it, so this skips until pnpm is upgraded by hand | `npx -y skills@1.7.4 add https://github.com/antfu/skills --skill pnpm -a codex --copy -y` |
-| `turborepo` | `.agents` | `turbo` | `npx -y skills@1.7.4 add https://github.com/vercel/turborepo --skill turborepo -a codex --copy -y` |
-| `vitest` | `.agents`, `.claude` | `vitest` | `npx -y skills@1.7.4 add https://github.com/antfu/skills --skill vitest -a codex claude-code --copy -y` |
-| `workleap-react-best-practices` | `.agents` | — | `npx -y skills@1.7.4 add https://github.com/workleap/wl-web-configs --skill workleap-react-best-practices -a codex --full-depth --copy -y` |
-| `workleap-web-configs` | `.agents`, `.claude` | every `@workleap/*-config` / `@workleap/*-configs` present (discover via grep, don't hard-code) | `npx -y skills@1.7.4 add https://github.com/workleap/wl-web-configs --skill workleap-web-configs -a codex claude-code --full-depth --copy -y` |
+| `agent-browser` | `.agents` | `agent-browser` | `pnpx skills@1.7.4 add https://github.com/vercel-labs/agent-browser --skill agent-browser -a codex --copy -y` |
+| `git-commit` | `.agents` | — | `pnpx skills@1.7.4 add https://github.com/github/awesome-copilot --skill git-commit -a codex --copy -y` |
+| `pnpm` | `.agents` | root `packageManager` field (`pnpm@<version>`) — `update-outdated-deps` never bumps it, so this skips until pnpm is upgraded by hand | `pnpx skills@1.7.4 add https://github.com/antfu/skills --skill pnpm -a codex --copy -y` |
+| `turborepo` | `.agents` | `turbo` | `pnpx skills@1.7.4 add https://github.com/vercel/turborepo --skill turborepo -a codex --copy -y` |
+| `vitest` | `.agents`, `.claude` | `vitest` | `pnpx skills@1.7.4 add https://github.com/antfu/skills --skill vitest -a codex claude-code --copy -y` |
+| `workleap-react-best-practices` | `.agents` | — | `pnpx skills@1.7.4 add https://github.com/workleap/wl-web-configs --skill workleap-react-best-practices -a codex --full-depth --copy -y` |
+| `workleap-web-configs` | `.agents`, `.claude` | every `@workleap/*-config` / `@workleap/*-configs` present (discover via grep, don't hard-code) | `pnpx skills@1.7.4 add https://github.com/workleap/wl-web-configs --skill workleap-web-configs -a codex claude-code --full-depth --copy -y` |
 
 ## Process
 
@@ -82,4 +82,4 @@ After each pull, grep the skill's new `SKILL.md` frontmatter for `model:`. An up
 - Skills updated (count + list) — note which ones actually changed files (`git status --short .agents .claude skills-lock.json`)
 - Skills skipped (with the lagging package: installed vs latest)
 - Skills whose pulled `SKILL.md` declares `model:` frontmatter
-- Any `npx skills add` failures (full error)
+- Any `pnpx skills add` failures (full error)

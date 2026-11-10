@@ -4,8 +4,9 @@
 
 ## Package firewall
 
-- npm dependencies install through the GitHub package firewall configured in `.npmrc`. Never remove `.pnpmfile.cjs`: it keeps the downloads, and the tarball URLs in `pnpm-lock.yaml`, off `registry.npmjs.org`. After editing it, run `pnpm install` and commit the lockfile (it records the file's checksum).
-- Never use `--ignore-pnpmfile`, `pnpm dlx` or `pnpx`, which skip the pnpmfile; run one-off CLIs with `npx`.
+- npm dependencies install through the GitHub package firewall configured in `.npmrc`. Never remove `.pnpmfile.cjs` or the `globalPnpmfile` setting in `pnpm-workspace.yaml` (which covers `pnpm dlx` / `pnpx`): they keep the downloads, and the tarball URLs in `pnpm-lock.yaml`, off `registry.npmjs.org`.
+- After editing the pnpmfile, or when CI reports tarball URLs in the lockfile, run `pnpm install --fix-lockfile` and commit the lockfile. A plain `pnpm install` skips the pnpmfile hooks when the lockfile is up to date, and the lockfile checksum doesn't track the pnpmfile (pnpm excludes a global pnpmfile from it).
+- Never use `--ignore-pnpmfile`.
 
 ## Agent skills
 

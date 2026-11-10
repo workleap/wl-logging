@@ -93,11 +93,11 @@ The output should include a line like `//package-firewall.githubapp.com/npm/ente
 
 #### Keep the installs on the firewall
 
-The firewall serves the npm package metadata, but the tarball URLs in that metadata still point to `registry.npmjs.org`. On its own, pnpm would download new packages from npmjs and write those URLs into `pnpm-lock.yaml`, so every later install would also download them from npmjs, bypassing the firewall. The [.pnpmfile.cjs](./.pnpmfile.cjs) file prevents both: it downloads the npmjs tarballs from the firewall instead, and removes their URLs from the lockfile.
+The firewall serves the npm package metadata, but the tarball URLs in that metadata still point to `registry.npmjs.org`. On its own, pnpm would download new packages from npmjs and write those URLs into `pnpm-lock.yaml`, so every later install would also download them from npmjs, bypassing the firewall. The [.pnpmfile.cjs](./.pnpmfile.cjs) file prevents both: it downloads the npmjs tarballs from the firewall instead, and removes their URLs from the lockfile. [pnpm-workspace.yaml](./pnpm-workspace.yaml) also sets it as the `globalPnpmfile`, because `pnpm dlx` and `pnpx` ignore the project pnpmfile.
 
-- Never run pnpm with `--ignore-pnpmfile`, and run one-off CLIs with `npx` rather than `pnpm dlx` or `pnpx`: both skip the pnpmfile. npm downloads through the firewall on its own.
-- The [CI](./.github/workflows/ci.yml) workflow fails if `pnpm-lock.yaml` contains a tarball URL. Run `pnpm install` to remove it and commit the lockfile.
-- The lockfile records a checksum of `.pnpmfile.cjs`. After editing or deleting the file, run `pnpm install` and commit the lockfile with the change, otherwise frozen installs fail with `ERR_PNPM_LOCKFILE_CONFIG_MISMATCH`. Branches opened before the change must merge `main` and run `pnpm install`.
+- Never run pnpm with `--ignore-pnpmfile`: it skips the pnpmfile.
+- The [CI](./.github/workflows/ci.yml) workflow fails if `pnpm-lock.yaml` contains a tarball URL. Run `pnpm install --fix-lockfile` to remove it and commit the lockfile. A plain `pnpm install` isn't enough when pnpm considers the lockfile up to date, because it then skips the pnpmfile.
+- After editing `.pnpmfile.cjs`, run `pnpm install --fix-lockfile` and commit the lockfile with the change. pnpm leaves a global pnpmfile out of the lockfile's `pnpmfileChecksum`, so nothing else re-applies the hooks to the lockfile.
 
 ### Install the dependencies
 

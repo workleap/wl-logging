@@ -8,8 +8,9 @@
 // - The afterAllResolved hook removes the npmjs tarball URLs from the lockfile, so pnpm derives
 //   them from the configured registry (the firewall) on install.
 //
-// Editing or deleting this file changes the pnpmfileChecksum recorded in pnpm-lock.yaml: run
-// `pnpm install` and commit the lockfile, otherwise frozen installs fail. See CONTRIBUTING.md.
+// pnpm-workspace.yaml also sets this file as the globalPnpmfile, so pnpm dlx / pnpx load it too.
+// pnpm leaves a global pnpmfile out of the lockfile's pnpmfileChecksum, so after editing this file,
+// run `pnpm install --fix-lockfile` to apply the change to pnpm-lock.yaml. See CONTRIBUTING.md.
 
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
