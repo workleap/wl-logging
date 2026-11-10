@@ -51,11 +51,13 @@ This project uses PNPM workspace, therefore, you must [install PNPM](https://pnp
 
 The npm dependencies are installed through the `gsoft` enterprise GitHub package firewall (configured in the repository [.npmrc](./.npmrc) file). Only members of the `gsoft` GitHub enterprise can install the dependencies.
 
-The firewall requires a GitHub token. First, sign in with the [GitHub CLI](https://cli.github.com/) and authorize the `gsoft` SSO if prompted:
+The firewall requires a GitHub token. First, sign in with the [GitHub CLI](https://cli.github.com/) and choose "Login with a web browser":
 
 ```bash
 gh auth login
 ```
+
+On the browser authorization page, under **Organization access**, click **Authorize** next to your Workleap organizations (e.g. `workleap`). `gsoft` is the enterprise slug, so it won't be listed. If there's no **Authorize** button, the GitHub CLI is already authorized.
 
 Then, add the token to your **user-level** `.npmrc` file (`~/.npmrc`):
 
@@ -69,11 +71,25 @@ Add-Content -Encoding ascii "$HOME\.npmrc" "//package-firewall.githubapp.com/npm
 echo "//package-firewall.githubapp.com/npm/enterprises/gsoft/:_authToken=$(gh auth token)" >> ~/.npmrc
 ```
 
+Finally, verify that the token was added to your `~/.npmrc` file:
+
+```powershell
+# PowerShell
+Get-Content "$HOME\.npmrc"
+```
+
+```bash
+# bash / zsh
+cat ~/.npmrc
+```
+
+The output should include a line like `//package-firewall.githubapp.com/npm/enterprises/gsoft/:_authToken=gho_...`, and only one such line. If there's more than one, delete the older ones.
+
 > [!IMPORTANT]
 > Never add the token to the repository `.npmrc` file: it would be committed, and pnpm ignores auth tokens set in a repository `.npmrc` file anyway.
 
 > [!NOTE]
-> If an install fails with a `401` error from `package-firewall.githubapp.com`, the token is missing or expired. After running `gh auth login` again, replace the `_authToken` line in `~/.npmrc` with a new token.
+> If an install fails with a `401` error from `package-firewall.githubapp.com`, the token is missing, expired, or not authorized for your Workleap organizations. Check the organization access of the GitHub CLI app at https://github.com/settings/applications, then run `gh auth login` again and replace the `_authToken` line in `~/.npmrc` with a new token.
 
 ### Install the dependencies
 

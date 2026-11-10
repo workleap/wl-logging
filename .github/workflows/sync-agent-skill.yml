@@ -56,6 +56,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      - name: Authenticate to the GitHub package firewall
+        # The repository .npmrc routes installs through the firewall, but pnpm ignores auth tokens
+        # set in a repository .npmrc, so the job token is written to the user-level ~/.npmrc.
+        # Precautionary: this job doesn't install dependencies, but the tools it runs may call npm.
+        env:
+          FIREWALL_TOKEN: ${{ github.token }}
+        run: echo "//package-firewall.githubapp.com/npm/enterprises/gsoft/:_authToken=${FIREWALL_TOKEN}" >> ~/.npmrc
+
       - name: Sync agent skill with docs
         uses: anthropics/claude-code-action@v1
         with:
