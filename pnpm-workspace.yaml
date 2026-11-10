@@ -2,11 +2,9 @@ packages:
   - packages/*
   - samples/*
 
-minimumReleaseAge: 10080 # 7 days, in minutes
-
-minimumReleaseAgeExclude:
-  - '@workleap/*'
-  - '@typescript/native-preview*'
+# Disables pnpm's default minimum release age of 24 hours. The GitHub package firewall already
+# holds back new releases.
+minimumReleaseAge: 0
 
 allowBuilds:
   agent-browser: true

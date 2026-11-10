@@ -35,6 +35,13 @@ jobs:
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
 
+      - name: Authenticate to the GitHub package firewall
+        # The repository .npmrc routes installs through the firewall. The job token is written to the
+        # user-level ~/.npmrc because pnpm doesn't expand environment variables in a repository .npmrc.
+        env:
+          FIREWALL_TOKEN: ${{ github.token }}
+        run: echo "//package-firewall.githubapp.com/npm/enterprises/gsoft/:_authToken=${FIREWALL_TOKEN}" >> ~/.npmrc
+
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
@@ -73,3 +80,9 @@ jobs:
           pr-title: "Changeset: New Version"
           # Packages are already built by the step above; publish-pkg only runs changeset publish.
           publish-script: pnpm publish-pkg
+        env:
+          # changeset publish checks npm for already published versions with `pnpm info` from the
+          # repository root and ignores publishConfig.registry, so without this the check goes to the
+          # package firewall instead of npm.
+          # Keep the pnpm_ prefix: pnpm 12 ignores npm_config_registry.
+          pnpm_config_registry: https://registry.npmjs.org/
