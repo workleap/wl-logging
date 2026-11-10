@@ -84,4 +84,5 @@ jobs:
           # changeset publish checks npm for already published versions with `pnpm info` from the
           # repository root and ignores publishConfig.registry, so without this the check goes to the
           # package firewall instead of npm.
+          # Keep the pnpm_ prefix: pnpm 12 ignores npm_config_registry.
           pnpm_config_registry: https://registry.npmjs.org/

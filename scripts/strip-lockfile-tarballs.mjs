@@ -5,13 +5,27 @@
 
 import { readFileSync, writeFileSync } from "node:fs";
 
+// Matches the same URLs as the "Check that the lockfile downloads through the package firewall" CI step.
+const npmTarballUrl = "tarball: https://registry.npmjs.org/";
+
 const lockfilePath = new URL("../pnpm-lock.yaml", import.meta.url);
 const lockfile = readFileSync(lockfilePath, "utf8");
-const stripped = lockfile.replaceAll(/, tarball: https:\/\/registry\.npmjs\.org\/[^}]*\}/g, "}");
 
-if (stripped === lockfile) {
-    console.log("pnpm-lock.yaml has no registry.npmjs.org tarball URLs.");
-} else {
+// A tarball URL can only be removed when the resolution also has an integrity, e.g.
+// "{integrity: sha512-..., tarball: https://registry.npmjs.org/...}" becomes "{integrity: sha512-...}".
+const stripped = lockfile.replaceAll(/, tarball: https:\/\/registry\.npmjs\.org\/[^,}]*/g, "");
+
+if (stripped !== lockfile) {
     writeFileSync(lockfilePath, stripped);
     console.log("Stripped the registry.npmjs.org tarball URLs from pnpm-lock.yaml.");
+} else {
+    console.log("pnpm-lock.yaml has no strippable registry.npmjs.org tarball URLs.");
+}
+
+const remaining = stripped.split("\n").filter(line => line.includes(npmTarballUrl));
+
+if (remaining.length > 0) {
+    console.error(`pnpm-lock.yaml still has ${remaining.length} registry.npmjs.org tarball URL(s) without an integrity, which can't be stripped safely:`);
+    remaining.forEach(line => console.error(`  ${line.trim()}`));
+    process.exitCode = 1;
 }
