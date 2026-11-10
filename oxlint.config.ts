@@ -2,8 +2,8 @@ import { defineConfig } from "oxlint";
 
 // Adapted from workleap/wl-app's oxlint.config.ts, without its custom wl/* rules and app-specific overrides.
 export default defineConfig({
-    // `.claude/` and `.agents/` hold vendored skills, `agent-skills/` and `docs/` are prose.
-    ignorePatterns: [".claude/**", ".agents/**", "agent-skills/**", "docs/**"],
+    // `.claude/` holds vendored skills, `agent-skills/` and `docs/` are prose.
+    ignorePatterns: [".claude/**", "agent-skills/**", "docs/**"],
     // Setting `plugins` overwrites oxlint's default plugin set (eslint, typescript, unicorn, oxc),
     // so the defaults must be listed explicitly alongside the extras we want enabled.
     plugins: ["eslint", "typescript", "unicorn", "oxc", "react", "import", "jsx-a11y", "promise", "vitest"],

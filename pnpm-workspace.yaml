@@ -19,3 +19,15 @@ allowBuilds:
   agent-browser: true
   core-js: false
   esbuild: true
+
+permissions:
+  '@workleap/browserslist-config':
+    skills: true
+  '@workleap/rsbuild-configs':
+    skills: true
+  '@workleap/rslib-configs':
+    skills: true
+  '@workleap/typescript-configs':
+    skills: true
+  agent-browser:
+    skills: true
