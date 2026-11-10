@@ -302,14 +302,6 @@ Updated outdated dependencies to their latest version. For more information, vie
 pnpm update-outdated-deps
 ```
 
-### strip-lockfile-tarballs
-
-When pnpm resolves packages through the GitHub package firewall, it writes `registry.npmjs.org` tarball URLs into `pnpm-lock.yaml`, and installs then download those packages directly from npm instead of through the firewall. Run this command after any command that changes `pnpm-lock.yaml` (`pnpm add`, `pnpm update`, `pnpm update-outdated-deps`, `pnpm reset` followed by `pnpm install`, etc.) to remove them. CI fails if `pnpm-lock.yaml` contains any.
-
-```bash
-pnpm strip-lockfile-tarballs
-```
-
 With Claude Code, run `/update-third-parties` instead to update the npm dependencies, the installed agent skills, and the GitHub Actions together (or any subset).
 
 ### GitHub Actions

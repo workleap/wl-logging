@@ -34,10 +34,7 @@ Otherwise, install the updated dependencies:
 
 ```bash
 pnpm install --no-frozen-lockfile
-pnpm strip-lockfile-tarballs
 ```
-
-`pnpm strip-lockfile-tarballs` removes the `registry.npmjs.org` tarball URLs that pnpm writes into `pnpm-lock.yaml` when it resolves packages through the GitHub package firewall; CI fails if the lockfile contains any. Run it again after every command that changes `pnpm-lock.yaml`, including when you revert a package in Step 2.
 
 ## Step 2: Validation loop
 

@@ -17,7 +17,7 @@ Ask this **first**, before touching anything, so the rest of the run is unattend
 
 | Action          | Runs (in step 4)                 | Purpose                                                               |
 | --------------- | -------------------------------- | --------------------------------------------------------------------- |
-| Reset + install | `pnpm reset`, `pnpm install`, then `pnpm strip-lockfile-tarballs` | Wipes `node_modules` + `pnpm-lock.yaml`, rebuilds from `package.json` |
+| Reset + install | `pnpm reset` then `pnpm install` | Wipes `node_modules` + `pnpm-lock.yaml`, rebuilds from `package.json` |
 | Validate        | `pnpm lint` then `pnpm test`     | Lint, typecheck, and unit tests — confirms nothing's broken           |
 
 Remember the selection; it runs in step 4 after the update, not now. Neither checked -> nothing runs after the update.
@@ -36,10 +36,7 @@ Report the outdated packages and any peer-version mismatches before changing any
 
 ```
 pnpm update-outdated-deps
-pnpm strip-lockfile-tarballs
 ```
-
-`strip-lockfile-tarballs` removes the `registry.npmjs.org` tarball URLs that pnpm writes into `pnpm-lock.yaml` when it resolves packages through the GitHub package firewall; CI fails if the lockfile contains any.
 
 ## 4. Run the selected follow-ups
 

@@ -26,7 +26,6 @@
         "publish-pr-pkg": "pkg-pr-new publish ./packages/* --packageManager=pnpm --pnpm",
         "clean": "pnpm -r --parallel --include-workspace-root exec pnpm dlx rimraf dist .turbo .rslib node_modules/.cache",
         "reset": "pnpm clean && pnpm reset:modules",
-        "strip-lockfile-tarballs": "node ./scripts/strip-lockfile-tarballs.mjs",
         "reset:modules": "pnpm -r --parallel --include-workspace-root exec pnpm dlx rimraf node_modules pnpm-lock.yaml",
         "list-outdated-deps": "pnpm outdated -r --format list !typescript",
         "update-outdated-deps": "pnpm run --sequential \"/^update-outdated-deps:.*/\"",
