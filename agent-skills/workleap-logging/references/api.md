@@ -67,6 +67,15 @@ logger
     .debug();
 ```
 
+**Styled log messages:** Every log level method accepts `(log?, options?)`, so a plain message can be styled without chaining:
+```ts
+scope.debug("Registration failed!", {
+    style: { backgroundColor: "red", color: "white", fontWeight: "bold" }
+});
+```
+
+If the logger doesn't support styling, the text is logged without any styling. With `BrowserConsoleLogger`, when styling is applied to any text segment, all error and object segments are appended at the end of the log entry; without styling, the original order is preserved.
+
 ## Scopes
 
 ```ts
