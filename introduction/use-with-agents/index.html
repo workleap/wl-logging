@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="turbo-root" content="/wl-logging">
-    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="4.6.0.847727599124">
+    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="4.6.0.847732381899">
 
     <!-- See retype.com -->
     <meta name="generator" content="Retype 4.6.0">
@@ -39,12 +39,12 @@
     <script data-cfasync="false">(function(){var cl=document.documentElement.classList,ls=localStorage.getItem("retype_scheme"),hd=cl.contains("dark"),hl=cl.contains("light"),wm=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;if(ls==="dark"||(!ls&&wm&&!hd&&!hl)){cl.remove("light");cl.add("dark")}else if(ls==="light"||(!ls&&!wm&&!hd&&!hl)){cl.remove("dark");cl.add("light")}})();</script>
 
     <link id="retype-favicon" rel="icon" href="../../static/favicon.png" />
-    <link href="../../resources/css/retype.css?v=4.6.0.847727599124" rel="stylesheet">
+    <link href="../../resources/css/retype.css?v=4.6.0.847732381899" rel="stylesheet">
 
-    <script data-cfasync="false" src="../../resources/js/config.js?v=4.6.0.847727599124" data-turbo-eval="false" defer></script>
+    <script data-cfasync="false" src="../../resources/js/config.js?v=4.6.0.847732381899" data-turbo-eval="false" defer></script>
     <script data-cfasync="false" src="../../resources/js/retype.js?v=4.6.0" data-turbo-eval="false" defer></script>
-    <script id="lunr-js" data-cfasync="false" src="../../resources/js/lunr.js?v=4.6.0.847727599124" data-turbo-eval="false" defer></script>
-    <script id="prism-js" data-cfasync="false" src="../../resources/js/prism.js?v=4.6.0.847727599124" defer></script>
+    <script id="lunr-js" data-cfasync="false" src="../../resources/js/lunr.js?v=4.6.0.847732381899" data-turbo-eval="false" defer></script>
+    <script id="prism-js" data-cfasync="false" src="../../resources/js/prism.js?v=4.6.0.847732381899" defer></script>
 
     <link href="https://workleap.github.io/wl-idp-docs-hub/static/retype-customization.css" rel="stylesheet" />
 
@@ -258,7 +258,7 @@
 <h1 id="use-with-agents">Use with agents</h1>
 <p>Information about this logging library can be shared with different agents using the <a href="https://skills.sh/workleap/wl-logging/workleap-logging" class="outbound" target="_blank">workleap-logging</a> agent skill.</p>
 <h2 id="install-agent-skill">Install agent skill</h2>
-<p>Starting with <code translate="no" v-pre>pnpm@12.11</code>, the <code translate="no" v-pre>@workleap/logging</code> package ships the <code translate="no" v-pre>workleap-logging</code> agent skill, and <code translate="no" v-pre>pnpm install</code> links it into your project&#x27;s agent skill directories. Since the skill is shipped with the package, its content always matches the installed version of <code translate="no" v-pre>@workleap/logging</code>.</p>
+<p>Starting with <code translate="no" v-pre>pnpm@12.11</code> and <code translate="no" v-pre>@workleap/logging</code> <code translate="no" v-pre>2.1.0</code>, the <code translate="no" v-pre>@workleap/logging</code> package ships the <code translate="no" v-pre>workleap-logging</code> agent skill, and <code translate="no" v-pre>pnpm install</code> links it into your project&#x27;s agent skill directories. Since the skill is shipped with the package, its content always matches the installed version of <code translate="no" v-pre>@workleap/logging</code>.</p>
 <p>To install the skill, first make sure <code translate="no" v-pre>@workleap/logging</code> is a <strong>direct</strong> dependency of a project in your workspace and that an agent skill directory, such as <code translate="no" v-pre>.claude/skills</code> or <code translate="no" v-pre>.cursor/skills</code>, exists at the root of the workspace.</p>
 <p>Then, open a terminal at the root of the workspace and approve the package&#x27;s skills by running the following command and selecting <code translate="no" v-pre>@workleap/logging</code>:</p>
 <div id="install-agent-skill-code-1" class="codeblock-wrapper"><doc-codeblock>
@@ -280,6 +280,10 @@
 <p>If the skill was previously installed with <code translate="no" v-pre>skills.sh</code>, remove it to avoid having it installed twice:</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre translate="no" class="language-bash"><code v-pre class="language-bash">pnpm dlx skills@latest remove workleap-logging</code></pre>
+</doc-codeblock></div>
+<p>If the skill was installed globally, add the <code translate="no" v-pre>--global</code> option:</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-bash"><code v-pre class="language-bash">pnpm dlx skills@latest remove workleap-logging --global</code></pre>
 </doc-codeblock></div>
         </div>
     </div>

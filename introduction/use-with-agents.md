@@ -4,7 +4,7 @@ Information about this logging library can be shared with different agents using
 
 ## Install agent skill
 
-Starting with `pnpm@12.11`, the `@workleap/logging` package ships the `workleap-logging` agent skill, and `pnpm install` links it into your project's agent skill directories. Since the skill is shipped with the package, its content always matches the installed version of `@workleap/logging`.
+Starting with `pnpm@12.11` and `@workleap/logging` `2.1.0`, the `@workleap/logging` package ships the `workleap-logging` agent skill, and `pnpm install` links it into your project's agent skill directories. Since the skill is shipped with the package, its content always matches the installed version of `@workleap/logging`.
 
 To install the skill, first make sure `@workleap/logging` is a **direct** dependency of a project in your workspace and that an agent skill directory, such as `.claude/skills` or `.cursor/skills`, exists at the root of the workspace.
 
@@ -23,6 +23,12 @@ If the skill was previously installed with `skills.sh`, remove it to avoid havin
 
 ```bash
 pnpm dlx skills@latest remove workleap-logging
+```
+
+If the skill was installed globally, add the `--global` option:
+
+```bash
+pnpm dlx skills@latest remove workleap-logging --global
 ```
 !!!
 
