@@ -1,5 +1,11 @@
 # @workleap/logging
 
+## 2.1.1
+
+### Patch Changes
+
+- [#149](https://github.com/workleap/wl-logging/pull/149) [`a00292a`](https://github.com/workleap/wl-logging/commit/a00292ab0f48733e97c5b79c991f6947c201b6f2) Thanks [@claude](https://github.com/apps/claude)! - Updated the `workleap-logging` agent skill: documented that log level methods accept `(log?, options?)` for styled messages, and how `BrowserConsoleLogger` orders segments when styling is applied.
+
 ## 2.1.0
 
 ### Minor Changes
