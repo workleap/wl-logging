@@ -103,6 +103,8 @@ jobs:
     # The workleap-logging skill ships in the @workleap/logging package: a skill change is only released with a changeset.
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout
