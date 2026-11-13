@@ -113,7 +113,20 @@ Run the `_update-skills` skill in a subagent (`Agent` tool) — not inline, so t
 
 Keep the report for the PR body. If the skill stops or a pull fails, record it and continue — skills never block the dependency update.
 
-A listing stop also opens an issue — a line in a dependency PR is easy to miss, and no PR is created when nothing else changed. It is the stop the report labels `listing stop:`, from `listSkillPins.ts` exiting non-zero in the `_update-skills` skill, not this prompt's Step 2:
+A listing stop also opens an issue — a line in a dependency PR is easy to miss, and no PR is created when nothing else changed. It is the stop the report labels `listing stop:`, from `listSkillPins.ts` exiting non-zero in the `_update-skills` skill, not this prompt's Step 2. A stop can last for weeks, so look for an open issue first:
+
+```bash
+gh issue list --state open --search '"[agent] Cannot update agent skills" in:title' --json number --jq '.[0].number'
+```
+
+If that prints a number, comment on that issue instead of opening another:
+
+```bash
+gh issue comment <number> \
+  --body "<the message the listing printed, and a link to: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID>"
+```
+
+Otherwise open one:
 
 ```bash
 gh issue create \
