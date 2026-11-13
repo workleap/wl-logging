@@ -146,7 +146,7 @@ If the workflow does not behave as expected, the simplest way to update an agent
 3. Add a `patch` changeset for `@workleap/logging`.
 4. Commit the changes and merge the pull request.
 
-NOTE: Skills installed using [skills.sh](https://skills.sh/) are sourced directly from the repository files, so merging the pull request is sufficient to update them. Skills linked by pnpm are updated when a new version of `@workleap/logging` is published, which is why **every skill change requires a changeset**.
+NOTE: Skills installed using [skills.sh](https://skills.sh/) are sourced directly from the repository files, so merging the pull request is sufficient to update them. Skills linked by pnpm are updated when a new version of `@workleap/logging` is published, which is why **every skill change requires a changeset**. The CI fails a pull request that changes the skill without adding one (see [check-agent-skill-changeset.sh](./.github/scripts/check-agent-skill-changeset.sh)).
 
 NOTE: The rules for local skills and skill discovery are documented in [CLAUDE.md](./CLAUDE.md#agent-skills) and checked by the [skill-discovery](.github/workflows/skill-discovery.yml) workflow.
 
