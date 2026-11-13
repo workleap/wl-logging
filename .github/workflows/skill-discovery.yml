@@ -41,7 +41,7 @@ jobs:
         env:
           DISABLE_TELEMETRY: "1"
           NO_COLOR: "1"
-        # The skills CLI version is pinned to the one used by the _update-skills skill. --list has no machine-readable
+        # The skills CLI version is pinned: the listing is parsed as text. --list has no machine-readable
         # output, so the skill names are parsed from the listing (one "│    <name>" line per skill).
         run: |
             output=$(npx -y skills@1.7.4 add . --list 2>&1 | sed -E 's/\x1B\[[0-9;?]*[A-Za-z]//g')

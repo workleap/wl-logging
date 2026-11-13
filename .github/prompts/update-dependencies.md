@@ -113,6 +113,14 @@ Run the `_update-skills` skill in a subagent (`Agent` tool) — not inline, so t
 
 Keep the report for the PR body. If the skill stops or a pull fails, record it and continue — skills never block the dependency update.
 
+A step 2 listing stop also opens an issue — a line in a dependency PR is easy to miss, and no PR is created when nothing else changed:
+
+```bash
+gh issue create \
+  --title "[agent] Cannot update agent skills" \
+  --body "<the message the listing printed, and a link to: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID>"
+```
+
 Then, check whether anything changed at all:
 
 ```bash
@@ -163,7 +171,7 @@ If no `package.json` changed, write "No dependency updates." instead.
 
 #### How to write the Agent skills section
 
-From the `_update-skills` report: list the skills whose files actually changed, the skipped skills with their lagging package (installed → latest), any skill whose pulled `SKILL.md` declares `model:` frontmatter, and any stop or pull failure. If nothing changed and nothing failed, write "No skill updates."
+From the `_update-skills` report: list the skills whose files actually changed with their pin moves, the skills in cooldown, the skipped skills with their lagging package (installed → latest), any skill whose pulled `SKILL.md` declares `model:` frontmatter, and any stop or pull failure. If nothing changed and nothing failed, write "No skill updates."
 
 #### PR body template
 
