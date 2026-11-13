@@ -124,7 +124,11 @@ The skill is published to npm with the `@workleap/logging` package, so a skill c
 Updated the `workleap-logging` agent skill: <one-sentence summary>.
 ```
 
+The CI fails a pull request that changes the skill without adding this changeset.
+
 ### 4c: Create branch and commit
+
+Do NOT add `[skip ci]` to the commit message: it skips the CI on the pull request and, once the pull request is merged, the Changesets workflow that releases the updated skill.
 
 ```bash
 BRANCH_NAME="agent/skill-sync-$(date -u +%Y%m%d-%H%M%S)-$(git rev-parse --short HEAD)"
