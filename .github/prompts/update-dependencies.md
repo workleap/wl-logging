@@ -113,6 +113,41 @@ Run the `_update-skills` skill in a subagent (`Agent` tool) — not inline, so t
 
 Keep the report for the PR body. If the skill stops or a pull fails, record it and continue — skills never block the dependency update.
 
+Once the subagent has returned, check what it left on disk, whatever its report says — it can end in the middle of a pull:
+
+```bash
+git status --short .claude/skills skills-lock.json
+```
+
+For every skill whose folder or `skills-lock.json` entry changed (`git diff skills-lock.json` shows the entries; leave the `_`-prefixed folders out), run:
+
+```bash
+node .claude/skills/_update-skills/scripts/listSkillPins.ts --verify <name>
+```
+
+Anything but `"verified": true`, a non-zero exit included, is a failed pull even when the report lists the skill as updated. Undo it: `git checkout -- .claude/skills/<name>`, `git clean -fd .claude/skills/<name>`, and put the skill's `skills-lock.json` entry back to its committed value with the Edit tool. Then report it as a failed pull below and in the PR body. If an `.agents/` folder appeared, remove it as well with `git clean -fd .agents`: skills install into `.claude/skills/` only.
+
+A stop, a blocked skill or a failed pull also gets an issue — a line in a dependency PR is easy to miss, and no PR is created when nothing else changed. That is any of: a drift stop (the skill's step 0), a listing stop (the one the report labels `listing stop:`, from `listSkillPins.ts` exiting non-zero in the `_update-skills` skill, not this prompt's Step 2), a skill the report lists as `BLOCKED`, a failed `skills add`. Any of them can last for weeks, so look for an open issue first:
+
+```bash
+gh issue list --state open --search '"[agent] Cannot update agent skills" in:title' --json number --jq '.[0].number'
+```
+
+If that prints a number, comment on that issue instead of opening another:
+
+```bash
+gh issue comment <number> \
+  --body "<what stopped, is blocked or failed, as the report words it, and a link to: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID>"
+```
+
+Otherwise open one:
+
+```bash
+gh issue create \
+  --title "[agent] Cannot update agent skills" \
+  --body "<what stopped, is blocked or failed, as the report words it, and a link to: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID>"
+```
+
 Then, check whether anything changed at all:
 
 ```bash
@@ -163,7 +198,7 @@ If no `package.json` changed, write "No dependency updates." instead.
 
 #### How to write the Agent skills section
 
-From the `_update-skills` report: list the skills whose files actually changed, the skipped skills with their lagging package (installed → latest), any skill whose pulled `SKILL.md` declares `model:` frontmatter, and any stop or pull failure. If nothing changed and nothing failed, write "No skill updates."
+From the `_update-skills` report: list the skills whose files actually changed with their pin moves, the skills in cooldown, the blocked skills with their problem, the skipped skills with their lagging package (installed → latest), any skill whose pulled `SKILL.md` declares `model:` frontmatter, and any stop or pull failure. If no skill changed on disk, write "No skill updates." and still list the rest.
 
 #### PR body template
 
