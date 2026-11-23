@@ -1,5 +1,11 @@
 # @workleap/logging
 
+## 2.1.2
+
+### Patch Changes
+
+- [#161](https://github.com/workleap/wl-logging/pull/161) [`6acc48c`](https://github.com/workleap/wl-logging/commit/6acc48c6aa604cb6f6a8389972fc0f97cf8c746e) Thanks [@patricklafrance](https://github.com/patricklafrance)! - The package is now published from the protected `npm-publish` GitHub environment with npm Trusted Publishing. The code of the package did not change.
+
 ## 2.1.1
 
 ### Patch Changes
