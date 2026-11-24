@@ -28,7 +28,7 @@ Only `workleap-*` skills use `--full-depth`. `<cli>` and `<latest>` are the list
 | Skill | Package gate (grep all `package.json`) | Update command |
 |---|---|---|
 | `git-commit` | — | `pnpm --config.minimumReleaseAge=10080 dlx skills@<cli> add https://github.com/github/awesome-copilot/tree/<latest>/skills/git-commit --skill git-commit -a claude-code --copy -y` |
-| `pnpm` | root `packageManager` field (`pnpm@<version>`) — `update-outdated-deps` never bumps it, so this skips until pnpm is upgraded by hand | `pnpm --config.minimumReleaseAge=10080 dlx skills@<cli> add https://github.com/antfu/skills/tree/<latest>/skills/pnpm --skill pnpm -a claude-code --copy -y` |
+| `pnpm` | root `packageManager` field (`pnpm@<version>`, without its `+sha512` hash) | `pnpm --config.minimumReleaseAge=10080 dlx skills@<cli> add https://github.com/antfu/skills/tree/<latest>/skills/pnpm --skill pnpm -a claude-code --copy -y` |
 | `turborepo` | `turbo` | `pnpm --config.minimumReleaseAge=10080 dlx skills@<cli> add https://github.com/vercel/turborepo/tree/<latest>/skills/turborepo --skill turborepo -a claude-code --copy -y` |
 | `vitest` | `vitest` | `pnpm --config.minimumReleaseAge=10080 dlx skills@<cli> add https://github.com/antfu/skills/tree/<latest>/skills/vitest --skill vitest -a claude-code --copy -y` |
 | `workleap-react-best-practices` | — | `pnpm --config.minimumReleaseAge=10080 dlx skills@<cli> add https://github.com/workleap/wl-web-configs/tree/<latest>/agent-skills/workleap-react-best-practices --skill workleap-react-best-practices -a claude-code --full-depth --copy -y` |
