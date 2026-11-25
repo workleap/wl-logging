@@ -337,7 +337,7 @@ Never add a step to the `deploy` job, and never give a write permission to the `
 - In the [GitHub Pages](https://github.com/workleap/wl-logging/settings/pages) settings, the source is "GitHub Actions". With "Deploy from a branch", the `deploy` job fails.
 - The `github-pages` environment has `main` as its only deployment branch, so a workflow run from another branch cannot deploy.
 
-The `retypeWorkflowPermissions.test.ts` test in `.github/scripts` checks this split in the CI.
+Nothing checks this split automatically: review every change to this workflow against the table above.
 
 ## Add a new package to the monorepo
 
