@@ -184,7 +184,7 @@ The following workflows are available with GitHub:
 | Claude | `.github/workflows/claude.yml` | @claude mentions | Interactive AI assistance |
 | Sync agent skill | `.github/workflows/sync-agent-skill.yml` | Push to main (docs/) | Sync logging skill with docs |
 | Skill discovery | `.github/workflows/skill-discovery.yml` | Push to main, PRs (skill paths) | Check that skills.sh discovers only the logging skill |
-| Retype | `.github/workflows/retype-action.yml` | Push to main, PRs | Build and deploy documentation site |
+| Retype | `.github/workflows/retype-action.yml` | Push to main, manual | Build and deploy documentation site |
 
 ## Commands
 
@@ -301,7 +301,7 @@ uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
 Never reference an action by a tag (`@v7`, `@latest`) or a branch. A tag picks up a new release on the next workflow run, which skips the 7-day minimum release age of the organization preset. Keep the version comment: Renovate ignores a hash that has none. Renovate pins an action added with a tag on its next run (`helpers:pinGitHubActionDigestsToSemver`). To update an action by hand, change the hash and the version comment together in a regular pull request, to a release that is at least 7 days old.
 
-The CI on the `renovate/*` branch only exercises the actions `ci.yml` uses (checkout, pnpm setup, Node setup, cache). An update to `anthropics/claude-code-action`, `changesets/action` or the Retype actions reaches `main` without having run: the minimum release age is its only guard.
+The CI on the `renovate/*` branch only exercises the actions `ci.yml` uses (checkout, pnpm setup, Node setup, cache). An update to `anthropics/claude-code-action`, `changesets/action`, the Retype action or the GitHub Pages actions reaches `main` without having run: the minimum release age is its only guard.
 
 `anthropics/claude-code-action` is released almost daily, so it has its own Renovate group. In the shared group, the other updates would wait behind its releases: Renovate does not merge a branch during the run that changed it. A `schedule` would not throttle it either: off schedule, Renovate keeps updating a branch that exists, so a schedule only delays the merges.
 
@@ -323,7 +323,21 @@ This action will trigger when a commit is done in a PR to `main`, or after a pus
 
 ### Retype
 
-This action will trigger when a commit is done in a PR to `main` or after a push to `main`. The action will generate the documentation website into the `retype` branch. This repository [Github Pages](https://github.com/workleap/wl-telemetry/settings/pages) is configured to automatically deploy the website from the `retype` branch.
+This action will trigger after a push to `main`, or when it is started manually. The action will build the documentation website and deploy it to [GitHub Pages](https://github.com/workleap/wl-logging/settings/pages).
+
+Every step of a job can use the permissions of that job. The [Retype](./.github/workflows/retype-action.yml) workflow is therefore split into two jobs, so the code that builds the website never runs in the job that can deploy it:
+
+| Job | Permissions | Purpose |
+|-----|-------------|---------|
+| `build` | `contents: read` | Builds the website with Retype and uploads it as an artifact. The checkout does not leave its token in the git configuration (`persist-credentials: false`) |
+| `deploy` | `pages: write`, `id-token: write` | Deploys the artifact with `actions/deploy-pages` |
+
+Never add a step to the `deploy` job, and never give a write permission to the `build` job. No job has `contents: write`: the website is deployed from the artifact, not from a branch. This depends on two settings that are not in the repository:
+
+- In the [GitHub Pages](https://github.com/workleap/wl-logging/settings/pages) settings, the source is "GitHub Actions". With "Deploy from a branch", the `deploy` job fails.
+- The `github-pages` environment has `main` as its only deployment branch, so a workflow run from another branch cannot deploy.
+
+Nothing checks this split automatically: review every change to this workflow against the table above.
 
 ## Add a new package to the monorepo
 
